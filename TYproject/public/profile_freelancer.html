@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Freelancer Profile</title>
+
+    <meta name="author" content="Codeconvey" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+    <!-- Only for demo purpose - no need to add. -->
+    <link rel="stylesheet" href="profile.css">
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
+
+    <style>
+        /* Add your custom CSS styles here */
+            body {
+                font-family: 'Lato', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;
+            }
+
+            header {
+                background-color: #fff;
+                padding: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .logo {
+                max-width: 100px;
+            }
+
+            .rt-container {
+                margin-top: 20px;
+                
+            }
+
+            .student-profile {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .card {
+                margin-bottom: 20px;
+            }
+
+            .card-header {
+                background-color: #f0f0f0;
+                padding: 10px 20px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .service-container {
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            input[type="text"],
+            textarea {
+                width: calc(100% - 30px);
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+            }
+
+            button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 3px;
+                background-color: #007bff;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+            #servicesModal .modal-body {
+                max-height: 300px; /* Adjust the maximum height as needed */
+                overflow-y: auto;
+            }
+    </style>
+    <script>
+        var firebaseConfig = {
+        apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+        authDomain: "snaplooks-bd932.firebaseapp.com",
+        databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com/",
+        projectId: "snaplooks-bd932",
+        storageBucket: "snaplooks-bd932.appspot.com",
+        messagingSenderId: "680311673132",
+        appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+  
+        firebase.initializeApp(firebaseConfig);
+  
+        var db = firebase.firestore();
+  
+        
+        // Function to convert image to base64
+        function getBase64Image(img, callback) {
+    if (typeof img === 'object' && img instanceof Blob) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var dataURL = e.target.result;
+            callback(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+        };
+        reader.readAsDataURL(img);
+    } else {
+        console.error('Invalid image object:', img);
+        callback(''); // Return empty string or handle error accordingly
+    }
+}
+
+
+      </script>
+    
+</head>
+<body>
+  <header id="mainHeader">
+    <div>
+        <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+    </div>
+  </header><br>
+  <div id="declineMessage"></div>
+  <div id="successMessage"></div>
+  <section>
+    <div class="rt-container">
+        <div class="col-rt-12">
+            <div class="Scriptcontent">
+                <div class="student-profile py-4">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent text-center">
+                                        <a href="javascript:void(0);" id="changePhotoBtn" onclick="uploadPhoto()">
+                                            <img class="profile_img" alt="freelancer dp" id="freelancerDpImage">
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-0"><strong class="pr-1">Freelancer ID:</strong>--------</p>
+                                        <p class="mb-0"><strong class="pr-1">Email:</strong><span id="freelancerEmail">Not Available</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h3 class="mb-0">freelancer Information</h3><br>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <form id="freelancerForm">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th width="30%">Owner's Name</th>
+                                                    <td width="2%">:</td>
+                                                    <td><input type="text" id="ownerName" name="ownerName" autocomplete="off"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="30%">freelancer Name</th>
+                                                    <td width="2%">:</td>
+                                                    <td><input type="text" id="freelancerName" name="freelancerName" autocomplete="off"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="30%">Contact</th>
+                                                    <td width="2%">:</td>
+                                                    <td><input type="text" id="contact" name="contact"></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h3 class="mb-0">location</h3><br>
+                                        <label for="location">Your current location</label>
+                                        
+                                        <input type="text" id="areaName" name="areaName" readonly>
+                                        <!-- Add this div to hold the map -->
+                                        <div id="map" style="height: 300px;"></div><br>
+                                        <!-- Add a button to trigger location retrieval -->
+                                        <button type="button" onclick="getCurrentLocation()">Get Current Location</button>
+                                        
+
+
+                                    </div>
+                                </div>
+                                <div style="height: 26px"></div>
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h3 class="mb-0">Work information</h3><br>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <label for="openTime">Working Hours:</label><br>
+                                        <label for="closeTime">Open Time:</label>
+                                        <input type="time" id="openTime" name="openTime">
+                            
+                                        <label for="closeTime">Close Time:</label>
+                                        <input type="time" id="closeTime" name="closeTime">
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <label for="workingDays">Working Days:</label><br>
+                                        <input type="checkbox" id="monday" name="workingDays" value="Monday">
+                                        <label for="monday">Monday</label>
+                                        <input type="checkbox" id="tuesday" name="workingDays" value="Tuesday">
+                                        <label for="tuesday">Tuesday</label>
+                                        <input type="checkbox" id="wednesday" name="workingDays" value="Wednesday">
+                                        <label for="wednesday">Wednesday</label>
+                                        <input type="checkbox" id="thursday" name="workingDays" value="Thursday">
+                                        <label for="thursday">Thursday</label>
+                                        <input type="checkbox" id="friday" name="workingDays" value="Friday">
+                                        <label for="friday">Friday</label>
+                                        <input type="checkbox" id="saturday" name="workingDays" value="Saturday">
+                                        <label for="saturday">Saturday</label>
+                                        <input type="checkbox" id="sunday" name="workingDays" value="Sunday">
+                                        <label for="sunday">Sunday</label>
+                                    </div>
+                                </div> <br>
+                                <div style="height: 26px"></div>
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h3 class="mb-0">Select Service</h3><br>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <label for="services">Select Services:</label><br>
+                                        <input type="checkbox" id="bodyMassage" name="services" value="Body Massage">
+                                        <label for="bodyMassage">Body Massage</label>
+
+                                        <input type="checkbox" id="haircut" name="services" value="Haircut">
+                                        <label for="haircut">Haircut</label>
+
+                                        <input type="checkbox" id="manicure" name="services" value="Manicure">
+                                        <label for="manicure">Manicure</label>
+
+                                        <input type="checkbox" id="pedicure" name="services" value="Pedicure">
+                                        <label for="pedicure">Pedicure</label>
+
+                                        <input type="checkbox" id="facial" name="services" value="Facial">
+                                        <label for="facial">Facial</label>
+
+                                        <input type="checkbox" id="waxing" name="services" value="Waxing">
+                                        <label for="waxing">Waxing</label>
+
+                                        <!-- Add more checkboxes for additional services as needed -->
+                                    </div>
+                                    <div id="servicesModal" class="modal">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Manage Services and Prices</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="servicesContainer" class="services-container">
+                                                        <!-- Dynamic content for services and prices will be added here -->
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    
+                                                    <button type="button" onclick="registerServicesWithPrices()" class="btn btn-primary">Confirm Price</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <button type="button" onclick="openServicesModal()" class="btn btn-primary mt-3">Select price for services</button>
+                            </div>
+                            <button type="button" onclick="savefreelancerToFirestore()" class="btn btn-primary mt-3">Save freelancer Data</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    // Your existing JavaScript code...
+    function uploadPhoto() {
+        var fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*'; 
+
+        fileInput.click();
+
+        fileInput.addEventListener('change', function () {
+            var file = fileInput.files[0];
+
+            if (file) {
+                var freelancerDpImage = document.getElementById('freelancerDpImage');
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    freelancerDpImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    function handleAuthStateChange() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in, you can proceed to savefreelancerToFirestore or update UI
+                    console.log("User is authenticated");
+                   // fetchfreelancerDataForLoggedInUser(user.uid);
+                } else {
+                    // User is signed out, handle accordingly
+                    console.error("User not authenticated.");
+                    // Optionally, display a message or handle the scenario where the user is not authenticated
+                }
+            });
+        }
+
+    // Function to save freelancer data
+    function savefreelancerToFirestore() {
+    var prices = {};
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+        var userID = user.uid;
+
+        var freelancerName = document.getElementById('freelancerName').value;
+        var contact = document.getElementById('contact').value;
+        var ownerName = document.getElementById('ownerName').value;
+        var openTime = document.getElementById('openTime').value;
+        var closeTime = document.getElementById('closeTime').value;
+        var latitude = marker.getLatLng().lat;
+        var longitude = marker.getLatLng().lng;
+        var areaName = document.getElementById('areaName').value;
+
+        var workingDays = [];
+        var checkboxes = document.getElementsByName('workingDays');
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                workingDays.push(checkbox.value);
+            }
+        });
+
+        var selectedServices = [];
+        var checkboxesServices = document.getElementsByName('services');
+        checkboxesServices.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                selectedServices.push(checkbox.value);
+            }
+        });
+
+        for (var i = 0; i < selectedServices.length; i++) {
+            var serviceName = selectedServices[i];
+            var inputId = 'price_' + serviceName.replace(/\s+/g, '_').toLowerCase();
+            var priceInput = document.getElementById(inputId);
+
+            prices[serviceName] = priceInput.value;
+        }
+
+        var freelancerDpImage = document.getElementById('freelancerDpImage');
+        var freelancerDpImageData = freelancerDpImage.src;
+
+        db.collection('freelancers').doc(userID).set({
+            freelancerName: freelancerName,
+            contact: contact,
+            ownerName: ownerName,
+            openTime: openTime,
+            closeTime: closeTime,
+            workingDays: workingDays,
+            selectedServices: selectedServices,
+            freelancerDpImage: freelancerDpImageData,
+            prices: prices,
+            areaName: areaName,
+            coordinates: {
+                latitude: latitude,
+                longitude: longitude
+            }
+            // Add other fields as needed
+        }).then(function () {
+            var successMessageContainer = document.getElementById('successMessage');
+            successMessageContainer.innerHTML = '<p>Your freelancer data has been successfully registered!</p>';
+        }).catch(function (error) {
+            console.error('Error adding freelancer information:', error);
+            // Optionally, display an error message or handle the error
+        });
+    } else {
+        console.error("User not authenticated.");
+        // Optionally, display a message or handle the scenario where the user is not authenticated
+    }
+}
+
+
+/*function fetchfreelancerDataForLoggedInUser() {
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+        var userID = user.uid;
+
+        var freelancerNameInput = document.getElementById('freelancerName');
+        var locationInput = document.getElementById('location');
+        var contactInput = document.getElementById('contact');
+        var freelancerDpImage = document.getElementById('freelancerDpImage');
+
+        db.collection('freelancers').doc(userID).get()
+            .then((doc) => {
+                if (doc.exists) {
+                    var freelancerData = doc.data();
+
+                    // Set freelancer profile image
+                    if (freelancerData.freelancerDpImage) {
+                        freelancerDpImage.src = freelancerData.freelancerDpImage;
+                    }
+
+                    // Set freelancer form fields
+                    freelancerNameInput.value = freelancerData.freelancerName || '';
+                    locationInput.value = freelancerData.areaName || '';
+                    contactInput.value = freelancerData.contact || '';
+                } else {
+                    console.log('No freelancer document found for this user.');
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching freelancer data:", error);
+            });
+    } else {
+        console.log('User not authenticated.');
+    }
+}
+
+
+
+
+
+
+function fetchfreelancerDataFromMainCollection(userId) {
+    var freelancerForm = document.getElementById('freelancerForm');
+    var freelancerDpImage = document.getElementById('freelancerDpImage');
+    var freelancerNameInput = document.getElementById('freelancerName');
+    var locationInput = document.getElementById('areaName');
+    var contactInput = document.getElementById('contact');
+
+    db.collection('freelancers').doc(userId).get()
+        .then((doc) => {
+            if (doc.exists) {
+                var freelancerData = doc.data();
+
+                // Set freelancer profile image
+                if (freelancerData.freelancerDpImage) {
+                    freelancerDpImage.src = freelancerData.freelancerDpImage;
+                }
+
+                // Set freelancer form fields
+                freelancerNameInput.value = freelancerData.freelancerName || '';
+                locationInput.value = freelancerData.areaName || '';
+                contactInput.value = freelancerData.contact || '';
+            } else {
+                console.log('No such freelancer document!');
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching freelancer data: ", error);
+        });
+}
+*/
+function registerServicesWithPrices() {
+    var prices = {};
+    var selectedServices = document.getElementsByName('services');
+
+    for (var i = 0; i < selectedServices.length; i++) {
+        if (selectedServices[i].checked) {
+            var serviceName = selectedServices[i].value;
+            var inputId = 'price_' + serviceName.replace(/\s+/g, '_').toLowerCase();
+            var priceInput = document.getElementById(inputId);
+            
+            // Fetch and store the prices
+            prices[serviceName] = priceInput.value;
+        }
+    }
+
+    // You can now save the 'prices' object in the database along with other freelancer information
+    console.log('Prices:', prices);
+
+    // Close the modal or perform any other necessary action
+    var modal = document.getElementById('servicesModal');
+    modal.style.display = 'none';
+}
+
+function displayApprovalMessage(message) {
+    var successMessageContainer = document.getElementById('successMessage');
+    successMessageContainer.innerHTML = `<p>${message}</p>`;
+}
+function displayDeclineMessage(message) {
+    var declineMessageContainer = document.getElementById('declineMessage');
+    declineMessageContainer.innerHTML = `<p>${message}</p>`;
+    // You can customize the decline message display as needed
+}
+function disablefreelancerForm() {
+    var inputs = document.querySelectorAll('#freelancerForm input, #freelancerForm textarea');
+    inputs.forEach((input) => {
+        input.setAttribute('readonly', true);
+    });
+}
+// Add this code after your existing script
+var map;
+    var marker;
+
+    function initMap() {
+        map = L.map('map').setView([0, 0], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Create a draggable marker
+        marker = L.marker([0, 0], {
+            draggable: true
+        }).addTo(map);
+
+        // Add the following code to register the dragend event listener
+        marker.on('dragend', function (e) {
+             var locationInput = document.getElementById('location');
+             var latlng = e.target.getLatLng();
+             locationInput.value = latlng.lat + ', ' + latlng.lng;
+        });
+    }
+
+// ...
+
+function getCurrentLocation() {
+    console.log('Getting current location...');
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+
+                // Update the area name input field
+                var areaNameInput = document.getElementById('areaName');
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        areaNameInput.value = data.display_name;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching area name:', error);
+                    });
+
+                // Update the map and marker
+                updateMap(latitude, longitude);
+
+                // ... (you can do more if needed)
+            },
+            function (error) {
+                // Handle errors
+                showError(error);
+            }
+        );
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+function storeCoordinatesInDatabase(latitude, longitude) {
+    // Modify this part to save the coordinates in your database
+    // For example, you can use the Firebase Firestore code you've already implemented
+    // Replace 'yourUserId' with the actual user ID or other identifier
+    console.log('Storing coordinates in the database:', latitude, longitude);
+    var user = firebase.auth().currentUser;
+    if (user) {
+        var userID = user.uid;
+
+        db.collection('freelancers').doc(userID).set({
+            coordinates: {
+                latitude: latitude,
+                longitude: longitude
+            }
+            // Add other fields as needed
+        }).then(function () {
+            console.log('Coordinates successfully stored in the database!');
+        }).catch(function (error) {
+            console.error('Error storing coordinates:', error);
+            // Optionally, display an error message or handle the error
+        });
+    } else {
+        console.error("User not authenticated.");
+        // Optionally, display a message or handle the scenario where the user is not authenticated
+    }
+}
+function updateMap(latitude, longitude) {
+    // Set the map view to the new coordinates
+    map.setView([latitude, longitude], 13);
+
+    // Set the marker to the new coordinates
+    marker.setLatLng([latitude, longitude]);
+
+    // Optionally, you can close the modal if it's open
+    var modal = document.getElementById('servicesModal');
+    modal.style.display = 'none';
+}
+function showPosition(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    // Set the map view to the user's current location
+    map.setView([latitude, longitude], 13);
+
+    // Set the marker to the user's current location
+    var marker = L.marker([latitude, longitude], {
+        draggable: true
+    }).addTo(map);
+
+    // Update the location input field
+    var locationInput = document.getElementById('location');
+    locationInput.value = latitude + ', ' + longitude;
+
+    // Remove existing markers from the map
+    map.eachLayer(function (layer) {
+        if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Add the new marker to the map
+    marker.addTo(map);
+
+    // Optionally, you can close the modal if it's open
+    var modal = document.getElementById('servicesModal');
+    modal.style.display = 'none';
+}
+
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+    }
+}
+
+
+function openServicesModal() {
+    var modal = document.getElementById('servicesModal');
+
+    // Dynamically generate content for services and prices
+    var selectedServices = document.getElementsByName('services');
+    var modalBody = document.querySelector('#servicesModal .modal-body');
+    modalBody.innerHTML = '';
+
+    for (var i = 0; i < selectedServices.length; i++) {
+        if (selectedServices[i].checked) {
+            var serviceName = selectedServices[i].value;
+            var inputId = 'price_' + serviceName.replace(/\s+/g, '_').toLowerCase();
+
+            // Add input fields for prices
+            modalBody.innerHTML += `
+                <div class="form-group">
+                    <label for="${inputId}">${serviceName} Price:</label>
+                    <input type="text" id="${inputId}" name="${inputId}" class="form-control">
+                </div>
+            `;
+        }
+    }
+
+    // Show the modal
+    modal.style.display = 'block';
+}
+
+
+
+    // Your existing event listeners and other JavaScript code remain unchanged.
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initMap();
+        handleAuthStateChange();
+        var registeredEmail = localStorage.getItem('registeredEmail');
+        var emailElement = document.getElementById('freelancerEmail');
+        if (emailElement) {
+            emailElement.textContent = registeredEmail || 'Not Available';
+        }
+        var modalCloseButton = document.querySelector('#servicesModal .close');
+        modalCloseButton.addEventListener('click', function () {
+            var modal = document.getElementById('servicesModal');
+            modal.style.display = 'none';
+        });
+    });
+</script>
+</body>
+</html>

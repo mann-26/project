@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Salon Profile</title>
+
+    <meta name="author" content="Codeconvey" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-storage-compat.js"></script>
+
+<style>
+    header {
+        background-color: #fff;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center; /* Center items vertically in the header */
+        justify-content: space-between; /* Distribute items horizontally with space between them */
+    }
+        .logo {
+            max-width: 100px;
+        }
+    body {
+        background-color: #f8f9fa;
+    }
+    .logo {
+        max-width: 100px;
+    }
+    .container {
+        background-color: #ffffff;
+        margin-top: 20px;
+        border-radius: 8px;
+        padding: 20px;
+    }
+    
+    .card {
+    background-color: #ffffff;
+    
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    .card-header h3 {
+    color: rgb(0, 0, 0); /* Replace #your-desired-color with the color you want */
+    font-size: xx-large;
+    }
+    .card-header {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px 10px 0 0;
+    }
+    
+    .card-body {
+    padding: 20px;
+    }
+    .profile_img {
+        width: 100%;
+        border-radius: 50%;
+    }
+</style>
+    
+    <script>
+        var firebaseConfig = {
+        apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+        authDomain: "snaplooks-bd932.firebaseapp.com",
+        databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com/",
+        projectId: "snaplooks-bd932",
+        storageBucket: "snaplooks-bd932.appspot.com",
+        messagingSenderId: "680311673132",
+        appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+  
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+        var storage = firebase.storage();
+        // Function to convert image to base64
+        
+      </script>
+</head>
+<body>
+  <header id="mainHeader">
+    <div>
+        <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        <button onclick="redirectToSalonDashboard()">Go to Dashboard</button>
+    </div>
+  </header><br>
+  <div id="declineMessage"></div>
+  <div id="successMessage"></div>
+  <section>
+    <div class="rt-container">
+        <div class="col-rt-12">
+            <div class="Scriptcontent">
+                <div class="student-profile py-4">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent text-center">
+                                        <a href="javascript:void(0);" id="changePhotoBtn" onclick="uploadPhoto()">
+                                            <img class="profile_img" alt="salon dp" id="salonDpImage">
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-0"><strong class="pr-1">Salon ID:</strong>--------</p>
+                                        <p class="mb-0"><strong class="pr-1">Email:</strong><span id="salonEmail">Not Available</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h3 class="mb-0">Salon Information</h3><br>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <form id="salonForm">
+                                            <div class="form-group">
+                                                <label for="ownerName">Owner's Name:</label>
+                                                <input type="text" class="form-control" id="ownerName" name="ownerName" autocomplete="off">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="salonName">Salon Name:</label>
+                                                <input type="text" class="form-control" id="salonName" name="salonName" autocomplete="off">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="contact">Contact:</label>
+                                                <input type="text" class="form-control" id="contact" name="contact">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div><br>
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h3 class="mb-0">location</h3><br>
+                                        <label for="location">Your current location</label>
+                                        
+                                        <input type="text" id="areaName" name="areaName" readonly>
+                                        <!-- Add this div to hold the map -->
+                                        <div id="map" style="height: 300px;"></div><br>
+                                        <!-- Add a button to trigger location retrieval -->
+                                        <button type="button" onclick="getCurrentLocation()" class="btn btn-primary">Get Current Location</button>
+                                    </div>
+                                </div>
+                                <div style="height: 26px"></div>
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h3 class="mb-0">Work information</h3><br>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <label for="openTime">Working Hours:</label><br>
+                                        <label for="closeTime">Open Time:</label>
+                                        <input type="time" id="openTime" name="openTime">
+                            
+                                        <label for="closeTime">Close Time:</label>
+                                        <input type="time" id="closeTime" name="closeTime">
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <label for="workingDays">Working Days:</label><br>
+                                        <input type="checkbox" id="monday" name="workingDays" value="Monday">
+                                        <label for="monday">Monday</label>
+                                        <input type="checkbox" id="tuesday" name="workingDays" value="Tuesday">
+                                        <label for="tuesday">Tuesday</label>
+                                        <input type="checkbox" id="wednesday" name="workingDays" value="Wednesday">
+                                        <label for="wednesday">Wednesday</label>
+                                        <input type="checkbox" id="thursday" name="workingDays" value="Thursday">
+                                        <label for="thursday">Thursday</label>
+                                        <input type="checkbox" id="friday" name="workingDays" value="Friday">
+                                        <label for="friday">Friday</label>
+                                        <input type="checkbox" id="saturday" name="workingDays" value="Saturday">
+                                        <label for="saturday">Saturday</label>
+                                        <input type="checkbox" id="sunday" name="workingDays" value="Sunday">
+                                        <label for="sunday">Sunday</label>
+                                    </div>
+                                </div> <br>
+                                <div style="height: 26px"></div>
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h3 class="mb-0">Add Services</h3><br>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <label for="customServices">Customized Services:</label>
+                                        <div id="customServicesContainer">
+                                            <!-- Custom services will be dynamically added here -->
+                                        </div>
+                                        <button type="button" onclick="addCustomService()" class="btn btn-primary mt-3">Add Custom Service</button>
+                                    </div>
+                            </div>
+                            <button type="button" onclick="saveSalonToFirestore()" class="btn btn-primary mt-3">Save Salon Data</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function addCustomService() {
+    var customServicesContainer = document.getElementById('customServicesContainer');
+
+    var serviceDiv = document.createElement('div');
+    serviceDiv.classList.add('form-group', 'service-container');
+
+    var serviceNameInput = document.createElement('input');
+    serviceNameInput.type = 'text';
+    serviceNameInput.classList.add('form-control', 'service-name');
+    serviceNameInput.placeholder = 'Service Name';
+    serviceDiv.appendChild(serviceNameInput);
+
+    var serviceDescriptionInput = document.createElement('textarea');
+    serviceDescriptionInput.classList.add('form-control', 'service-description');
+    serviceDescriptionInput.placeholder = 'Service Description';
+    serviceDiv.appendChild(serviceDescriptionInput);
+
+    var servicePriceInput = document.createElement('input');
+    servicePriceInput.type = 'text';
+    servicePriceInput.classList.add('form-control', 'service-price');
+    servicePriceInput.placeholder = 'Service Price';
+    serviceDiv.appendChild(servicePriceInput);
+
+    var serviceImageInput = document.createElement('input');
+    serviceImageInput.type = 'file';
+    serviceImageInput.accept = 'image/*';
+    serviceImageInput.classList.add('service-image');
+    serviceDiv.appendChild(serviceImageInput);
+
+    serviceImageInput.addEventListener('change', function () {
+        handleCustomServiceImageUpload(serviceImageInput);
+    });
+
+    customServicesContainer.appendChild(serviceDiv);
+}
+    function redirectToSalonDashboard() {
+            // Assuming the dashboard is named 'salon_dashboard.html'
+            window.location.href = 'salon_dashboard.html';
+        }
+
+        function uploadPhoto() {
+        var fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*'; 
+
+        fileInput.click();
+
+        fileInput.addEventListener('change', function () {
+            var file = fileInput.files[0];
+
+            if (file) {
+                var salonDpImage = document.getElementById('salonDpImage');
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    salonDpImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    // Your existing JavaScript code...
+    async function handleCustomServiceImageUpload(inputElement) {
+    var file = inputElement.files[0];
+
+    if (file) {
+        // Get a reference to the Firebase Storage location
+        var storageRef = storage.ref();
+
+        // Generate a unique filename for the image
+        var filename = 'custom_services/' + Date.now() + '_' + file.name;
+
+        // Upload the file to Firebase Storage
+        var fileRef = storageRef.child(filename);
+        await fileRef.put(file);
+
+        // Get the download URL of the uploaded image
+        var downloadURL = await fileRef.getDownloadURL();
+
+        // Find the parent container of the current input element
+        var serviceContainer = inputElement.closest('.service-container');
+
+        // Add a hidden input field to store the download URL
+        var downloadURLInput = document.createElement('input');
+        downloadURLInput.type = 'hidden';
+        downloadURLInput.value = downloadURL;
+        downloadURLInput.name = 'service-image-url'; // Change this to an appropriate name
+        serviceContainer.appendChild(downloadURLInput);
+    }
+}
+
+    function handleAuthStateChange() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in, you can proceed to saveSalonToFirestore or update UI
+                    console.log("User is authenticated");
+                    fetchSalonDataForLoggedInUser(user.uid);
+                } else {
+                    // User is signed out, handle accordingly
+                    console.error("User not authenticated.");
+                    // Optionally, display a message or handle the scenario where the user is not authenticated
+                }
+            });
+        }
+
+    // Function to add new service inputs
+    
+    async function saveSalonToFirestore() {
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+        var userID = user.uid;
+
+        // Get values from the form
+        var salonName = document.getElementById('salonName').value;
+        var contact = document.getElementById('contact').value;
+        var ownerName = document.getElementById('ownerName').value;
+        var openTime = document.getElementById('openTime').value;
+        var closeTime = document.getElementById('closeTime').value;
+        var areaName = document.getElementById('areaName').value;
+
+        // Get working days
+        var workingDays = [];
+        var checkboxes = document.getElementsByName('workingDays');
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                workingDays.push(checkbox.value);
+            }
+        });
+
+        // Get salonDP image
+        var salonDpImage = document.getElementById('salonDpImage');
+        var salonDpImageFile = await getBase64Image(salonDpImage);
+
+        // Get selected services
+        var selectedServices = [];
+        var serviceElements = document.querySelectorAll('.service-container');
+
+        // Function to convert image to base64 with the specified format
+        // Function to convert image to base64 with the specified format
+// Function to convert and compress image to base64 with the specified format
+async function getBase64Image(img) {
+    return new Promise(async function (resolve) {
+        if (img instanceof HTMLImageElement) {
+            // Handle HTMLImageElement (e.g., salonDpImage)
+            var canvas = document.createElement('canvas');
+            var maxWidth = 800; // Adjust the maximum width as needed
+
+            // Set canvas dimensions while maintaining aspect ratio
+            var width = img.width;
+            var height = img.height;
+            if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            var context = canvas.getContext('2d');
+            context.drawImage(img, 0, 0, width, height);
+
+            // Compress the image
+            var compressedDataURL = await compressImage(canvas.toDataURL('image/jpeg'));
+
+            resolve(compressedDataURL);
+        } else if (img instanceof File) {
+            // Handle File object (e.g., serviceImage)
+            var reader = new FileReader();
+            reader.onload = async function (e) {
+                var compressedDataURL = await compressImage(e.target.result);
+                resolve(compressedDataURL);
+            };
+            reader.readAsDataURL(img);
+        } else {
+            console.error('Invalid image object:', img);
+            resolve(''); // Return empty string or handle error accordingly
+        }
+    });
+}
+
+// Function to compress the image using the browser's built-in image compression
+function compressImage(dataURL) {
+    return new Promise(function (resolve) {
+        var img = new Image();
+        img.onload = function () {
+            var canvas = document.createElement('canvas');
+            var maxWidth = 800; // Adjust the maximum width as needed
+
+            // Set canvas dimensions while maintaining aspect ratio
+            var width = img.width;
+            var height = img.height;
+            if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            var context = canvas.getContext('2d');
+            context.drawImage(img, 0, 0, width, height);
+
+            // Resolve with the compressed dataURL
+            resolve(canvas.toDataURL('image/jpeg'));
+        };
+
+        img.src = dataURL;
+    });
+}
+
+
+        // Process all service elements asynchronously
+await Promise.all(Array.from(serviceElements).map(async function (serviceElement, index) {
+    var serviceName = serviceElement.querySelector('.service-name').value;
+    var serviceDescription = serviceElement.querySelector('.service-description').value;
+    var servicePrice = serviceElement.querySelector('.service-price').value;
+    var serviceImage = serviceElement.querySelector('.service-image').files[0];
+    var downloadURLInput = serviceElement.querySelector('input[name="service-image-url"]');
+    var serviceImageURL = downloadURLInput ? downloadURLInput.value : '';
+
+    // You can add validation for required fields
+
+    try {
+        // Convert service image to base64 with the specified format
+        var base64Image = await getBase64Image(serviceImage);
+
+        // Add the service details to the selectedServices array
+        selectedServices.push({
+            name: serviceName,
+            description: serviceDescription,
+            price: servicePrice,
+            image: serviceImageURL || base64Image, // Use base64 image if URL is empty
+        });
+
+        console.log(`Service ${index} processed successfully.`);
+    } catch (error) {
+        console.error(`Error processing service ${index}:`, error);
+    }
+}));
+
+
+        // Prepare salon data for Firestore
+        var salonData = {
+            salonName: salonName,
+            contact: contact,
+            ownerName: ownerName,
+            openTime: openTime,
+            closeTime: closeTime,
+            areaName: areaName,
+            workingDays: workingDays,
+            salonDpImage: salonDpImageFile, // Save salonDP image with the specified format
+            selectedServices: selectedServices, // Include selected services as an array
+        };
+
+        // Save salon data to Firestore
+        db.collection('salons').doc(userID).set(salonData)
+            .then(function () {
+                var successMessageContainer = document.getElementById('successMessage');
+                successMessageContainer.innerHTML = '<p>Your salon data has been successfully registered!</p>';
+            })
+            .catch(function (error) {
+                console.error('Error adding salon information:', error);
+                // Optionally, display an error message or handle the error
+            });
+    } else {
+        console.error("User not authenticated.");
+        // Optionally, display a message or handle the scenario where the user is not authenticated
+    }
+}
+function fetchSalonDataForLoggedInUser(userId) {
+    var salonForm = document.getElementById('salonForm');
+    var salonDpImage = document.getElementById('salonDpImage');
+    var salonNameInput = document.getElementById('salonName');
+    var locationInput = document.getElementById('location');
+    var contactInput = document.getElementById('contact');
+    
+    
+    var declineMessageContainer = document.getElementById('declineMessage');
+
+    db.collection('approved').doc(userId).get()
+        .then((approvedDoc) => {
+            if (approvedDoc.exists) {
+                // Salon is approved
+                displayApprovalMessage('Your salon is approved. Congratulations!');
+            } else {
+                db.collection('declined').doc(userId).get()
+                    .then((declinedDoc) => {
+                        if (declinedDoc.exists) {
+                            // Salon is declined
+                            displayDeclineMessage('Your salon application has been declined.');
+                        } else {
+                            // Check if data is present in the salons collection
+                            db.collection('salons').doc(userId).get()
+                                .then((salonDoc) => {
+                                    if (salonDoc.exists) {
+                                        // Salon is neither approved nor declined but data is present in the salons collection
+                                        declineMessageContainer.innerHTML = '<p>Your salon is pending approval.</p>';
+                                        fetchSalonDataFromMainCollection(userId); // Fetch data from the main collection
+                                    } else {
+                                        // Salon is neither approved nor declined and no data in the salons collection
+                                        // No message is displayed in this case
+                                        fetchSalonDataFromMainCollection(userId); // Fetch data from the main collection
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error("Error checking salons collection: ", error);
+                                });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error checking declined collection: ", error);
+                    });
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking approved collection: ", error);
+        });
+}
+
+function fetchSalonDataFromMainCollection(userId) {
+    var salonForm = document.getElementById('salonForm');
+    var salonDpImage = document.getElementById('salonDpImage');
+    var salonNameInput = document.getElementById('salonName');
+    var locationInput = document.getElementById('location');
+    var contactInput = document.getElementById('contact');
+    
+    
+
+    db.collection('salons').doc(userId).get()
+        .then((doc) => {
+            if (doc.exists) {
+                var salonData = doc.data();
+
+                // Set salon profile image
+                if (salonData.salonDpImage) {
+                    salonDpImage.src = salonData.salonDpImage;
+                }
+
+                // Set salon form fields
+                salonNameInput.value = salonData.salonName || '';
+                locationInput.value = salonData.location || '';
+                contactInput.value = salonData.contact || '';
+            } else {
+                console.log('No such salon document!');
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching salon data: ", error);
+        });
+}
+function registerServicesWithPrices() {
+    // Add your code to fetch prices and register them in the database
+
+    var prices = {};
+    var selectedServices = document.getElementsByName('services');
+
+    for (var i = 0; i < selectedServices.length; i++) {
+        if (selectedServices[i].checked) {
+            var serviceName = selectedServices[i].value;
+            var inputId = 'price_' + serviceName.replace(/\s+/g, '_').toLowerCase();
+            var priceInput = document.getElementById(inputId);
+            
+            // Fetch and store the prices
+            prices[serviceName] = priceInput.value;
+        }
+    }
+
+    // You can now save the 'prices' object in the database along with other salon information
+    console.log('Prices:', prices);
+
+    // Close the modal
+    var modal = document.getElementById('servicesModal');
+    modal.style.display = 'none';
+}
+function displayApprovalMessage(message) {
+    var successMessageContainer = document.getElementById('successMessage');
+    successMessageContainer.innerHTML = `<p>${message}</p>`;
+}
+function displayDeclineMessage(message) {
+    var declineMessageContainer = document.getElementById('declineMessage');
+    declineMessageContainer.innerHTML = `<p>${message}</p>`;
+    // You can customize the decline message display as needed
+}
+function disableSalonForm() {
+    var inputs = document.querySelectorAll('#salonForm input, #salonForm textarea');
+    inputs.forEach((input) => {
+        input.setAttribute('readonly', true);
+    });
+}
+// Add this code after your existing script
+var map;
+    var marker;
+
+    function initMap() {
+        map = L.map('map').setView([0, 0], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Create a draggable marker
+        marker = L.marker([0, 0], {
+            draggable: true
+        }).addTo(map);
+
+        // Add the following code to register the dragend event listener
+        marker.on('dragend', function (e) {
+             var locationInput = document.getElementById('location');
+             var latlng = e.target.getLatLng();
+             locationInput.value = latlng.lat + ', ' + latlng.lng;
+        });
+    }
+
+// ...
+
+function getCurrentLocation() {
+    console.log('Getting current location...');
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+
+                // Update the area name input field
+                var areaNameInput = document.getElementById('areaName');
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        areaNameInput.value = data.display_name;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching area name:', error);
+                    });
+
+                // Update the map and marker
+                updateMap(latitude, longitude);
+
+                // ... (you can do more if needed)
+            },
+            function (error) {
+                // Handle errors
+                showError(error);
+            }
+        );
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+function storeCoordinatesInDatabase(latitude, longitude) {
+    // Modify this part to save the coordinates in your database
+    // For example, you can use the Firebase Firestore code you've already implemented
+    // Replace 'yourUserId' with the actual user ID or other identifier
+    console.log('Storing coordinates in the database:', latitude, longitude);
+    var user = firebase.auth().currentUser;
+    if (user) {
+        var userID = user.uid;
+
+        db.collection('salons').doc(userID).set({
+            coordinates: {
+                latitude: latitude,
+                longitude: longitude
+            }
+            // Add other fields as needed
+        }).then(function () {
+            console.log('Coordinates successfully stored in the database!');
+        }).catch(function (error) {
+            console.error('Error storing coordinates:', error);
+            // Optionally, display an error message or handle the error
+        });
+    } else {
+        console.error("User not authenticated.");
+        // Optionally, display a message or handle the scenario where the user is not authenticated
+    }
+}
+function updateMap(latitude, longitude) {
+    // Set the map view to the new coordinates
+    map.setView([latitude, longitude], 13);
+
+    // Set the marker to the new coordinates
+    marker.setLatLng([latitude, longitude]);
+
+    // Optionally, you can close the modal if it's open
+    var modal = document.getElementById('servicesModal');
+    modal.style.display = 'none';
+}
+function showPosition(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    // Set the map view to the user's current location
+    map.setView([latitude, longitude], 13);
+
+    // Set the marker to the user's current location
+    var marker = L.marker([latitude, longitude], {
+        draggable: true
+    }).addTo(map);
+
+    // Update the location input field
+    var locationInput = document.getElementById('location');
+    locationInput.value = latitude + ', ' + longitude;
+
+    // Remove existing markers from the map
+    map.eachLayer(function (layer) {
+        if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Add the new marker to the map
+    marker.addTo(map);
+
+    // Optionally, you can close the modal if it's open
+    var modal = document.getElementById('servicesModal');
+    modal.style.display = 'none';
+}
+
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+    }
+}
+
+
+function openServicesModal() {
+    var modal = document.getElementById('servicesModal');
+
+    // Dynamically generate content for services and prices
+    var selectedServices = document.getElementsByName('services');
+    var modalBody = document.querySelector('#servicesModal .modal-body');
+    modalBody.innerHTML = '';
+
+    for (var i = 0; i < selectedServices.length; i++) {
+        if (selectedServices[i].checked) {
+            var serviceName = selectedServices[i].value;
+            var inputId = 'price_' + serviceName.replace(/\s+/g, '_').toLowerCase();
+
+            // Add input fields for prices
+            modalBody.innerHTML += `
+                <div class="form-group">
+                    <label for="${inputId}">${serviceName} Price:</label>
+                    <input type="text" id="${inputId}" name="${inputId}" class="form-control">
+                </div>
+            `;
+        }
+    }
+
+    // Show the modal
+    modal.style.display = 'block';
+}
+
+
+
+    // Your existing event listeners and other JavaScript code remain unchanged.
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initMap();
+        handleAuthStateChange();
+        var registeredEmail = localStorage.getItem('registeredEmail');
+        var emailElement = document.getElementById('salonEmail');
+        if (emailElement) {
+            emailElement.textContent = registeredEmail || 'Not Available';
+        }
+        var modalCloseButton = document.querySelector('#servicesModal .close');
+    });
+</script>
+</body>
+</html>

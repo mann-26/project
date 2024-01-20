@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon Dashboard - Snaplooks</title>
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        /* Your existing styles... */
+
+        /* Add styles for the collapsible sections */
+        .collapsible-section {
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard">
+        <h2>Salon Dashboard</h2>
+
+        <!-- Pending Bookings Collapsible Section -->
+        <div class="collapsible-section" data-toggle="collapse" data-target="#pendingBookingsSection">
+            <h3>Pending Bookings</h3>
+        </div>
+        <div id="pendingBookingsSection" class="collapse">
+            <div class="bookings" id="pendingBookings">
+                <!-- Pending booking data will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Approved Bookings Collapsible Section -->
+        <div class="collapsible-section" data-toggle="collapse" data-target="#approvedBookingsSection">
+            <h3>Approved Bookings</h3>
+        </div>
+        <div id="approvedBookingsSection" class="collapse">
+            <div class="bookings" id="approvedBookings">
+                <!-- Approved booking data will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Declined Bookings Collapsible Section -->
+        <div class="collapsible-section" data-toggle="collapse" data-target="#declinedBookingsSection">
+            <h3>Declined Bookings</h3>
+        </div>
+        <div id="declinedBookingsSection" class="collapse">
+            <div class="bookings" id="declinedBookings">
+                <!-- Declined booking data will be displayed here -->
+            </div>
+        </div>
+
+        <div id="feedbackMessage"></div>
+    </div>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+            authDomain: "snaplooks-bd932.firebaseapp.com",
+            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com/",
+            projectId: "snaplooks-bd932",
+            storageBucket: "snaplooks-bd932.appspot.com",
+            messagingSenderId: "680311673132",
+            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        function displaySalonBookings() {
+    var pendingBookingsContainer = document.getElementById('pendingBookings');
+    var feedbackMessageContainer = document.getElementById('feedbackMessage');
+
+    // Clear existing content
+    pendingBookingsContainer.innerHTML = '';
+    feedbackMessageContainer.innerHTML = '';
+
+    // Fetch bookings from the "Salon_bookings" collection with salonId matching the logged-in salon
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            var loggedInSalonId = user.uid;
+
+            db.collection('Salon_bookings')
+                .where('salonId', '==', loggedInSalonId)
+                .get()
+                .then(querySnapshot => {
+                    if (!querySnapshot.empty) {
+                        querySnapshot.forEach(doc => {
+                            var bookingData = doc.data();
+                            var bookingHtml = `
+                                <div class="booking-entry">
+                                    <p>Date: ${bookingData.appointmentDate}</p>
+                                    <p>Time: ${bookingData.appointmentTime}</p>
+                                    <p>Salon ID: ${bookingData.salonId}</p>
+                                    <p>Salon Name: ${bookingData.salonName}</p>
+                                    <p>Services: ${bookingData.services.map(service => service.service).join(', ')}</p>
+                                    <p>Total Amount: ${bookingData.totalAmount}</p>
+                                    <p>User Email: ${bookingData.userEmail}</p>
+                                    <p>User ID: ${bookingData.userId}</p>
+                                    <button onclick="confirmApproveBooking('${doc.id}')">Approve</button>
+                                    <button onclick="confirmDeclineBooking('${doc.id}')">Decline</button>
+                                </div>
+                            `;
+                            pendingBookingsContainer.appendChild(document.createRange().createContextualFragment(bookingHtml));
+                        });
+                    } else {
+                        // Show a message when there are no bookings
+                        feedbackMessageContainer.innerHTML = '<div class="alert alert-info" role="alert">No bookings currently.</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching salon bookings:', error);
+                    showFeedbackMessage('Error fetching bookings. Please try again.', 'danger');
+                });
+        } else {
+            // Handle the case where the user is not authenticated.
+            console.error('User not authenticated.');
+            showFeedbackMessage('User not authenticated. Please log in.', 'danger');
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+        // Function to automatically fetch salon ID if using Firebase Authentication
+        function getSalonId() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            salonId = user.uid;
+            console.log('Salon ID:', salonId);
+
+            // Call the function to display pending bookings for the logged-in salon
+            displaySalonBookings();
+        } else {
+            // Handle the case where the user is not authenticated.
+            console.error('User not authenticated.');
+            showFeedbackMessage('User not authenticated. Please log in.', 'danger');
+        }
+    });
+}
+
+
+
+function displayApprovedBookings() {
+        var approvedBookingsContainer = document.getElementById('approvedBookings');
+        var feedbackMessageContainer = document.getElementById('feedbackMessage');
+
+        // Clear existing content
+        approvedBookingsContainer.innerHTML = '';
+
+        // Fetch approved bookings from the "Approved_bookings" collection
+        db.collection('Approved_bookings')
+            .get()
+            .then(querySnapshot => {
+                if (!querySnapshot.empty) {
+                    querySnapshot.forEach(doc => {
+                        var approvedBookingData = doc.data();
+                        var approvedBookingHtml = `
+                            <div class="booking-entry">
+                                <p>Date: ${approvedBookingData.appointmentDate}</p>
+                                <p>Time: ${approvedBookingData.appointmentTime}</p>
+                                <p>Salon ID: ${approvedBookingData.salonId}</p>
+                                <p>Salon Name: ${approvedBookingData.salonName}</p>
+                                <p>Services: ${approvedBookingData.services.map(service => service.service).join(', ')}</p>
+                                <p>Total Amount: ${approvedBookingData.totalAmount}</p>
+                                <p>User Email: ${approvedBookingData.userEmail}</p>
+                                <p>User ID: ${approvedBookingData.userId}</p>
+                                <button onclick="confirmCancelBooking('${doc.id}')">Cancel Booking</button>
+                            </div>
+                        `;
+                        approvedBookingsContainer.appendChild(document.createRange().createContextualFragment(approvedBookingHtml));
+                    });
+                } else {
+                    // Show a message when there are no approved bookings
+                    feedbackMessageContainer.innerHTML = '<div class="alert alert-info" role="alert">No approved bookings currently.</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching approved bookings:', error);
+                showFeedbackMessage('Error fetching approved bookings. Please try again.', 'danger');
+            });
+    }
+        // Function to confirm before canceling a booking
+        function confirmCancelBooking(bookingId) {
+            if (window.confirm('Are you sure you want to cancel this booking?')) {
+                cancelBooking(bookingId);
+            }
+        }
+
+        // Function to cancel a booking
+        function cancelBooking(bookingId) {
+            // Get the reference to the booking document in "Approved_bookings" collection
+            var bookingRef = db.collection('Approved_bookings').doc(bookingId);
+
+            // Get the data of the booking to be moved
+            bookingRef.get()
+                .then(doc => {
+                    if (doc.exists) {
+                        var bookingData = doc.data();
+
+                        // Add the booking data to "Declined_bookings" collection
+                        return db.collection('Declined_bookings').add(bookingData);
+                    } else {
+                        // Handle the case where the booking document does not exist
+                        console.error('Booking document does not exist.');
+                        showFeedbackMessage('Error canceling booking. Please try again.', 'danger');
+                    }
+                })
+                .then(() => {
+                    // After successfully adding to "Declined_bookings," delete from "Approved_bookings"
+                    return bookingRef.delete();
+                })
+                .then(() => {
+                    // Update the displayed bookings on the salon dashboard
+                    displayApprovedBookings();
+                    showFeedbackMessage('Booking canceled successfully!', 'success');
+                })
+                .catch(error => {
+                    console.error('Error canceling booking:', error);
+                    showFeedbackMessage('Error canceling booking. Please try again.', 'danger');
+                });
+        }
+        // Call this function to display approved bookings on salon dashboard
+        displayApprovedBookings();
+
+
+
+
+        <!-- Add the following code inside the <script> tag -->
+function displayDeclinedBookings() {
+    var declinedBookingsContainer = document.getElementById('declinedBookings');
+    var feedbackMessageContainer = document.getElementById('feedbackMessage');
+
+    // Clear existing content
+    declinedBookingsContainer.innerHTML = '';
+
+    // Fetch declined bookings from the "Declined_bookings" collection
+    db.collection('Declined_bookings')
+        .get()
+        .then(querySnapshot => {
+            if (!querySnapshot.empty) {
+                querySnapshot.forEach(doc => {
+                    var declinedBookingData = doc.data();
+                    var declinedBookingHtml = `
+                        <div class="booking-entry">
+                            <p>Date: ${declinedBookingData.appointmentDate}</p>
+                            <p>Time: ${declinedBookingData.appointmentTime}</p>
+                            <p>Salon ID: ${declinedBookingData.salonId}</p>
+                            <p>Salon Name: ${declinedBookingData.salonName}</p>
+                            <p>Services: ${declinedBookingData.services.map(service => service.service).join(', ')}</p>
+                            <p>Total Amount: ${declinedBookingData.totalAmount}</p>
+                            <p>User Email: ${declinedBookingData.userEmail}</p>
+                            <p>User ID: ${declinedBookingData.userId}</p>
+                        </div>
+                    `;
+                    declinedBookingsContainer.appendChild(document.createRange().createContextualFragment(declinedBookingHtml));
+                });
+
+                // Add "Clear Declined Bookings" button
+                var clearButtonHtml = '<button onclick="clearDeclinedBookings()">Clear Declined Bookings</button>';
+                declinedBookingsContainer.appendChild(document.createRange().createContextualFragment(clearButtonHtml));
+            } else {
+                // Show a message when there are no declined bookings
+                feedbackMessageContainer.innerHTML = '<div class="alert alert-info" role="alert">No declined bookings currently.</div>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching declined bookings:', error);
+            showFeedbackMessage('Error fetching declined bookings. Please try again.', 'danger');
+        });
+}
+
+// Function to clear declined bookings
+function clearDeclinedBookings() {
+    // Add logic to clear the declined bookings collection
+    db.collection('Declined_bookings')
+        .get()
+        .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                // Delete each document in the collection
+                db.collection('Declined_bookings').doc(doc.id).delete();
+            });
+
+            // After clearing, refresh the displayed declined bookings
+            displayDeclinedBookings();
+            showFeedbackMessage('Cleared declined bookings successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('Error clearing declined bookings:', error);
+            showFeedbackMessage('Error clearing declined bookings. Please try again.', 'danger');
+        });
+}
+
+        // Call this function to display declined bookings on salon dashboard
+        displayDeclinedBookings();
+
+
+
+
+        // Function to confirm before approving a booking
+        function confirmApproveBooking(bookingId) {
+            if (window.confirm('Are you sure you want to approve this booking?')) {
+                approveBooking(bookingId);
+            }
+        }
+
+        // Function to confirm before declining a booking
+        function confirmDeclineBooking(bookingId) {
+            if (window.confirm('Are you sure you want to decline this booking?')) {
+                declineBooking(bookingId);
+            }
+        }
+
+        // Function to approve a booking
+function approveBooking(bookingId) {
+    // Get the reference to the booking document in "Salon_bookings" collection
+    var bookingRef = db.collection('Salon_bookings').doc(bookingId);
+
+    // Get the data of the booking to be moved
+    bookingRef.get()
+        .then(doc => {
+            if (doc.exists) {
+                var bookingData = doc.data();
+
+                // Add the booking data to "Approved_bookings" collection
+                return db.collection('Approved_bookings').add(bookingData);
+            } else {
+                // Handle the case where the booking document does not exist
+                console.error('Booking document does not exist.');
+                showFeedbackMessage('Error approving booking. Please try again.', 'danger');
+            }
+        })
+        .then(() => {
+            // After successfully adding to "Approved_bookings," delete from "Salon_bookings"
+            return bookingRef.delete();
+        })
+        .then(() => {
+            // Update the displayed bookings on the salon dashboard
+            displaySalonBookings();
+            showFeedbackMessage('Booking approved successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('Error approving booking:', error);
+            showFeedbackMessage('Error approving booking. Please try again.', 'danger');
+        });
+}
+
+// Function to decline a booking
+function declineBooking(bookingId) {
+    // Get the reference to the booking document in "Salon_bookings" collection
+    var bookingRef = db.collection('Salon_bookings').doc(bookingId);
+
+    // Get the data of the booking to be moved
+    bookingRef.get()
+        .then(doc => {
+            if (doc.exists) {
+                var bookingData = doc.data();
+
+                // Add the booking data to "Declined_bookings" collection
+                return db.collection('Declined_bookings').add(bookingData);
+            } else {
+                // Handle the case where the booking document does not exist
+                console.error('Booking document does not exist.');
+                showFeedbackMessage('Error declining booking. Please try again.', 'danger');
+            }
+        })
+        .then(() => {
+            // After successfully adding to "Declined_bookings," delete from "Salon_bookings"
+            return bookingRef.delete();
+        })
+        .then(() => {
+            // Update the displayed bookings on the salon dashboard
+            displaySalonBookings();
+            showFeedbackMessage('Booking declined successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('Error declining booking:', error);
+            showFeedbackMessage('Error declining booking. Please try again.', 'danger');
+        });
+}
+
+
+        function showFeedbackMessage(message, type) {
+            var feedbackMessageContainer = document.getElementById('feedbackMessage');
+            feedbackMessageContainer.innerHTML = `<div class="alert alert-${type}" role="alert">${message}</div>`;
+        }
+
+        // Call this function to display pending bookings on salon dashboard
+        getSalonId();
+    </script>
+</body>
+
+</html>

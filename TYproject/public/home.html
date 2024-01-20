@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snaplooks - A Home Salon and Beauty Services Website</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin-top: 50px;
+            padding: 0;
+            background-color: white;
+            margin-right: 2em;
+            font-size: small;
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        h2 {
+            color: black;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 1em;
+            margin-top: 10px;
+            margin-bottom: 60px;
+        }
+
+        .service {
+            text-align: left;
+            margin-bottom: 1em;
+            padding: 1em;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            margin-right: 10px;
+        }
+
+        .service:hover img {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .service img {
+            max-width: 100%;
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+            margin-bottom: 5px;
+        }
+        
+        .service h3 {
+            font-size: 1.5em;
+        }
+       
+       /* Footer Styles */
+       footer {
+            margin-right: -26px;
+            background-color: #f8f9fa;
+            padding: 50px 0;
+            color: #555;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .col-md-3 {
+            width: 25%;
+            padding: 0 15px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .col-md-3:hover {
+            transform: translateY(-10px);
+        }
+
+        h5 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+            transition: color 0.3s ease-in-out;
+        }
+
+        h5:hover {
+            color: #1e87d7;
+        }
+
+        p {
+            color: #666;
+            transition: color 0.3s ease-in-out;
+        }
+
+        p:hover {
+            color: #444;
+        }
+
+        strong {
+            color: #333;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #1e87d7;
+        }
+
+        .text-center {
+            text-align: center;
+            margin-top: 30px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .text-center:hover {
+            transform: scale(1.05);
+        }
+        button {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: lightgray;
+            color: black;
+        }
+
+        .login-container {
+            margin-left: auto;
+            margin-right: 18cm;
+            margin-bottom: -1cm;
+            top: auto;
+        }
+
+        #mainHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 80px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+
+        }
+
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .login-button {
+            background-color: white;
+            color: black;
+            padding: 10px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12.5px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 50px;
+            border: 1px solid black;
+            
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 70px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        h6 {
+            margin: 0;
+            font-size: 1em;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        img {
+            margin-right: 10px;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        p {
+            font-size: small;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .btn {
+            background-color: #fff;
+            color: #3498db;
+        }
+
+        .service a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .offers-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 150px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            height: 250px;
+            overflow: hidden;
+            width: 570px;
+            margin-left: 60px;
+        }
+
+        .offer-slider {
+            height: 100%;
+        }
+
+        .offers-container img {
+            width: 100%;
+            height: 130%;
+            object-fit: fill;
+            border-radius: 8px;
+            margin-bottom: 6em;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .offers-container img.hidden {
+            opacity: 0;
+        }
+
+        .offers-container {
+            background-color: #ecf0f1;
+            border-radius: 10px;
+        }
+
+        button {
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        button:hover {
+            background-color: #9aa1ac5a;
+        }
+
+        .material-icons {
+            margin-right: 8px;
+        }
+
+        .exp {
+            margin-bottom: 0.1em;
+            margin-top: 1em;
+        }
+        .animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #searchForm {
+            display: flex;
+            align-items: center;
+            margin-left: 60%;
+        }
+
+        #searchInput {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        #searchButton {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Styles for the search icon */
+        .material-icons {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .profile-picture-container {
+            border-radius: 50%;
+            overflow: hidden;
+            height: 45px;
+            width: 45px;
+            cursor: pointer;
+            
+        }
+        .profile-picture {
+            max-width: 100%;
+            border-radius: 50%;
+        }
+        .side-section {
+            position: fixed;
+            top: 0;
+            right: -300px; /* Initially hide the side section */
+            width: 300px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+            transition: right 0.3s ease-in-out;
+            z-index: 1001;
+        }
+
+        .profile-section {
+            padding: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+        .mod {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            padding-top: 60px;
+            animation: openModal 0.5s ease-in-out;
+        }
+
+        .blurred-background {
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px); /* Adjust the blur intensity as needed */
+        }
+
+        @keyframes openModal {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+/* Rest of your styles */
+
+
+        .modal-cont {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 400px; /* Adjust the width as needed */
+            max-height: 520px; /* Adjust the maximum height as needed */
+            border-radius: 25px;
+        }
+        .create-profile-btn {
+            display: block;
+            margin: 0 auto;
+            margin-top: 5px;
+        }
+        h1{
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Additional styling for input fields */
+        input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 12px;
+            border: 0.5px solid #ccc; /* Add a border */
+            border-radius: 5px; /* Add rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow for depth */
+        }
+        #userModalProfilePicture {
+            width: 100px; /* Adjust the width as needed */
+            height: 100px; /* Adjust the height as needed */
+            border-radius: 50%;
+            margin: 0 auto 10px; /* Center horizontally and add optional margin */
+            display: block; /* Ensure it's a block element for margin auto to work */
+        }
+      
+    </style>
+</head>
+
+<body>
+    <header id="mainHeader">
+    <div>
+        <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+    </div>
+    <div class="profile-picture-container">
+        <img id="userProfilePicture" alt="Profile Picture" class="profile-picture">
+    </div>
+</header><br>
+    <section class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="exp">Explore Services</h2><br>
+                <div class="services">
+                    <div class="service mb-3" onclick="openServiceModal('Beauty Treatments', 'Pamper yourself with luxurious beauty treatments', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Frosa-rafael-Pe9IXUuC6QU-unsplash.jpg?alt=media&token=0e27f5fe-774b-4430-88a7-a21c72074182', 'Beauty Treatments')">
+                        <a href="#Beauty-Treatments">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Frosa-rafael-Pe9IXUuC6QU-unsplash.jpg?alt=media&token=0e27f5fe-774b-4430-88a7-a21c72074182" alt="Salon Services">
+                            <h3>Beauty Treatments</h3>
+                            <p>Pamper yourself with luxurious beauty treatments</p>
+                        </a>
+                    </div>
+                    <div class="service mb-3" onclick="openServiceModal('Hair Styling', 'Professional hair styling for all occasions', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fclient-doing-hair-cut-barber-shop-salon.jpg?alt=media&token=fd80fd99-313f-4581-a6f6-bb04c8af93d7', 'Hair Styling')">
+                        <a href="#Hair-Styling">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fclient-doing-hair-cut-barber-shop-salon.jpg?alt=media&token=fd80fd99-313f-4581-a6f6-bb04c8af93d7" alt="Salon Services">
+                            <h3>Hair Styling</h3>
+                            <p>Professional hair styling for all occasions</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Massage Therapy', 'Relax with rejuvenating massage sessions', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Falan-caishan-cU53ZFBr3lk-unsplash.jpg?alt=media&token=9d9020b1-94f8-43d0-be36-76e9df533aca', 'Massage Therapy')">
+                        <a href="#Massage-Therapy">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Falan-caishan-cU53ZFBr3lk-unsplash.jpg?alt=media&token=9d9020b1-94f8-43d0-be36-76e9df533aca" alt="Salon Services">
+                            <h3>Massage Therapy</h3>
+                            <p>Relax with rejuvenating massage sessions</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Nail Care', 'Get beautiful and trendy nail services', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Felement5-digital-Xf7o2W7qgP0-unsplash.jpg?alt=media&token=dc049698-2af0-40eb-ac0d-81efbc69149b', 'Nail Care')">
+                        <a href="#Nail-Care">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Felement5-digital-Xf7o2W7qgP0-unsplash.jpg?alt=media&token=dc049698-2af0-40eb-ac0d-81efbc69149b" alt="Salon Services">
+                            <h3>Nail Care</h3>
+                            <p>Get beautiful and trendy nail services</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Makeup Artistry', 'Expert makeup artists for any occasion', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Felement5-digital-ceWgSMd8rvQ-unsplash.jpg?alt=media&token=66599628-2858-4a57-b44d-6cbbd64131a6', 'Makeup Artistry')">
+                        <a href="#Makeup-Artistry">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Felement5-digital-ceWgSMd8rvQ-unsplash.jpg?alt=media&token=66599628-2858-4a57-b44d-6cbbd64131a6" alt="Salon Services">
+                            <h3>Makeup </h3>
+                            <p>Expert makeup artists for any occasion</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Wedding Services', 'Specialized services for your wedding day', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fairbrush-makeup-weddingplz-feature.jpg?alt=media&token=cd6464f0-d05e-4835-8d65-d062111354aa', 'Wedding Services')">
+                        <a href="#Wedding-Services">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fairbrush-makeup-weddingplz-feature.jpg?alt=media&token=cd6464f0-d05e-4835-8d65-d062111354aa" alt="Salon Services">
+                            <h3>Wedding Services</h3>
+                            <p>Specialized services for your wedding day</p>
+                        </a>
+                    </div>                    
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                
+                <div class="offers-container mt-4">
+                    <div class="offer-slider">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>About Us</h5>
+                    <p>
+                        Temporary details about your company can go here. Discuss your mission, values, or any other information relevant to your brand.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact Us</h5>
+                    <p>
+                        <strong>Address:</strong><br>
+                        Your Address Here<br><br>
+                        <strong>Email:</strong><br>
+                        info@example.com<br><br>
+                        <strong>Phone:</strong><br>
+                        +1 234 567 890
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Join Us</h5>
+                    <p>
+                        Explore career opportunities with Snaplooks.<br>
+                        Join our team and contribute your expertise. <br>
+                        
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Help</h5>
+                    <p>
+                        Visit our <a href="#">FAQs</a> for quick answers<br>
+                        Contact our <a href="#">Customer Support</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <p>&copy; 2023 Snaplooks - A Home Salon and Beauty Services Website</p>
+        </div>
+    </footer>
+    
+    <script>
+        function changeImage() { 
+        }
+
+        function openServiceModal(title, description, imageUrl, serviceName) {
+            const modalTitle = document.getElementById('serviceModalTitle');
+            const modalDescription = document.getElementById('serviceModalDescription');
+            const modalImage = document.getElementById('serviceModalImage');
+
+            modalTitle.textContent = serviceName;  // Set the service name dynamically
+            modalDescription.textContent = description;
+            modalImage.src = imageUrl;
+
+            $('#serviceModal').modal('show');
+        }
+
+        // Declare the position variable in a broader scope
+        let position;
+
+        // Function to handle location
+        function handleLocation(pos) {
+            position = pos.coords;
+            var latitude = position.latitude;
+            var longitude = position.longitude;
+            console.log("Latitude:", latitude);
+            console.log("Longitude:", longitude);
+        }
+
+        // Function to handle errors in location retrieval
+        function handleLocationError(error) {
+            console.error("Error getting location:", error.message);
+            // You can handle errors here, such as displaying a message to the user
+        }
+
+        // Try to fetch the user's location using the Geolocation API
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError);
+        } else {
+            console.error("Geolocation is not supported by this browser");
+            // You can handle this case, such as displaying a message to the user
+        }
+
+    // Rest of your script...
+
+    function exploreMore() {
+        // Get the details of the selected service
+        const title = document.getElementById('serviceModalTitle').textContent;
+        const description = document.getElementById('serviceModalDescription').textContent;
+        const imageUrl = document.getElementById('serviceModalImage').src;
+
+        // Encode the parameters for the URL
+        const encodedTitle = encodeURIComponent(title);
+        const encodedDescription = encodeURIComponent(description);
+        const encodedImageUrl = encodeURIComponent(imageUrl);
+
+        // Check if position is defined before using it
+        if (position) {
+            const latitude = position.latitude;
+            const longitude = position.longitude;
+            
+            // Append the latitude and longitude to the URL
+            const encodedLatitude = encodeURIComponent(latitude);
+            const encodedLongitude = encodeURIComponent(longitude);
+
+            // Redirect to the display_SF.html page with parameters
+            const redirectURL = `display_S_F.html?title=${encodedTitle}&description=${encodedDescription}&image=${encodedImageUrl}&lat=${encodedLatitude}&lon=${encodedLongitude}`;
+            console.log("Redirecting to:", redirectURL);
+            window.location.href = redirectURL;
+            } else {
+            console.error("Location not available");
+            // You can handle this case, such as displaying a message to the user
+        }
+    }
+            setInterval(changeImage, 3000);
+            const serviceContainers = document.querySelectorAll('.service');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                    } else {
+                        entry.target.classList.remove('animate');
+                    }
+                });
+            }, { threshold: 0.5 }); 
+            serviceContainers.forEach(container => {
+                observer.observe(container);
+            });
+    </script>
+      <!-- Modal -->
+        <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="serviceModalLabel">Service Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="serviceModalImage" src="" alt="Service Image" style="max-width: 100%;">
+                        <h3 id="serviceModalTitle"></h3>
+                        <p id="serviceModalDescription"></p>
+                        <!-- Add other details here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="exploreMore()">Check Availability</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sideSection" class="side-section">
+            <div class="profile-section">
+                <!-- Add your profile content here -->
+                <h3>User Profile</h3>
+                <p>This is your profile information.</p>
+                <!-- You can customize this section based on your needs -->
+                <button id="logoutBtn">Logout</button>
+            </div>
+            <button id="closeSideSection" class="close-btn">&times;</button>
+        </div>
+        <script>
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+                authDomain: "snaplooks-bd932.firebaseapp.com",
+                databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com",
+                projectId: "snaplooks-bd932",
+                storageBucket: "snaplooks-bd932.appspot.com",
+                messagingSenderId: "680311673132",
+                appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+            };
+        
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+    
+            const checkAuthentication = () => {
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    // User is signed in
+                    console.log("User is authenticated:", user.displayName);
+
+                    // Update the profile picture
+                    const userProfilePicture = document.getElementById('userProfilePicture');
+                    userProfilePicture.src = user.photoURL;
+
+                    // Check if the user has already created a profile
+                    checkProfileCreated();
+                } else {
+                    // User is signed out
+                    console.log("User is not authenticated");
+                }
+            });
+        };
+
+            function openUserModal(name, email, profilePictureUrl) {
+                const userModal = document.getElementById('userModal');
+                const userModalProfilePicture = document.getElementById('userModalProfilePicture');
+                const userNameInput = document.getElementById('userName');
+                const userEmailInput = document.getElementById('userEmail');
+
+                // Set user information in the modal
+                userModalProfilePicture.src = profilePictureUrl;
+                userNameInput.value = name;
+                userEmailInput.value = email;
+
+                // Display the modal
+                userModal.style.display = 'block';
+            }
+
+            function closeUserModal() {
+                const userModal = document.getElementById('userModal');
+                userModal.style.display = 'none';
+            }
+             window.onload = checkAuthentication;
+        </script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const profilePictureContainer = document.querySelector('.profile-picture-container');
+        const sideSection = document.getElementById('sideSection');
+        const closeSideSectionBtn = document.getElementById('closeSideSection');
+        const modal = document.querySelector('.mod');
+
+        modal.addEventListener('animationend', function () {
+            modal.classList.add('blurred-background');
+        });
+
+        profilePictureContainer.addEventListener('click', function () {
+            sideSection.style.transition = 'right 0.3s ease-in-out';
+            sideSection.style.right = '0';
+        });
+
+        closeSideSectionBtn.addEventListener('click', function () {
+            sideSection.style.transition = 'right 0.3s ease-in-out';
+            sideSection.style.right = '-300px'; // Adjust the value based on your side section width
+        });
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+        // Perform Firebase logout
+        firebase.auth().signOut().then(function () {
+            // Sign-out successful.
+            console.log('User signed out');
+            window.location.href = 'index.html'; // Redirect to the index.html page
+        }).catch(function (error) {
+            // An error happened.
+            console.error('Error during sign-out:', error);
+        });
+    });
+    });
+
+    function handleLocation(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            // Now you have the user's current location (latitude and longitude)
+            // You can proceed to the next steps based on your requirements
+            console.log("Latitude:", latitude);
+            console.log("Longitude:", longitude);
+        }
+
+        function checkProfileCreated() {
+    const user = firebase.auth().currentUser;
+
+    if (user) {
+        const db = firebase.firestore();
+        const usersCollection = db.collection('users');
+
+        usersCollection.doc(user.uid).get()
+            .then((doc) => {
+                if (doc.exists && doc.data().profileCreated) {
+                    // User has already created a profile, you can skip showing the modal
+                    console.log("Profile already created");
+                } else {
+                    // User has not created a profile, show the modal
+                    console.log("Profile not created");
+                    openUserModal(user.displayName, user.email, user.photoURL);
+                }
+            })
+            .catch((error) => {
+                console.error("Error checking profile:", error);
+            });
+    } else {
+        // User not authenticated, handle accordingly
+        console.error("User not authenticated");
+    }
+}
+
+
+
+function createProfile() {
+    const user = firebase.auth().currentUser;
+
+    if (user) {
+        const db = firebase.firestore();
+        const usersCollection = db.collection('users');
+
+        // Get values from the modal
+        const contactNumber = document.getElementById('userContact').value;
+        const address = document.getElementById('userAddress').value;
+
+        // Update user profile in Firestore
+        usersCollection.doc(user.uid).set({
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            contactNumber: contactNumber,
+            address: address,
+            profileCreated: true,
+        }, { merge: true })
+        .then(() => {
+            console.log("Profile created successfully");
+            closeUserModal();
+            // Perform additional actions if needed
+        })
+        .catch((error) => {
+            console.error("Error creating profile:", error);
+        });
+    } else {
+        // User not authenticated, handle accordingly
+        console.error("User not authenticated");
+    }
+}
+
+        
+        function closeUserModal() {
+            document.getElementById('userModal').style.display = 'none';
+        }
+
+        // Function to handle errors in location retrieval
+        function handleLocationError(error) {
+            console.error("Error getting location:", error.message);
+            // You can handle errors here, such as displaying a message to the user
+        }
+
+        // Try to fetch the user's location using the Geolocation API
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError);
+        } else {
+            console.error("Geolocation is not supported by this browser");
+            // You can handle this case, such as displaying a message to the user
+        }
+</script>
+<div id="userModal" class="mod">
+    <div class="modal-cont">
+        <h1>Create Profile</h1><br>
+        <img id="userModalProfilePicture" alt="Profile Picture" class="profile-picture">
+        <input type="text" id="userName" placeholder="Enter your name" readonly>
+        <input type="text" id="userEmail" placeholder="Enter your email" readonly>
+        <input type="text" id="userContact" placeholder="Enter your contact number">
+        <input type="text" id="userAddress" placeholder="Enter your address">
+        <!-- Add the "Create Profile" button -->
+        <button class="create-profile-btn" onclick="createProfile()">Create Profile</button>
+    </div>
+</div>
+
+</body>
+</html>

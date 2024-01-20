@@ -1,0 +1,108 @@
+<div class="services">
+                    <div class="service mb-3" onclick="openServiceModal('Beauty Treatments', 'Pamper yourself with luxurious beauty treatments', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Frosa-rafael-Pe9IXUuC6QU-unsplash.jpg?alt=media&token=0e27f5fe-774b-4430-88a7-a21c72074182', 'Beauty Treatments')">
+                        <a href="#Beauty-Treatments">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Frosa-rafael-Pe9IXUuC6QU-unsplash.jpg?alt=media&token=0e27f5fe-774b-4430-88a7-a21c72074182" alt="Salon Services">
+                            <h3>Beauty Treatments</h3>
+                            <p>Pamper yourself with luxurious beauty treatments</p>
+                        </a>
+                    </div>
+                    <div class="service mb-3" onclick="openServiceModal('Hair Styling', 'Professional hair styling for all occasions', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fclient-doing-hair-cut-barber-shop-salon.jpg?alt=media&token=fd80fd99-313f-4581-a6f6-bb04c8af93d7', 'Hair Styling')">
+                        <a href="#Hair-Styling">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fclient-doing-hair-cut-barber-shop-salon.jpg?alt=media&token=fd80fd99-313f-4581-a6f6-bb04c8af93d7" alt="Salon Services">
+                            <h3>Hair Styling</h3>
+                            <p>Professional hair styling for all occasions</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Massage Therapy', 'Relax with rejuvenating massage sessions', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Falan-caishan-cU53ZFBr3lk-unsplash.jpg?alt=media&token=9d9020b1-94f8-43d0-be36-76e9df533aca', 'Massage Therapy')">
+                        <a href="#Massage-Therapy">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Falan-caishan-cU53ZFBr3lk-unsplash.jpg?alt=media&token=9d9020b1-94f8-43d0-be36-76e9df533aca" alt="Salon Services">
+                            <h3>Massage Therapy</h3>
+                            <p>Relax with rejuvenating massage sessions</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Nail Care', 'Get beautiful and trendy nail services', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Felement5-digital-Xf7o2W7qgP0-unsplash.jpg?alt=media&token=dc049698-2af0-40eb-ac0d-81efbc69149b', 'Nail Care')">
+                        <a href="#Nail-Care">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Felement5-digital-Xf7o2W7qgP0-unsplash.jpg?alt=media&token=dc049698-2af0-40eb-ac0d-81efbc69149b" alt="Salon Services">
+                            <h3>Nail Care</h3>
+                            <p>Get beautiful and trendy nail services</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Makeup Artistry', 'Expert makeup artists for any occasion', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Felement5-digital-ceWgSMd8rvQ-unsplash.jpg?alt=media&token=66599628-2858-4a57-b44d-6cbbd64131a6', 'Makeup Artistry')">
+                        <a href="#Makeup-Artistry">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Felement5-digital-ceWgSMd8rvQ-unsplash.jpg?alt=media&token=66599628-2858-4a57-b44d-6cbbd64131a6" alt="Salon Services">
+                            <h3>Makeup </h3>
+                            <p>Expert makeup artists for any occasion</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Wedding Services', 'Specialized services for your wedding day', 'https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fairbrush-makeup-weddingplz-feature.jpg?alt=media&token=cd6464f0-d05e-4835-8d65-d062111354aa', 'Wedding Services')">
+                        <a href="#Wedding-Services">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fairbrush-makeup-weddingplz-feature.jpg?alt=media&token=cd6464f0-d05e-4835-8d65-d062111354aa" alt="Salon Services">
+                            <h3>Wedding Services</h3>
+                            <p>Specialized services for your wedding day</p>
+                        </a>
+                    </div>                    
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="services">
+                    <div class="service mb-3" onclick="openServiceModal('Beauty Treatments', 'Pamper yourself with luxurious beauty treatments', 'https://via.placeholder.com/300x200', 'Beauty Treatments')">
+                        <a href="#Beauty-Treatments">
+                            <img src="https://via.placeholder.com/300x200" alt="Salon Services">
+                            <h3>Beauty Treatments</h3>
+                            <p>Pamper yourself with luxurious beauty treatments</p>
+                        </a>
+                    </div>
+                    <div class="service mb-3" onclick="openServiceModal('Hair Styling', 'Professional hair styling for all occasions', 'https://via.placeholder.com/300x200', 'Hair Styling')">
+                        <a href="#Hair-Styling">
+                            <img src="https://via.placeholder.com/300x200" alt="Salon Services">
+                            <h3>Hair Styling</h3>
+                            <p>Professional hair styling for all occasions</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Massage Therapy', 'Relax with rejuvenating massage sessions', 'https://via.placeholder.com/300x200', 'Massage Therapy')">
+                        <a href="#Massage-Therapy">
+                            <img src="https://via.placeholder.com/300x200" alt="Salon Services">
+                            <h3>Massage Therapy</h3>
+                            <p>Relax with rejuvenating massage sessions</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Nail Care', 'Get beautiful and trendy nail services', 'https://via.placeholder.com/300x200', 'Nail Care')">
+                        <a href="#Nail-Care">
+                            <img src="https://via.placeholder.com/300x200" alt="Salon Services">
+                            <h3>Nail Care</h3>
+                            <p>Get beautiful and trendy nail services</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Makeup Artistry', 'Expert makeup artists for any occasion', 'https://via.placeholder.com/300x200', 'Makeup Artistry')">
+                        <a href="#Makeup-Artistry">
+                            <img src="https://via.placeholder.com/300x200" alt="Salon Services">
+                            <h3>Makeup </h3>
+                            <p>Expert makeup artists for any occasion</p>
+                        </a>
+                    </div>
+                    
+                    <div class="service mb-3" onclick="openServiceModal('Wedding Services', 'Specialized services for your wedding day', 'https://via.placeholder.com/300x200', 'Wedding Services')">
+                        <a href="#Wedding-Services">
+                            <img src="https://via.placeholder.com/300x200" alt="Salon Services">
+                            <h3>Wedding Services</h3>
+                            <p>Specialized services for your wedding day</p>
+                        </a>
+                    </div>                    
+                </div>

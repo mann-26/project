@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+        .banner{
+            width: 100%;
+            height: 100vh;
+            background-image: linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)), url(https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fbenyamin-bohlouli-_C-S7LqxHPw-unsplash.jpg?alt=media&token=49516365-3cf6-4f03-b1d9-f215d6d892c9);
+            background-size: cover;
+            background-position: center;
+        }
+        .navbar{
+            width: 85%;
+            margin: auto;
+            padding: 35px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo{
+            width: 120px;
+            cursor: pointer;
+            filter: invert(100%);
+        }
+        .navbar ul li{
+            list-style: none;
+            display: inline-block;
+            margin: 0 20px;
+            position: relative;
+        }
+        .navbar ul li a{
+            text-decoration: none;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .navbar ul li::after{
+            content: '';
+            height: 3px;
+            width: 0;
+            background: #ffffff;
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            transition: 0.5s;
+        }
+        .navbar ul li:hover::after{
+            width: 100%;
+        }
+        .content{
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+            color: #fff;
+        }
+        .content h1{
+            font-size: 70px;
+            margin-top: 80px;
+        }
+        .content p{
+            margin: 20px auto;
+            font-weight: 100;
+            line-height: 25px;
+        }
+        button{
+            width: 200px;
+            padding: 15px 0;
+            text-align: center;
+            margin: 20px 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            border: 2px solid #a3a3a3;
+            background: transparent;
+            color: #ffffff;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        span{
+            background: #ffffff;
+            height: 100%;
+            width: 0;
+            border-radius: 25px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: -1;
+            transition: 0.5s;
+        }
+        button:hover span{
+            width: 100%;
+        }
+        button:hover{
+            border: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="banner">
+        <div class="navbar">
+            <img src="logo1.png" class="logo">
+            <ul>
+                <li><a href="register.html">Register Salon/Freelancer</a></li>
+                <li><a href="login_SF.html">Login Salon/Freelancer</a></li>
+                <li><a href="admin.html">Login Admin</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>Welcome To Snaplooks</h1>
+            <p>Need some grooming?<br>Book now!</p>
+            <div>
+                <button type="button" onclick="continueWithGoogle()"><span></span>login With Google</button>
+                <button type="button" onclick="continueWithGoogle()"><span></span>Signin With Google</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+            authDomain: "snaplooks-bd932.firebaseapp.com",
+            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com",
+            projectId: "snaplooks-bd932",
+            storageBucket: "snaplooks-bd932.appspot.com",
+            messagingSenderId: "680311673132",
+            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Function to open the modal
+        function openModal() {
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = 1;
+            }, 100);
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            const modal = document.getElementById('myModal');
+            modal.style.opacity = 0;
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        // Function for the "Continue with Google" button
+        async function continueWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    try {
+        // Sign in with Google
+        const result = await firebase.auth().signInWithPopup(provider);
+
+        // If successful, redirect to home.html
+        window.location.href = 'home.html';
+    } catch (error) {
+        console.error(error.message);
+        // Handle authentication error if needed
+    }
+}
+        // Close the modal if the user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('myModal')) {
+                closeModal();
+            }
+        };
+
+        
+    </script>
+    
+</body>
+</html>

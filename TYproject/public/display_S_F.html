@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Webpage Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        section {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .salon-section, .freelancer-section {
+            width: 45%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 60px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .salon-list {
+            list-style: none;
+            padding: 0  ;
+            margin: 0;
+        }
+
+        .salon-item {
+            margin-bottom: 10px;
+            cursor: pointer;
+            background-color: #fff; /* Set background color */
+            border: 1px solid #ddd; /* Add border for separation */
+            padding: 20px; /* Add padding for spacing */
+            border-radius: 20px; /* Add rounded corners */
+            transition: background-color 0.3s; /* Add transition for smoother effect */
+            height: 230px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
+        }
+        #mainHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 60px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 60px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+
+        }
+        #searchForm {
+            display: flex;
+            align-items: center;
+            margin-left: 60%;
+            position: relative; /* Add position relative to make absolute positioning work */
+        }
+        #searchInput {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 5px;
+            width: 200px;
+        }
+        #searchButton {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 9px;
+            margin-right: 70px;
+        }
+        #searchResultsContainer {
+            position: absolute;
+            top: 100%; /* Adjust this value based on your design */
+            left: 0;
+            width: 58%;
+            max-height: 200px; /* Adjust the max-height value */
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .search-result {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .salon-info {
+            margin-bottom: 5px; 
+        }
+
+        .location {
+            color: #555; 
+        }
+        .salon-profile-picture {
+            max-width: 100px; /* Adjust the maximum width as needed */
+            max-height: 100px; /* Adjust the maximum height as needed */
+            border-radius: 50%; /* Make the image round (adjust as needed) */
+            margin-right: 10px; /* Add some margin for spacing */
+            object-fit: cover; /* Ensure the image covers the container */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+        }
+        .salon-info {
+        margin-bottom: 5px;
+        position: relative; /* Add relative positioning */
+    }
+
+    .status-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 5px;
+    }
+
+    .salon-status {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .salon-status.open {
+        color: green;
+    }
+
+    .salon-status.closed {
+        color: red;
+    }
+    .salon-item:hover {
+    background-color: #f0f0f0b6; /* Change to the desired background color on hover */
+    transition: background-color 0.3s; /* Add transition for smoother effect */
+}
+    </style>
+</head>
+<body>
+    <header id="mainHeader">
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>
+
+        <form id="searchForm">
+            <input type="text" id="searchInput" placeholder="Search your favorite salon...">
+            <button type="button" id="searchButton" onclick="searchServices()">Search</button>
+            <div id="searchResultsContainer"></div>
+        </form>
+    </header><br>
+
+    <section>
+        <div class="salon-section">
+            <h2>Salons</h2>
+            <div id="loadingContainer" style="display: none; text-align: center; padding: 20px; display: flex; ">
+
+                <div id="loadingSpinner" style="
+                border: 6px solid #e1dcdce4; /* Change border color */
+                border-top: 6px solid #1e2020; /* Change spinner color */
+                border-radius: 50%;
+                width: 40px; /* Change spinner size */
+                height: 40px; /* Change spinner size */
+                animation: spin 1s linear infinite;
+                align-items: center;
+            "></div>
+
+            </div>
+            <ul class="salon-list" id="salonList">
+                <li class="salon-item" data-salon-id="{doc.id}">
+                    <div class="salon-info">
+                        <img src="{salonData.profilePictureURL}" alt="{salonData.salonName}" class="salon-profile-picture">
+                        <h3>{salonData.salonName}</h3>
+                        <p class="location">{salonData.location}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="freelancer-section">
+            <h2>Freelancers</h2>
+            <!-- Add freelancer-related content here -->
+        </div>
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+            authDomain: "snaplooks-bd932.firebaseapp.com",
+            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com",
+            projectId: "snaplooks-bd932",
+            storageBucket: "snaplooks-bd932.appspot.com",
+            messagingSenderId: "680311673132",
+            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        var db = firebase.firestore();
+
+        
+        // Function to fetch and display salons
+        function displaySalons() {
+    var salonList = document.getElementById('salonList');
+    var loadingContainer = document.getElementById('loadingContainer');
+
+    // Show the loading container
+    loadingContainer.style.display = 'block';
+
+    // Clear existing content
+    salonList.innerHTML = '';
+
+    // Get the user's location using Geolocation API
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                // Call the function to display salons, passing user's coordinates
+                var userLatitude = position.coords.latitude;
+                var userLongitude = position.coords.longitude;
+                displaySalonsWithDistance(userLatitude, userLongitude);
+            },
+            function (error) {
+                console.error('Error getting user location:', error);
+
+                // Hide the loading container in case of an error
+                loadingContainer.style.display = 'none';
+            }
+        );
+    } else {
+        console.error('Geolocation is not supported by this browser.');
+
+        // Hide the loading container in case of an error
+        loadingContainer.style.display = 'none';
+    }
+}
+function displaySalonsWithDistance(userLatitude, userLongitude) {
+    // Get the salon list container
+    var salonList = document.getElementById('salonList');
+
+    // Show the loading container
+    var loadingContainer = document.getElementById('loadingContainer');
+    loadingContainer.style.display = 'block';
+
+    // Clear existing content
+    salonList.innerHTML = '';
+
+    // Fetch salons from the 'approved' collection
+    db.collection('approved').get()
+        .then((querySnapshot) => {
+            // Create an array to store salon items with calculated distances
+            var salonItems = [];
+
+            querySnapshot.forEach((doc) => {
+                var salonData = doc.data();
+
+                // Calculate distance using Haversine formula
+                var salonLatitude = salonData.coordinates.latitude;
+                var salonLongitude = salonData.coordinates.longitude;
+                var distance = calculateHaversineDistance(
+                    userLatitude, userLongitude,
+                    salonLatitude, salonLongitude
+                );
+
+                // Add the salon item with its distance to the array
+                salonItems.push({ docId: doc.id, distance: distance });
+            });
+
+            // Sort salon items based on distance in ascending order
+            salonItems.sort((a, b) => a.distance - b.distance);
+
+            // Loop through the sorted salon items and append them to the salon list
+            salonItems.forEach((salonItem) => {
+                var docId = salonItem.docId;
+                var doc = querySnapshot.docs.find((doc) => doc.id === docId);
+                var salonData = doc.data();
+
+                var isOpen = isSalonOpen(salonData.openTime, salonData.closeTime);
+
+                // Create a list item for each salon
+                var listItem = document.createElement('li');
+                listItem.classList.add('salon-item');
+                listItem.setAttribute('data-salon-id', doc.id); // Store salon ID as a data attribute
+
+                // Create a div to hold salon information
+                var salonInfoDiv = document.createElement('div');
+                salonInfoDiv.classList.add('salon-info');
+
+                // Display the salon profile picture
+                var profilePictureElement = document.createElement('img');
+                profilePictureElement.src = salonData.salonDpImage;
+                profilePictureElement.alt = salonData.salonName;
+                profilePictureElement.classList.add('salon-profile-picture');
+                salonInfoDiv.appendChild(profilePictureElement);
+
+                // Create and append salon name with distance
+                var salonNameElement = document.createElement('h3');
+                salonNameElement.textContent = salonData.salonName + ' (' + salonItem.distance.toFixed(2) + ' km)';
+                salonInfoDiv.appendChild(salonNameElement);
+
+                var statusElement = document.createElement('p');
+                statusElement.textContent = isOpen ? 'Open' : 'Closed';
+                statusElement.classList.add(isOpen ? 'open' : 'closed');
+                statusElement.classList.add('salon-status'); // Add a common class
+                salonInfoDiv.appendChild(statusElement);
+
+                // Create and append location
+                var locationElement = document.createElement('p');
+                locationElement.classList.add('location');
+                locationElement.textContent = salonData.areaName;
+                salonInfoDiv.appendChild(locationElement);
+
+                // Append salon info div to the list item
+                listItem.appendChild(salonInfoDiv);
+
+                // Add an event listener to the salon item
+                listItem.addEventListener('click', function () {
+                    // Redirect to the salon details page and pass salon ID as a URL parameter
+                    window.location.href = 'salon_details.html?salonId=' + doc.id;
+                });
+
+                // Append the list item to the salon list
+                salonList.appendChild(listItem);
+            });
+
+            // Hide the loading container after data is loaded
+            loadingContainer.style.display = 'none';
+        })
+        .catch((error) => {
+            console.error("Error fetching salons: ", error);
+
+            // Hide the loading container in case of an error
+            loadingContainer.style.display = 'none';
+        });
+}
+
+function isSalonOpen(openTime, closeTime) {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinutes = now.getMinutes();
+    const currentTime = currentHour + currentMinutes / 60;
+
+    // Parse openTime and closeTime from HH:mm format
+    const parseTime = (time) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours + minutes / 60;
+    };
+
+    const openTimeNumeric = parseTime(openTime);
+    const closeTimeNumeric = parseTime(closeTime);
+
+    return currentTime >= openTimeNumeric && currentTime <= closeTimeNumeric;
+}
+function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance;
+}
+
+// Function to convert degrees to radians
+function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+                // Call the function to display salons
+                displaySalons();
+
+
+                function searchServices() {
+            var searchInput = document.getElementById('searchInput').value.toLowerCase();
+            var searchResultsContainer = document.getElementById('searchResultsContainer');
+
+            // Clear existing content
+            searchResultsContainer.innerHTML = '';
+
+            // Show loading or feedback if needed
+            // ...
+
+            // Fetch salons from the 'approved' collection
+            db.collection('approved').get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        var salonData = doc.data();
+                        var salonName = salonData.salonName.toLowerCase();
+
+                        // Check if the salon name contains the search input
+                        if (salonName.includes(searchInput)) {
+                            // Create a div for each search result
+                            var resultDiv = document.createElement('div');
+                            resultDiv.classList.add('search-result');
+                            resultDiv.textContent = salonData.salonName;
+
+                            // Add an event listener if needed
+                            resultDiv.addEventListener('click', function () {
+                                // Redirect to the salon details page and pass salon ID as a URL parameter
+                                window.location.href = 'salon_details.html?salonId=' + doc.id;
+                            });
+
+                            // Append the result div to the search results container
+                            searchResultsContainer.appendChild(resultDiv);
+                        }
+                    });
+
+                    // Hide loading or feedback if needed
+                    // ...
+
+                    // Display or hide the search results container based on results
+                    if (searchResultsContainer.children.length > 0) {
+                        searchResultsContainer.style.maxHeight = '200px'; // Adjust the max-height value
+                    } else {
+                        searchResultsContainer.style.maxHeight = '0';
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error searching services: ", error);
+                    // Handle errors if needed
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to get URL parameters
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            // Retrieve and log location parameters from the URL
+            const title = getUrlParameter('title');
+            const description = getUrlParameter('description');
+            const image = getUrlParameter('image');
+            const latitude = getUrlParameter('lat');
+            const longitude = getUrlParameter('lon');
+
+            console.log('Title:', title);
+            console.log('Description:', description);
+            console.log('Image:', image);
+            console.log('Latitude:', latitude);
+            console.log('Longitude:', longitude);
+        });
+    </script>
+
+</body>
+</html>

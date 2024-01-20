@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Snaplooks</title>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+    
+        .dashboard {
+            padding: 20px;
+            margin: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+    
+        .applications {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            animation: slideIn 0.5s ease-in-out;
+        }
+    
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    
+        .application h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+    
+        .application h3:hover {
+            color: #ff6600;
+        }
+    
+        .details {
+            display: none;
+        }
+    
+        .details p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+    
+        .details img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+    
+        .action-buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+    
+        .action-buttons button {
+            margin-bottom: 5px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease-in-out;
+        }
+    
+        .action-buttons button:hover {
+            background-color: #ff6600;
+            color: #fff;
+        }
+    
+        .action-buttons button:last-child {
+            margin-right: 0;
+        }
+    
+        .footer {
+            background-color: #f9f9f9;
+            color: #777;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    
+        /* Responsive Design */
+    
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 15px;
+                margin: 15px;
+            }
+    
+            .applications {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+    
+            .action-buttons button {
+                margin-right: 5px;
+            }
+        }
+
+        .details img {
+        max-width: 100%;
+        max-height: 150px; /* Adjust the max-height as needed */
+        margin-bottom: 10px;
+    }
+    </style>
+    
+</head>
+<body>
+
+    <div class="dashboard">
+        <h2>Admin Dashboard</h2>
+        <div class="applications" id="salonList">
+            <!-- Salon data will be displayed here -->
+        </div>
+        <div class="applications" id="freelancerList">
+            <!-- Freelancer data will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Firebase JavaScript SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+            authDomain: "snaplooks-bd932.firebaseapp.com",
+            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com/",
+            projectId: "snaplooks-bd932",
+            storageBucket: "snaplooks-bd932.appspot.com",
+            messagingSenderId: "680311673132",
+            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        function fetchSalonData() {
+    var salonList = document.getElementById('salonList');
+
+    db.collection('salons').get()
+        .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                salonList.innerHTML = '<p>No salon applications found.</p>';
+            } else {
+                salonList.innerHTML = ''; // Clear the existing content
+                querySnapshot.forEach((doc) => {
+                    var salonData = doc.data();
+                    console.log('Salon Data:', salonData); // Log all salon data for debugging
+
+                    var salonEntry = document.createElement('div');
+                    salonEntry.classList.add('application');
+                    salonEntry.innerHTML = `
+                        <h3 onclick="toggleDetails(this)">${salonData.salonName}</h3>
+                        <div class="details">
+                            <img src="${salonData.salonDpImage}" alt="Salon DP">
+                            <p><strong>Owner's Name:</strong> ${salonData.ownerName}</p>
+                            <p><strong>Location:</strong> ${salonData.areaName}</p>
+                            <p><strong>Contact:</strong> ${salonData.contact}</p>
+                            <p><strong>Open Time:</strong> ${salonData.openTime}</p>
+                            <p><strong>Close Time:</strong> ${salonData.closeTime}</p>
+                            <p><strong>Working Days:</strong> ${salonData.workingDays ? salonData.workingDays.join(', ') : 'N/A'}</p>
+                            <p><strong>Services Provided By Salon:</strong></p>
+                            <ul>
+                            ${salonData.selectedServices ? salonData.selectedServices.map(service => `
+                                <li>
+                                <strong>Name:</strong> ${service.name}<br>
+                                <strong>Description:</strong> ${service.description}<br>
+                                <strong>Price:</strong> ${service.price}<br>
+                                <img src="${service.image}" alt="Service Image" style="max-width: 100%; height: auto; margin-top: 10px;">
+                                </li>
+                            `).join('') : '<li>N/A</li>'}
+                            </ul>
+
+                        </div>
+                    `;
+
+                    // Create approve and decline buttons for each salon
+                    var actionButtons = document.createElement('div');
+                    actionButtons.classList.add('action-buttons');
+                    actionButtons.innerHTML = `
+                        <button class="btn btn-success approve-btn" onclick="approveSalon('${doc.id}')">Approve</button>
+                        <button class="btn btn-danger decline-btn" onclick="declineSalon('${doc.id}')">Decline</button>
+                    `;
+                    salonEntry.appendChild(actionButtons);
+
+                    salonList.appendChild(salonEntry);
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching salons: ", error);
+        });
+}
+
+
+
+        function fetchFreelancerData() {
+    var freelancerList = document.getElementById('freelancerList');
+
+    db.collection('freelancers').get()
+        .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                freelancerList.innerHTML = '<p>No freelancer applications found.</p>';
+            } else {
+                freelancerList.innerHTML = ''; // Clear the existing content
+                querySnapshot.forEach((doc) => {
+                    var freelancerData = doc.data();
+                    var freelancerEntry = document.createElement('div');
+                    freelancerEntry.classList.add('application');
+                    freelancerEntry.innerHTML = `
+                        <h3 onclick="toggleDetails(this)">${freelancerData.freelancerName}</h3>
+                        <div class="details">
+                            <img src="${freelancerData.freelancerDpImage}" alt="Freelancer DP">
+                            <p><strong>Freelancer's Name:</strong> ${freelancerData.freelancerName}</p>
+                            <p><strong>Location:</strong> ${freelancerData.location}</p>
+                            <p><strong>Contact:</strong> ${freelancerData.contact}</p>
+                            <!-- Add other details as needed -->
+                        </div>
+                    `;
+
+                    // Create approve and decline buttons for each freelancer
+                    var actionButtons = document.createElement('div');
+                    actionButtons.classList.add('action-buttons');
+                    actionButtons.innerHTML = `
+                        <button class="btn btn-success approve-btn" onclick="approveFreelancer('${doc.id}')">Approve</button>
+                        <button class="btn btn-danger decline-btn" onclick="declineFreelancer('${doc.id}')">Decline</button>
+                    `;
+                    freelancerEntry.appendChild(actionButtons);
+
+                    freelancerList.appendChild(freelancerEntry);
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching freelancers: ", error);
+        });
+}
+
+
+        // Toggle details visibility
+        function toggleDetails(element) {
+            var details = element.nextElementSibling;
+            if (details.style.display === 'block') {
+                details.style.display = 'none';
+            } else {
+                details.style.display = 'block';
+            }
+        }
+
+        fetchSalonData();
+        fetchFreelancerData();
+
+
+        // Function to handle approving a salon
+        function approveSalon(salonId) {
+            const confirmation = window.confirm('Are you sure you want to approve this salon application?');
+            if (!confirmation) {
+                return; // If the user cancels, exit the function
+            }
+
+            const salonRef = db.collection('salons').doc(salonId);
+            salonRef.get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const salonData = doc.data();
+
+                        // Add the approved salon to the "approved" collection with the same ID
+                        db.collection('approved').doc(salonId).set(salonData)
+                            .then(() => {
+                                console.log('Salon approved and added to "approved" collection');
+
+                                // Remove the salon from the "salons" collection after approval
+                                salonRef.delete()
+                                    .then(() => {
+                                        console.log('Salon removed from "salons" collection');
+
+                                        // Update the UI or fetch salon data again to reflect changes
+                                        fetchSalonData();
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error removing salon:', error);
+                                    });
+                            })
+                            .catch((error) => {
+                                console.error('Error adding salon to "approved" collection:', error);
+                            });
+                    } else {
+                        console.log('No such salon document!');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error getting salon document:', error);
+                });
+        }
+
+        // Function to handle declining a salon
+        function declineSalon(salonId) {
+            const confirmation = window.confirm('Are you sure you want to decline this salon application?');
+            if (!confirmation) {
+                return; // If the user cancels, exit the function
+            }
+
+            const salonRef = db.collection('salons').doc(salonId);
+            salonRef.get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const salonData = doc.data();
+
+                        // Add the declined salon to the "declined" collection with the same ID
+                        db.collection('declined').doc(salonId).set(salonData)
+                            .then(() => {
+                                console.log('Salon declined and added to "declined" collection');
+
+                                // Remove the salon from the "salons" collection after decline
+                                salonRef.delete()
+                                    .then(() => {
+                                        console.log('Salon removed from "salons" collection');
+
+                                        // Update the UI or fetch salon data again to reflect changes
+                                        fetchSalonData();
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error removing salon:', error);
+                                    });
+                            })
+                            .catch((error) => {
+                                console.error('Error adding salon to "declined" collection:', error);
+                            });
+                    } else {
+                        console.log('No such salon document!');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error getting salon document:', error);
+                });
+        }
+
+        function approveFreelancer(freelancerId) {
+    const confirmation = window.confirm('Are you sure you want to approve this freelancer application?');
+    if (!confirmation) {
+        return; // If the user cancels, exit the function
+    }
+
+    const freelancerRef = db.collection('freelancers').doc(freelancerId);
+    freelancerRef.get()
+        .then((doc) => {
+            if (doc.exists) {
+                const freelancerData = doc.data();
+
+                // Add the approved freelancer to the "approved_freelancers" collection with the same ID
+                db.collection('approved_freelancers').doc(freelancerId).set(freelancerData)
+                    .then(() => {
+                        console.log('Freelancer approved and added to "approved_freelancers" collection');
+
+                        // Remove the freelancer from the "freelancers" collection after approval
+                        freelancerRef.delete()
+                            .then(() => {
+                                console.log('Freelancer removed from "freelancers" collection');
+
+                                // Update the UI or fetch freelancer data again to reflect changes
+                                fetchFreelancerData();
+                            })
+                            .catch((error) => {
+                                console.error('Error removing freelancer:', error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error('Error adding freelancer to "approved_freelancers" collection:', error);
+                    });
+            } else {
+                console.log('No such freelancer document!');
+            }
+        })
+        .catch((error) => {
+            console.error('Error getting freelancer document:', error);
+        });
+}
+
+
+function declineFreelancer(freelancerId) {
+    const confirmation = window.confirm('Are you sure you want to decline this freelancer application?');
+    if (!confirmation) {
+        return; // If the user cancels, exit the function
+    }
+
+    const freelancerRef = db.collection('freelancers').doc(freelancerId);
+    freelancerRef.get()
+        .then((doc) => {
+            if (doc.exists) {
+                const freelancerData = doc.data();
+
+                // Add the declined freelancer to the "declined_freelancers" collection with the same ID
+                db.collection('declined_freelancers').doc(freelancerId).set(freelancerData)
+                    .then(() => {
+                        console.log('Freelancer declined and added to "declined_freelancers" collection');
+
+                        // Remove the freelancer from the "freelancers" collection after decline
+                        freelancerRef.delete()
+                            .then(() => {
+                                console.log('Freelancer removed from "freelancers" collection');
+
+                                // Update the UI or fetch freelancer data again to reflect changes
+                                fetchFreelancerData();
+                            })
+                            .catch((error) => {
+                                console.error('Error removing freelancer:', error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error('Error adding freelancer to "declined_freelancers" collection:', error);
+                    });
+            } else {
+                console.log('No such freelancer document!');
+            }
+        })
+        .catch((error) => {
+            console.error('Error getting freelancer document:', error);
+        });
+}
+
+    </script>
+</body>
+</html>
