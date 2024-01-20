@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Snaplooks</title>
+    <style>
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #707274;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.logo {
+    max-width: 100px;
+    height: auto;
+}
+
+.home-button {
+    display: block;
+    padding: 10px;
+    background-color: #fff;
+    color: #454647;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.home-button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.profile-picture-container {
+    display: flex;
+    align-items: center;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+#searchInput {
+    width: 80%;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 1em;
+    transition: width 0.3s ease;
+}
+
+.faq-item {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.faq-item:hover {
+    transform: scale(1.02);
+}
+
+.question {
+    font-weight: bold;
+    margin: 10px 0;
+    font-size: 1.2em;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.answer {
+    color: #555;
+    margin-bottom: 15px;
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.faq-item.open .answer {
+    max-height: 1000px;
+    transition: max-height 0.5s ease;
+}
+
+.bg-light {
+    background-color: #f8f9fa;
+}
+
+.py-5 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col-md-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding-right: 15px;
+    padding-left: 15px;
+    transition: flex 0.3s ease;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+
+
+
+
+
+        
+    </style>
+</head>
+
+<body>
+    <header id="mainHeader">
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>
+        <a href="home.html" class="home-button">Home</a>
+        <div class="profile-picture-container">
+            <img id="userProfilePicture" alt="Profile Picture" class="profile-picture">
+        </div>
+    </header>
+
+    <h1>Frequently Asked Questions - Snaplooks</h1>
+    
+    <input type="text" id="searchInput" placeholder="Search questions..." oninput="searchQuestions()">
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: What is Snaplooks?</div>
+        <div class="answer">A: Snaplooks is a platform that connects users with salons and freelancers offering various beauty and grooming services.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: How can I find salons in my area?</div>
+        <div class="answer">A: You can easily find salons in your area by using our search feature. Enter your location, and browse through the available options.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Can I book appointments through Snaplooks?</div>
+        <div class="answer">A: Yes, Snaplooks allows users to book appointments with their preferred salons and freelancers. Simply select the service, date, and time that suits you.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Is my personal information secure on Snaplooks?</div>
+        <div class="answer">A: Absolutely. We prioritize the security and privacy of your data. All information provided is encrypted and stored securely.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: How do I create an account on Snaplooks?</div>
+        <div class="answer">A: To create an account, click on the "Sign Up" button and follow the prompts. You'll need to provide some basic information to get started.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Can I cancel or reschedule my appointments?</div>
+        <div class="answer">A: Yes, you can manage your appointments through your Snaplooks account. Navigate to the "Appointments" section to make any necessary changes.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: How do I review a salon or freelancer?</div>
+        <div class="answer">A: After your appointment, you can leave a review and rating on the salon or freelancer's profile. Your feedback helps other users make informed decisions.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Are there discounts or promotions available?</div>
+        <div class="answer">A: Yes, Snaplooks often features promotions and discounts. Keep an eye on our website or app for the latest offers from salons and freelancers.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: How do I contact customer support?</div>
+        <div class="answer">A: You can reach our customer support team through the "Contact Us" page on the Snaplooks website. We're here to assist you with any questions or concerns.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Can I become a freelancer on Snaplooks?</div>
+        <div class="answer">A: Absolutely! If you're a freelancer offering beauty or grooming services, you can apply to join Snaplooks. Visit our "Become a Freelancer" page for more details.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: How can I reset my password?</div>
+        <div class="answer">A: If you forget your password, click on the "Forgot Password" link on the login page. Follow the instructions sent to your email to reset your password.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Are there membership plans on Snaplooks?</div>
+        <div class="answer">A: Snaplooks offers different membership plans with additional benefits. Explore the "Membership" section for details on available plans and their perks.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Can I edit my profile information?</div>
+        <div class="answer">A: Yes, you can edit your profile information at any time. Simply log in to your account and go to the "Profile" section to make changes.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: What payment methods are accepted?</div>
+        <div class="answer">A: Snaplooks accepts various payment methods, including credit cards and digital wallets. Choose your preferred payment option during the booking process.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Can I share my favorite salons with friends?</div>
+        <div class="answer">A: Yes, you can share salon profiles with friends through social media or messaging apps. Each salon's profile has a sharing option.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: How does Snaplooks ensure the quality of services?</div>
+        <div class="answer">A: Snaplooks verifies and reviews salons and freelancers before they join the platform. User reviews also contribute to maintaining service quality.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: Is Snaplooks available in multiple languages?</div>
+        <div class="answer">A: Currently, Snaplooks is available in [list of languages]. We're continuously working to expand our language support.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: How can I share feedback or suggestions?</div>
+        <div class="answer">A: We appreciate your feedback and suggestions! You can share them through the "Feedback" section on the Snaplooks website or app.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: What are the system requirements for using Snaplooks?</div>
+        <div class="answer">A: Snaplooks is accessible through web browsers and mobile apps. Ensure your device meets the minimum system requirements for a smooth experience.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleAnswer(this)">
+        <div class="question">Q: How can I report inappropriate content or behavior?</div>
+        <div class="answer">A: If you come across inappropriate content or behavior, please report it to us through the "Report" feature on the platform. We take such reports seriously.</div>
+    </div>
+
+    <!-- Include more FAQ items with the same structure -->
+
+    <script>
+        function toggleAnswer(element) {
+            element.classList.toggle('open');
+        }
+
+        function searchQuestions() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            let found = false;
+
+            faqItems.forEach(item => {
+                const questionText = item.querySelector('.question').innerText.toLowerCase();
+                const isVisible = questionText.includes(searchInput);
+                item.style.display = isVisible ? 'block' : 'none';
+
+                if (isVisible) {
+                    found = true;
+                }
+            });
+
+            const notFoundMessage = document.getElementById('notFoundMessage');
+            const askQuestionLink = document.getElementById('askQuestionLink');
+
+            if (found) {
+                notFoundMessage.style.display = 'none';
+                askQuestionLink.style.display = 'none';
+            } else {
+                notFoundMessage.style.display = 'block';
+                askQuestionLink.style.display = 'block';
+            }
+        }
+    </script>
+
+<div id="notFoundMessage" style="display: none; text-align: center; margin-top: 20px; color: #ff0000;">
+    <strong>No matching questions found.</strong> 
+</div>
+
+<div id="askQuestionLink" style="display: none; text-align: center; margin-top: 10px;">
+    <a href="ask.html">Ask a Question</a>
+</div>
+
+<footer class="bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h5>About Us</h5>
+                <p>
+                    Temporary details about your company can go here. Discuss your mission, values, or any other information relevant to your brand.
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h5>Contact Us</h5>
+                <p>
+                    <strong>Address:</strong><br>
+                    Your Address Here<br><br>
+                    <strong>Email:</strong><br>
+                    info@example.com<br><br>
+                    <strong>Phone:</strong><br>
+                    +1 234 567 890
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h5>Join Us</h5>
+                <p>
+                    Explore career opportunities with Snaplooks.<br>
+                    Join our team and contribute your expertise. <br>
+                    
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h5>Help</h5>
+                <p>
+                    
+                    Contact our <a href="#">Customer Support</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <p>&copy; 2023 Snaplooks - A Home Salon and Beauty Services Website</p>
+    </div>
+</footer>
+</body>
+</html>

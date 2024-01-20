@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support - Snaplooks</title>
+    <!-- Include FontAwesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, p, label, textarea, button {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            width: 100%;
+        }
+
+        .logo {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .home-button {
+            display: block;
+            padding: 10px;
+            background-color: #fff;
+            color: #007bff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .support-info, .support-form {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .support-info:hover, .support-form:hover {
+            transform: scale(1.02);
+        }
+
+        .support-info h2, .support-form h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .support-info p {
+            color: #555;
+        }
+
+        .support-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #007bff;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .social-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .social-link {
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>
+        <a href="home.html" class="home-button">Home</a>
+    </header>
+
+    <h1>Customer Support - Snaplooks</h1>
+
+    <div class="support-info">
+        <h2>Contact Information</h2>
+        <p>
+            <strong>Email:</strong> support@snaplooks.com<br>
+            <strong>Phone:</strong> +91 9764689578<br>
+            <strong>Working Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM (GMT)
+        </p>
+    </div>
+
+    <div class="support-form">
+        <h2>Submit Your Query</h2>
+        <form id="customerSupportForm" onsubmit="submitQuery(event)">
+            <label for="userName">Your Name:</label>
+            <input type="text" id="userName" name="userName" required>
+
+            <label for="userEmail">Your Email:</label>
+            <input type="email" id="userEmail" name="userEmail" required>
+
+            <label for="userQuery">Your Query:</label>
+            <textarea id="userQuery" name="userQuery" rows="4" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="social-links">
+        <a href="https://www.facebook.com/your_facebook_page" class="social-link" title="Follow us on Facebook">
+            <div class="social-icon"><i class="fab fa-facebook"></i></div>
+        </a>
+        <a href="https://twitter.com/your_twitter_page" class="social-link" title="Follow us on Twitter">
+            <div class="social-icon"><i class="fab fa-twitter"></i></div>
+        </a>
+        <a href="https://www.instagram.com/your_instagram_page" class="social-link" title="Follow us on Instagram">
+            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://wa.me/9764689578" class="social-link" title="Chat with us on WhatsApp">
+            <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
+        </a>
+    </div>
+
+    <footer>
+        <!-- Footer content remains the same -->
+    </footer>
+</html>
