@@ -6,141 +6,150 @@
     <title>Customer Support - Snaplooks</title>
     <!-- Include FontAwesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
     <style>
         /* Reset some default styles */
         body, h1, h2, p, label, textarea, button {
             margin: 0;
             padding: 0;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f4;
-            margin: 0;
+            margin: 30px 20px;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            margin-top: 100px;
+            
         }
 
-        header {
+        #mainHeader {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #007bff;
-            padding: 10px 20px;
-            width: 100%;
+            padding: 10px 30px;
+            height: 70px;
+            border-bottom: 1px solid rgb(225, 220, 220);
         }
-
         .logo {
-            max-width: 100px;
-            height: auto;
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
+            margin-left: 20px;
         }
-
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 60px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
         .home-button {
-            display: block;
-            padding: 10px;
-            background-color: #fff;
-            color: #007bff;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
+            background-color: white;
+            padding: 8px 20px;
+            margin-right: 15px;
+            border: 2px solid #333;
+            border-radius: 50px;
             cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            display: block; /* To center the span properly */
             transition: background-color 0.3s ease, color 0.3s ease;
+            color: #333;
         }
-
         .home-button:hover {
-            background-color: #007bff;
+            background-color: #333;
             color: #fff;
         }
-
+        a, .home-button{
+            text-decoration: none;
+        }
+        a, .home-button:hover{
+            text-decoration: none;
+        }
         h1, h2 {
             color: #333;
             text-align: center;
             margin-bottom: 20px;
         }
-
         .support-info, .support-form {
-            width: 80%;
+            width: 65%;
             margin: 20px auto;
             background-color: #fff;
-            border-radius: 10px;
+            border-radius: 30px;
             overflow: hidden;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             transition: transform 0.3s ease;
         }
-
-        .support-info:hover, .support-form:hover {
-            transform: scale(1.02);
-        }
-
         .support-info h2, .support-form h2 {
-            color: #007bff;
+            color: #333;
             margin-bottom: 10px;
         }
-
         .support-info p {
-            color: #555;
+            color: #333;
         }
-
         .support-form form {
             display: flex;
             flex-direction: column;
         }
-
+        .support-form textarea {
+            resize: vertical; /* Allow horizontal resizing only */
+        }
         label {
             margin-top: 10px;
             color: #333;
         }
-
         input, textarea {
-            width: 100%;
+            width: calc(100% - 20px); /* Adjusted width with a little margin on both sides */
             padding: 10px;
             margin-top: 5px;
             margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 1.5px solid #ddd;
+            border-radius: 11px;
             transition: border-color 0.3s ease;
         }
-
         input:focus, textarea:focus {
-            border-color: #007bff;
+            border-color: #000000;
         }
-
         button {
+            width: 20%;
             padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
+            background-color: #ffffff;
+            color: black;
+            border: 1px solid black;
+            border-radius: 30px;
             cursor: pointer;
+            margin: auto;
+            display: block;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-
         button:hover {
-            background-color: #0056b3;
+            background-color: #333;
+            color: #fff;
         }
-
         .social-links {
             margin-top: 20px;
             display: flex;
             justify-content: center;
         }
-
         .social-link {
             margin: 0 10px;
             text-decoration: none;
         }
-
         .social-icon {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #007bff;
+            background-color: #333;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -148,9 +157,8 @@
             font-size: 20px;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-
         .social-icon:hover {
-            background-color: #0056b3;
+            background-color: #1e2022;
         }
     </style>
 </head>
@@ -163,27 +171,27 @@
         <a href="home.html" class="home-button">Home</a>
     </header>
 
-    <h1>Customer Support - Snaplooks</h1>
+    <h2>Customer Support - Snaplooks</h2>
 
     <div class="support-info">
         <h2>Contact Information</h2>
         <p>
-            <strong>Email:</strong> support@snaplooks.com<br>
-            <strong>Phone:</strong> +91 9764689578<br>
-            <strong>Working Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM (GMT)
+            <strong>Email:</strong> snaplooks204@gmail.com<br>
+            <strong>Phone:</strong> +91 0000000000<br>
+            <strong>Working Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM (IST)
         </p>
     </div>
 
     <div class="support-form">
         <h2>Submit Your Query</h2>
         <form id="customerSupportForm" onsubmit="submitQuery(event)">
-            <label for="userName">Your Name:</label>
+            <label for="userName"><strong>Your Name:</strong></label>
             <input type="text" id="userName" name="userName" required>
 
-            <label for="userEmail">Your Email:</label>
+            <label for="userEmail"><strong>Your Email:</strong></label>
             <input type="email" id="userEmail" name="userEmail" required>
 
-            <label for="userQuery">Your Query:</label>
+            <label for="userQuery"><strong>Your Query:</strong></label>
             <textarea id="userQuery" name="userQuery" rows="4" required></textarea>
 
             <button type="submit">Submit</button>
@@ -200,7 +208,7 @@
         <a href="https://www.instagram.com/your_instagram_page" class="social-link" title="Follow us on Instagram">
             <div class="social-icon"><i class="fab fa-instagram"></i></div>
         </a>
-        <a href="https://wa.me/9764689578" class="social-link" title="Chat with us on WhatsApp">
+        <a href="https://wa.me/0000000000" class="social-link" title="Chat with us on WhatsApp">
             <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
         </a>
     </div>

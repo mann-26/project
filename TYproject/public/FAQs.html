@@ -6,158 +6,174 @@
     <title>FAQ - Snaplooks</title>
     <style>
         body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #707274;
-    padding: 10px 20px;
-    width: 100%;
-}
-
-.logo {
-    max-width: 100px;
-    height: auto;
-}
-
-.home-button {
-    display: block;
-    padding: 10px;
-    background-color: #fff;
-    color: #454647;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.home-button:hover {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.profile-picture-container {
-    display: flex;
-    align-items: center;
-}
-
-.profile-picture {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-left: 10px;
-}
-
-h1 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2em;
-}
-
-#searchInput {
-    width: 80%;
-    margin-bottom: 20px;
-    padding: 10px;
-    font-size: 1em;
-    transition: width 0.3s ease;
-}
-
-.faq-item {
-    width: 80%;
-    margin: 20px auto;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.faq-item:hover {
-    transform: scale(1.02);
-}
-
-.question {
-    font-weight: bold;
-    margin: 10px 0;
-    font-size: 1.2em;
-    color: #333;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.answer {
-    color: #555;
-    margin-bottom: 15px;
-    padding: 0 20px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.faq-item.open .answer {
-    max-height: 1000px;
-    transition: max-height 0.5s ease;
-}
-
-.bg-light {
-    background-color: #f8f9fa;
-}
-
-.py-5 {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-}
-
-.container {
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-}
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-}
-
-.col-md-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-    padding-right: 15px;
-    padding-left: 15px;
-    transition: flex 0.3s ease;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.mt-4 {
-    margin-top: 1.5rem;
-}
-
-
-
-
-
-
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin-top: 80px;
+        }
+        #mainHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 60px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
+            margin-left: 20px;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 70px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
         
+        .home-button {
+            background-color: white;
+            padding: 8px 20px;
+            margin-right: 15px;
+            border: 2px solid #333;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            display: block; /* To center the span properly */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: #333;
+        }
+        .home-button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+        a, .home-button{
+            text-decoration: none;
+        }
+        a, .home-button:hover{
+            text-decoration: none;
+        }
+        #searchInput {
+            width: 70%;
+            margin-bottom: 20px;
+            padding: 16px;
+            border-radius: 60px;
+            outline: none; /* Remove default outline */
+            border: none; /* Remove default border */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #searchInput:focus {
+            border: 0.5px solid #282727; /* Add border on focus */
+        }
+
+        .faq-item {
+            width: 65%;
+            margin: 11px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border-radius: 60px;
+        }
+        .faq-item:hover {
+            transform: scale(1.02);
+        }
+        .question {
+            font-weight: bold;
+            margin: 10px 25px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .answer {
+            color: #555;
+            margin-bottom: 15px;
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-left: 25px;
+        }
+        .faq-item.open .answer {
+            max-height: 1000px;
+            transition: max-height 0.5s ease;
+        }
+        footer {
+            width: 100%;
+            background-color: #f8f9fa;
+            margin-top: 20px;
+            padding: 40px 0;
+            color: #555;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.1);
+            
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-right: -130px;
+            margin-left: 80px;
+        }
+        .col-md-3 {
+            width: 80%;
+            padding: 0 15px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .col-md-3:hover {
+            transform: translateY(-10px);
+        }
+        h5 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+            transition: color 0.3s ease-in-out;
+        }
+        h5:hover {
+            color: #444;
+        }
+        p {
+            color: #666;
+            transition: color 0.3s ease-in-out;
+        }
+        p:hover {
+            color: #444;
+        }
+        strong {
+            color: #333;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #1e87d7;
+        }
+        .text-center-mt-4{
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -167,12 +183,9 @@ h1 {
             <img src="logo1.png" alt="Snaplooks Logo" class="logo">
         </div>
         <a href="home.html" class="home-button">Home</a>
-        <div class="profile-picture-container">
-            <img id="userProfilePicture" alt="Profile Picture" class="profile-picture">
-        </div>
     </header>
 
-    <h1>Frequently Asked Questions - Snaplooks</h1>
+    <h2>Frequently Asked Questions - Snaplooks</h2>
     
     <input type="text" id="searchInput" placeholder="Search questions..." oninput="searchQuestions()">
 
@@ -319,7 +332,7 @@ h1 {
     <a href="ask.html">Ask a Question</a>
 </div>
 
-<footer class="bg-light py-5">
+<footer class="bg-primary py-5">
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -344,19 +357,17 @@ h1 {
                 <p>
                     Explore career opportunities with Snaplooks.<br>
                     Join our team and contribute your expertise. <br>
-                    
                 </p>
             </div>
             <div class="col-md-3">
                 <h5>Help</h5>
                 <p>
-                    
-                    Contact our <a href="#">Customer Support</a>
+                    Contact our <a href="customer_support.html">Customer Support</a>
                 </p>
             </div>
         </div>
     </div>
-    <div class="text-center mt-4">
+    <div class="text-center-mt-4">
         <p>&copy; 2023 Snaplooks - A Home Salon and Beauty Services Website</p>
     </div>
 </footer>
