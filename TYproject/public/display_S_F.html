@@ -230,178 +230,178 @@
 
         
         // Function to fetch and display salons
-        function displaySalons() {
-    var salonList = document.getElementById('salonList');
-    var loadingContainer = document.getElementById('loadingContainer');
+            function displaySalons() {
+                var salonList = document.getElementById('salonList');
+                var loadingContainer = document.getElementById('loadingContainer');
 
-    // Show the loading container
-    loadingContainer.style.display = 'block';
+                // Show the loading container
+                loadingContainer.style.display = 'block';
 
-    // Clear existing content
-    salonList.innerHTML = '';
+                // Clear existing content
+                salonList.innerHTML = '';
 
-    // Get the user's location using Geolocation API
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                // Call the function to display salons, passing user's coordinates
-                var userLatitude = position.coords.latitude;
-                var userLongitude = position.coords.longitude;
-                displaySalonsWithDistance(userLatitude, userLongitude);
-            },
-            function (error) {
-                console.error('Error getting user location:', error);
+                // Get the user's location using Geolocation API
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            // Call the function to display salons, passing user's coordinates
+                            var userLatitude = position.coords.latitude;
+                            var userLongitude = position.coords.longitude;
+                            displaySalonsWithDistance(userLatitude, userLongitude);
+                        },
+                        function (error) {
+                            console.error('Error getting user location:', error);
 
-                // Hide the loading container in case of an error
-                loadingContainer.style.display = 'none';
+                            // Hide the loading container in case of an error
+                            loadingContainer.style.display = 'none';
+                        }
+                    );
+                } else {
+                    console.error('Geolocation is not supported by this browser.');
+
+                    // Hide the loading container in case of an error
+                    loadingContainer.style.display = 'none';
+                }
             }
-        );
-    } else {
-        console.error('Geolocation is not supported by this browser.');
+            function displaySalonsWithDistance(userLatitude, userLongitude) {
+                // Get the salon list container
+                var salonList = document.getElementById('salonList');
 
-        // Hide the loading container in case of an error
-        loadingContainer.style.display = 'none';
-    }
-}
-function displaySalonsWithDistance(userLatitude, userLongitude) {
-    // Get the salon list container
-    var salonList = document.getElementById('salonList');
+                // Show the loading container
+                var loadingContainer = document.getElementById('loadingContainer');
+                loadingContainer.style.display = 'block';
 
-    // Show the loading container
-    var loadingContainer = document.getElementById('loadingContainer');
-    loadingContainer.style.display = 'block';
+                // Clear existing content
+                salonList.innerHTML = '';
 
-    // Clear existing content
-    salonList.innerHTML = '';
+                // Fetch salons from the 'approved' collection
+                db.collection('approved').get()
+                    .then((querySnapshot) => {
+                        // Create an array to store salon items with calculated distances
+                        var salonItems = [];
 
-    // Fetch salons from the 'approved' collection
-    db.collection('approved').get()
-        .then((querySnapshot) => {
-            // Create an array to store salon items with calculated distances
-            var salonItems = [];
+                        querySnapshot.forEach((doc) => {
+                            var salonData = doc.data();
 
-            querySnapshot.forEach((doc) => {
-                var salonData = doc.data();
+                            // Calculate distance using Haversine formula
+                            var salonLatitude = salonData.coordinates.latitude;
+                            var salonLongitude = salonData.coordinates.longitude;
+                            var distance = calculateHaversineDistance(
+                                userLatitude, userLongitude,
+                                salonLatitude, salonLongitude
+                            );
 
-                // Calculate distance using Haversine formula
-                var salonLatitude = salonData.coordinates.latitude;
-                var salonLongitude = salonData.coordinates.longitude;
-                var distance = calculateHaversineDistance(
-                    userLatitude, userLongitude,
-                    salonLatitude, salonLongitude
-                );
+                            // Add the salon item with its distance to the array
+                            salonItems.push({ docId: doc.id, distance: distance });
+                        });
 
-                // Add the salon item with its distance to the array
-                salonItems.push({ docId: doc.id, distance: distance });
-            });
+                        // Sort salon items based on distance in ascending order
+                        salonItems.sort((a, b) => a.distance - b.distance);
 
-            // Sort salon items based on distance in ascending order
-            salonItems.sort((a, b) => a.distance - b.distance);
+                        // Loop through the sorted salon items and append them to the salon list
+                        salonItems.forEach((salonItem) => {
+                            var docId = salonItem.docId;
+                            var doc = querySnapshot.docs.find((doc) => doc.id === docId);
+                            var salonData = doc.data();
 
-            // Loop through the sorted salon items and append them to the salon list
-            salonItems.forEach((salonItem) => {
-                var docId = salonItem.docId;
-                var doc = querySnapshot.docs.find((doc) => doc.id === docId);
-                var salonData = doc.data();
+                            var isOpen = isSalonOpen(salonData.openTime, salonData.closeTime);
 
-                var isOpen = isSalonOpen(salonData.openTime, salonData.closeTime);
+                            // Create a list item for each salon
+                            var listItem = document.createElement('li');
+                            listItem.classList.add('salon-item');
+                            listItem.setAttribute('data-salon-id', doc.id); // Store salon ID as a data attribute
 
-                // Create a list item for each salon
-                var listItem = document.createElement('li');
-                listItem.classList.add('salon-item');
-                listItem.setAttribute('data-salon-id', doc.id); // Store salon ID as a data attribute
+                            // Create a div to hold salon information
+                            var salonInfoDiv = document.createElement('div');
+                            salonInfoDiv.classList.add('salon-info');
 
-                // Create a div to hold salon information
-                var salonInfoDiv = document.createElement('div');
-                salonInfoDiv.classList.add('salon-info');
+                            // Display the salon profile picture
+                            var profilePictureElement = document.createElement('img');
+                            profilePictureElement.src = salonData.salonDpImage;
+                            profilePictureElement.alt = salonData.salonName;
+                            profilePictureElement.classList.add('salon-profile-picture');
+                            salonInfoDiv.appendChild(profilePictureElement);
 
-                // Display the salon profile picture
-                var profilePictureElement = document.createElement('img');
-                profilePictureElement.src = salonData.salonDpImage;
-                profilePictureElement.alt = salonData.salonName;
-                profilePictureElement.classList.add('salon-profile-picture');
-                salonInfoDiv.appendChild(profilePictureElement);
+                            // Create and append salon name with distance
+                            var salonNameElement = document.createElement('h3');
+                            salonNameElement.textContent = salonData.salonName + ' (' + salonItem.distance.toFixed(2) + ' km)';
+                            salonInfoDiv.appendChild(salonNameElement);
 
-                // Create and append salon name with distance
-                var salonNameElement = document.createElement('h3');
-                salonNameElement.textContent = salonData.salonName + ' (' + salonItem.distance.toFixed(2) + ' km)';
-                salonInfoDiv.appendChild(salonNameElement);
+                            var statusElement = document.createElement('p');
+                            statusElement.textContent = isOpen ? 'Open' : 'Closed';
+                            statusElement.classList.add(isOpen ? 'open' : 'closed');
+                            statusElement.classList.add('salon-status'); // Add a common class
+                            salonInfoDiv.appendChild(statusElement);
 
-                var statusElement = document.createElement('p');
-                statusElement.textContent = isOpen ? 'Open' : 'Closed';
-                statusElement.classList.add(isOpen ? 'open' : 'closed');
-                statusElement.classList.add('salon-status'); // Add a common class
-                salonInfoDiv.appendChild(statusElement);
+                            // Create and append location
+                            var locationElement = document.createElement('p');
+                            locationElement.classList.add('location');
+                            locationElement.textContent = salonData.areaName;
+                            salonInfoDiv.appendChild(locationElement);
 
-                // Create and append location
-                var locationElement = document.createElement('p');
-                locationElement.classList.add('location');
-                locationElement.textContent = salonData.areaName;
-                salonInfoDiv.appendChild(locationElement);
+                            // Append salon info div to the list item
+                            listItem.appendChild(salonInfoDiv);
 
-                // Append salon info div to the list item
-                listItem.appendChild(salonInfoDiv);
+                            // Add an event listener to the salon item
+                            listItem.addEventListener('click', function () {
+                                // Redirect to the salon details page and pass salon ID as a URL parameter
+                                window.location.href = 'salon_details.html?salonId=' + doc.id;
+                            });
 
-                // Add an event listener to the salon item
-                listItem.addEventListener('click', function () {
-                    // Redirect to the salon details page and pass salon ID as a URL parameter
-                    window.location.href = 'salon_details.html?salonId=' + doc.id;
-                });
+                            // Append the list item to the salon list
+                            salonList.appendChild(listItem);
+                        });
 
-                // Append the list item to the salon list
-                salonList.appendChild(listItem);
-            });
+                        // Hide the loading container after data is loaded
+                        loadingContainer.style.display = 'none';
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching salons: ", error);
 
-            // Hide the loading container after data is loaded
-            loadingContainer.style.display = 'none';
-        })
-        .catch((error) => {
-            console.error("Error fetching salons: ", error);
+                        // Hide the loading container in case of an error
+                        loadingContainer.style.display = 'none';
+                    });
+            }
 
-            // Hide the loading container in case of an error
-            loadingContainer.style.display = 'none';
-        });
-}
+            function isSalonOpen(openTime, closeTime) {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentMinutes = now.getMinutes();
+                const currentTime = currentHour + currentMinutes / 60;
 
-function isSalonOpen(openTime, closeTime) {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinutes = now.getMinutes();
-    const currentTime = currentHour + currentMinutes / 60;
+                // Parse openTime and closeTime from HH:mm format
+                const parseTime = (time) => {
+                    const [hours, minutes] = time.split(':').map(Number);
+                    return hours + minutes / 60;
+                };
 
-    // Parse openTime and closeTime from HH:mm format
-    const parseTime = (time) => {
-        const [hours, minutes] = time.split(':').map(Number);
-        return hours + minutes / 60;
-    };
+                const openTimeNumeric = parseTime(openTime);
+                const closeTimeNumeric = parseTime(closeTime);
 
-    const openTimeNumeric = parseTime(openTime);
-    const closeTimeNumeric = parseTime(closeTime);
+                return currentTime >= openTimeNumeric && currentTime <= closeTimeNumeric;
+            }
+            function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371; // Radius of the Earth in kilometers
+                const dLat = toRadians(lat2 - lat1);
+                const dLon = toRadians(lon2 - lon1);
+                const a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                const distance = R * c;
+                return distance;
+            }
 
-    return currentTime >= openTimeNumeric && currentTime <= closeTimeNumeric;
-}
-function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of the Earth in kilometers
-    const dLat = toRadians(lat2 - lat1);
-    const dLon = toRadians(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c;
-    return distance;
-}
-
-// Function to convert degrees to radians
-function toRadians(degrees) {
-    return degrees * (Math.PI / 180);
-}
-                // Call the function to display salons
-                displaySalons();
+            // Function to convert degrees to radians
+            function toRadians(degrees) {
+                return degrees * (Math.PI / 180);
+            }
+            // Call the function to display salons
+            displaySalons();
 
 
-                function searchServices() {
+        function searchServices() {
             var searchInput = document.getElementById('searchInput').value.toLowerCase();
             var searchResultsContainer = document.getElementById('searchResultsContainer');
 
@@ -475,6 +475,5 @@ function toRadians(degrees) {
             console.log('Longitude:', longitude);
         });
     </script>
-
 </body>
 </html>
