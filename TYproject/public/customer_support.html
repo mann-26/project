@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Support - Snaplooks</title>
-    <!-- Include FontAwesome CSS -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         /* Reset some default styles */
@@ -164,6 +165,48 @@
 </head>
 
 <body>
+    <script>
+        // Your Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+            authDomain: "snaplooks-bd932.firebaseapp.com",
+            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com/",
+            projectId: "snaplooks-bd932",
+            storageBucket: "snaplooks-bd932.appspot.com",
+            messagingSenderId: "680311673132",
+            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        // Function to handle form submission
+        function submitQuery(event) {
+            event.preventDefault();
+
+            var userName = document.getElementById('userName').value;
+            var userEmail = document.getElementById('userEmail').value;
+            var userQuery = document.getElementById('userQuery').value;
+
+            // Add the user query to the "user_queries" collection
+            db.collection('user_queries').add({
+                userName: userName,
+                userEmail: userEmail,
+                userQuery: userQuery,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(function(docRef) {
+                console.log('Query submitted with ID: ', docRef.id);
+                alert('Query submitted successfully!');
+                // You can reset the form or redirect the user to another page here
+            })
+            .catch(function(error) {
+                console.error('Error submitting query: ', error);
+                alert('Error submitting query. Please try again.');
+            });
+        }
+    </script>
     <header>
         <div>
             <img src="logo1.png" alt="Snaplooks Logo" class="logo">
@@ -208,7 +251,7 @@
         <a href="https://www.instagram.com/your_instagram_page" class="social-link" title="Follow us on Instagram">
             <div class="social-icon"><i class="fab fa-instagram"></i></div>
         </a>
-        <a href="https://wa.me/0000000000" class="social-link" title="Chat with us on WhatsApp">
+        <a href="https://wa.me/+919764689578" class="social-link" title="Chat with us on WhatsApp">
             <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
         </a>
     </div>
