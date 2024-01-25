@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-container {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .service-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .service-details {
+            padding: 10px;
+        }
+
+        .book-button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .back-button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="servicesContainer"></div>
+
+    <script>
+        // Retrieve salon data from previous page (you can pass this data through URL parameters or any other method)
+        var salonData = JSON.parse(localStorage.getItem('selectedSalon'));
+        if (!salonData) {
+            // Handle the case when salon data is not available
+            console.error('Salon data not found.');
+            window.location.href = 'index.html'; // Redirect to the main page
+        }
+
+        // Display salon name
+        var container = document.getElementById('servicesContainer');
+        var salonTitle = document.createElement('h2');
+        salonTitle.textContent = salonData.salonName;
+        container.appendChild(salonTitle);
+
+        // Display services
+        salonData.selectedServices.forEach(function (service, index) {
+            var serviceContainer = document.createElement('div');
+            serviceContainer.className = 'service-container';
+
+            // Display service image
+            if (service.image) {
+                var serviceImage = document.createElement('img');
+                serviceImage.className = 'service-image';
+                serviceImage.src = service.image;
+                serviceContainer.appendChild(serviceImage);
+            }
+
+            // Display service details
+            var serviceDetails = document.createElement('div');
+            serviceDetails.className = 'service-details';
+            var serviceName = document.createElement('h3');
+            serviceName.textContent = service.name;
+            var serviceDescription = document.createElement('p');
+            serviceDescription.textContent = service.description;
+            var servicePrice = document.createElement('p');
+            servicePrice.textContent = 'Price: ' + service.price;
+            serviceDetails.appendChild(serviceName);
+            serviceDetails.appendChild(serviceDescription);
+            serviceDetails.appendChild(servicePrice);
+            serviceContainer.appendChild(serviceDetails);
+
+            // Book button
+            var bookButton = document.createElement('button');
+            bookButton.className = 'book-button';
+            bookButton.textContent = 'Book Service';
+            bookButton.addEventListener('click', function () {
+                // Implement booking functionality here
+                alert('Booking functionality not implemented yet.');
+            });
+            serviceContainer.appendChild(bookButton);
+
+            // Append the service container to the main container
+            container.appendChild(serviceContainer);
+        });
+
+        // Back button
+        var backButton = document.createElement('button');
+        backButton.className = 'back-button';
+        backButton.textContent = 'Back';
+        backButton.addEventListener('click', function () {
+            // Navigate back to the main page
+            window.location.href = 'test.html';
+        });
+        container.appendChild(backButton);
+    </script>
+</body>
+</html>

@@ -374,8 +374,56 @@
             }
         }));
 
+        // Prepare salon data for Firestore
+        var salonData = {
+            salonName: salonName,
+            contact: contact,
+            ownerName: ownerName,
+            openTime: openTime,
+            closeTime: closeTime,
+            areaName: areaName,
+            workingDays: workingDays,
+            salonDpImage: salonDpImageFile, // Save salonDP image with the specified format
+            selectedServices: selectedServices, // Include selected services as an array
+            coordinates: {
+                latitude: latitude,
+                longitude: longitude
+            }
+            // Add other fields as needed
+        };
 
-        
+        // Save salon data to Firestore
+        db.collection('salons').doc(userID).set(salonData)
+            .then(function () {
+                // Index services by updating the "services" collection
+                updateServicesCollection(selectedServices, userID);
+                
+                var successMessageContainer = document.getElementById('successMessage');
+                successMessageContainer.innerHTML = '<p>Your salon data has been successfully registered!</p>';
+            })
+            .catch(function (error) {
+                console.error('Error adding salon information:', error);
+                // Optionally, display an error message or handle the error
+            });
+    } else {
+        console.error("User not authenticated.");
+        // Optionally, display a message or handle the scenario where the user is not authenticated
+    }
+}
+
+// Function to update the "services" collection
+function updateServicesCollection(selectedServices, userID) {
+    selectedServices.forEach(function (service) {
+        // Create a document reference using the service name
+        var serviceDocRef = db.collection('services').doc(service.name);
+
+        // Update the "salons" subcollection within the service document
+        serviceDocRef.collection('salons').doc(userID).set({
+            salonID: userID,
+            // Add other salon-related fields if needed
+        }, { merge: true }); // Use merge to update the document without overwriting existing data
+    });
+}
 async function getBase64Image(img) {
     return new Promise(async function (resolve) {
         if (img instanceof HTMLImageElement) {
@@ -416,6 +464,8 @@ async function getBase64Image(img) {
     });
 }
 
+
+  
 // Function to compress the image using the browser's built-in image compression
 function compressImage(dataURL) {
     return new Promise(function (resolve) {
@@ -444,40 +494,6 @@ function compressImage(dataURL) {
 
         img.src = dataURL;
     });
-}
-  
-        // Prepare salon data for Firestore
-        var salonData = {
-            salonName: salonName,
-            contact: contact,
-            ownerName: ownerName,
-            openTime: openTime,
-            closeTime: closeTime,
-            areaName: areaName,
-            workingDays: workingDays,
-            salonDpImage: salonDpImageFile, // Save salonDP image with the specified format
-            selectedServices: selectedServices, // Include selected services as an array
-            coordinates: {
-                latitude: latitude,
-                longitude: longitude
-            }
-            // Add other fields as needed
-        };
-
-        // Save salon data to Firestore
-        db.collection('salons').doc(userID).set(salonData)
-            .then(function () {
-                var successMessageContainer = document.getElementById('successMessage');
-                successMessageContainer.innerHTML = '<p>Your salon data has been successfully registered!</p>';
-            })
-            .catch(function (error) {
-                console.error('Error adding salon information:', error);
-                // Optionally, display an error message or handle the error
-            });
-    } else {
-        console.error("User not authenticated.");
-        // Optionally, display a message or handle the scenario where the user is not authenticated
-    }
 }
 
 async function getCurrentLocation() {
