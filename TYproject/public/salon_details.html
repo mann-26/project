@@ -3,63 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salon Details</title>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
-
-    <script>
-        var firebaseConfig = {
-            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
-            authDomain: "snaplooks-bd932.firebaseapp.com",
-            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com",
-            projectId: "snaplooks-bd932",
-            storageBucket: "snaplooks-bd932.appspot.com",
-            messagingSenderId: "680311673132",
-            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
-        };
-        firebase.initializeApp(firebaseConfig);
-        var db = firebase.firestore();
-        var auth = firebase.auth();
-    </script>
+    <title>Book Services</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
-            
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5%;
         }
-
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            text-align: center;
-        }
-
-        section {
-            padding: 20px;
-        }
-
-        .salon-details {
-            width: 70%;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-            margin-top: 70px;
-        }
-
-        h2 {
-            color: #333;
-            font-size: xx-large;
-        }
-        .logo {
-            height: 70px;
-            width: auto;
-            margin-right: 10px;
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%; /* Adjust the width as needed */
+            margin: auto; /* Center the container */
         }
         #mainHeader {
             display: flex;
@@ -68,6 +27,11 @@
             padding: 10px 30px;
             height: 60px;
             border-bottom: 1px solid rgb(225, 220, 220);
+        }
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
         }
         header {
             position: fixed;
@@ -80,351 +44,370 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 30px;
-            height: 60px;
+            height: 50px;
             border-bottom: 1px solid rgb(225, 220, 220);
         }
-        .salon-profile-picture {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 50%;
-            margin-bottom: 10px;
+        .container {
+            max-width: 650px;
+            margin: 5px 10px;
+            padding: 20px;
+            border-radius: 50px;
+            flex: 1; /* Occupy remaining space */
+            overflow-y: auto;
+        }
+
+        .service-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .service-image {
+            max-height: 50%;
+            width: 20%;
             object-fit: cover;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-        }
-        #salonName {
-            text-align: center; /* Center the text */
-            font-size: 24px; /* Adjust the font size as needed */
-            margin-top: 10px; /* Add space above the salon name */
-            margin-bottom: 20px; /* Add space below the salon name */
-            color: #333; /* Specify the text color */
-        }
-        .services-container {
-            border: 1.3px solid #ddd;
+            object-position: center;
+            margin-right: 18px;
             border-radius: 50px;
-            padding: 25px;
-            background-color: #f1eded15;
-            max-width: 80%;
-            margin: 20px auto; /* Center horizontally */
-        }
-
-        .service-item {
-            transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
-            cursor: pointer;
             padding: 10px;
-            margin: 8px;
-            border-radius: 50px;
-            border: 1px solid #ddd;
-            text-align: center;
-            width: 600px;
-            margin: 8px auto; /* Center horizontally */
         }
 
-        .service-item.selected {
-            background-color: #1b1e20;
+        .service-details {
+            flex-grow: 1; /* Allow the text to take up remaining space */
+        }
+
+        .book-button {
+            background-color: #000000d4;
             color: #fff;
-            border: 1px solid #2d2e2f;
-            box-shadow: 0 0 10px rgba(24, 25, 26, 0.5);
-        }
-
-        /* Remove the fixed margin-left from .service-item */
-        .service-item:hover {
-            background-color: #f2f2f2;
-        }
-
-        .service-item.selected:hover {
-            background-color: #1b1e20;
-        }
-
-        h3 {
-            margin-top: -20px;
-        }
-
-        .appointment-container {
-            border: 1.3px solid #ddd;
-            border-radius: 38px;
             padding: 10px;
-            background-color: #f1eded15;
-            text-align: center;
-            margin: 20px auto; /* Center horizontally */
-            max-width: 735px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-right: 30px;
         }
 
-        legend {
-            font-size: 30px;
-            text-align: left;
+        .remove-button {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 9px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
         }
 
-        h2 {
-            text-align: center;
-            font-size: xx-large;
-        }
-
-        #appointmentDate,
-        #appointmentTime {
-            width: 50%;
+        .back-button {
+            background-color: #3498db;
+            color: #fff;
             padding: 10px;
-            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .cart-container {
+            width: 300px;
+            margin: 20px 0px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-            margin: 0 auto; /* Center horizontally */
+            padding: 45px;
+            border-radius: 50px;
+            background-color: #fff;
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            position: fixed;
+            top: 100px;
+            right: 90px;
+            overflow: hidden;
         }
 
-        #bookNowButton {
+        /* Adjust the height and show overflow after a certain height is reached */
+        .cart-container.open {
+            max-height: 250px; /* Adjust the value as needed */
+            overflow: auto;
+        }
+        /* Hide the scrollbar */
+        .cart-container {
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+
+        .cart-container::-webkit-scrollbar {
+            width: 1px; 
+        }
+
+        .cart-container::-webkit-scrollbar-thumb {
+            background-color: transparent; 
+        }
+
+        .cart-container::-webkit-scrollbar-track {
+            background-color: transparent; 
+        }
+        .cart-title {
+            font-size: 20px;
+            margin-top: -5px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .cart-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-details h4 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .cart-item-details p {
+            margin: 0;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .cart-item-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .salon-name-container{
+            font-size: large;
+        }
+        .back-button {
             background-color: white;
-            padding: 10px 20px;
+            padding: 8px 20px;
+            margin-right: 50px;
+            margin-top: -5px;
             border: 2px solid #333;
             border-radius: 50px;
             cursor: pointer;
             transition: background-color 0.3s, color 0.3s;
             display: block; /* To center the span properly */
-            margin: 20px auto; /* Center horizontally */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: #333;
         }
-
-        #bookNowButton span {
-            display: block;
+        .back-button:hover {
             background-color: #333;
-            height: 100%;
-            width: 0;
-            border-radius: 5px;
-            transition: width 0.3s;
+            color: #fff;
+        }
+        a, .back-button{
+            text-decoration: none;
+        }
+        a, .back-button:hover{
+            text-decoration: none;
+        }
+        .select-date-time-container {
+            position: fixed;
+            width: 24%;
+            top: 500px; /* Adjust the top position as needed */
+            right: 90px; /* Adjust the right position as needed */
         }
 
-        #bookNowButton:hover span {
-            width: 100%;
-        }
-
-        #bookNowButton:hover {
-            background-color: #333;
-            color: white;
-        }
-
-        #totalAmount {
-            text-align: center;
-            font-size: x-large;
-            margin-top: 20px;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        .select-date-time-button {
+            background-color: #000000d4;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            width: 90%;
+            border-radius: 50px;
+            cursor: pointer;
+            display: none; /* Initially hidden */
         }
     </style>
 </head>
-<body>
-
     <header id="mainHeader">
         <div>
             <img src="logo1.png" alt="Snaplooks Logo" class="logo">
         </div>
-    </header><br>
+        <a href="display_S_F.html" class="back-button">Back</a>
+    </header>
 
-    <section>
-        <div class="salon-details" id="salonDetailsContainer">
-            <div id="loadingContainer" style="display: none; text-align: center; padding: 20px;">
-                <div id="loadingSpinner" style="
-                    border: 4px solid #e1dcdce4; /* Change border color */
-                    border-top: 4px solid #1e2020; /* Change spinner color */
-                    border-radius: 50%;
-                    width: 20px; /* Change spinner size */
-                    height: 20px; /* Change spinner size */
-                    animation: spin 1s linear infinite;
-                    align-items: center;
-                "></div>
-            </div>
-            
-            <h2>Book Your Appointment</h2>
-            <img id="salonProfilePicture" class="salon-profile-picture" alt="Salon Profile Picture">
-            <div id="salonName"></div>
-            <div id="servicesAndPrices"></div>
-            
-            
-            <fieldset class="appointment-container">
-                <legend>Select Date And Time</legend>
-                <form id="bookingForm">
-                    <label for="appointmentDate">Select Date:</label>
-                    <input type="date" id="appointmentDate" required><br>
-            
-                    <label for="appointmentTime">Select Time:</label>
-                    <input type="time" id="appointmentTime" required><br>
-                    <button id="bookNowButton" type="submit"><span></span>Book Now</button>
-                </form>
-            </fieldset>
-            
-            
+    <div class="main-container">
+        <div class="container" id="servicesContainer"></div>
+
+        <div class="cart-container" id="cartContainer">
+            <h2 class="cart-title">Service Selected</h2>
+            <ul class="cart-items" id="cartItems"></ul><br>
+            <p id="totalPrice"><strong>Total Price:</strong> Rs0</p>
         </div>
-        
-    </section>
+        <div class="select-date-time-container">
+            <button class="select-date-time-button" id="selectDateTimeButton">Select Date and Time</button>
+        </div>
+    </div>
+    <script>
+        var salonData = JSON.parse(localStorage.getItem('selectedSalon'));
+        if (!salonData) {
+            alert('Salon data not found.');
+            window.location.href = 'home.html';
+        }
 
-    <script>
-        function toggleSelection(element) {
-            element.classList.toggle("selected");
-            calculateTotal();
-        }
-    
-        function calculateTotal() {
-            var total = 0;
-            var selectedServiceItems = document.querySelectorAll('.service-item.selected span');
-    
-            selectedServiceItems.forEach(function (span) {
-                var price = parseFloat(span.getAttribute('data-price'));
-                total += price;
+        var salonIdFromURL = new URLSearchParams(window.location.search).get('salonId');
+        var container = document.getElementById('servicesContainer');
+        var cartContainer = document.getElementById('cartContainer');
+        var cartItemsContainer = document.getElementById('cartItems');
+        var totalPriceDisplay = document.getElementById('totalPrice');
+        var selectDateTimeButton = document.getElementById('selectDateTimeButton');
+        var selectedServices = [];
+        var totalPrice = 0;
+
+        function isServiceInCart(service) {
+            return selectedServices.some(function (cartService) {
+                return cartService.name === service.name;
             });
-    
-            // Display the total
-            document.getElementById('totalAmount').textContent = `Total Amount: Rs ${total.toFixed(2)}`;
         }
-    </script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var urlParams = new URLSearchParams(window.location.search);
-            var salonId = urlParams.get('salonId');
-            var salonDetailsContainer = document.getElementById('salonDetailsContainer');
-            var loadingContainer = document.getElementById('loadingContainer');
-            var loadingSpinner = document.getElementById('loadingSpinner');
-            if (salonId) {
-                loadingContainer.style.display = 'block';
-                var salonRef = db.collection('approved').doc(salonId);
-                salonRef.get()
-                    .then((doc) => {
-                        if (doc.exists) {
-                            var salonData = doc.data();
-                            var servicesAndPrices = salonData.prices;
-    
-                            var salonProfilePicture = document.getElementById('salonProfilePicture');
-                            salonProfilePicture.src = salonData.salonDpImage;
-    
-                            var salonNameElement = document.getElementById('salonName');
-                            salonNameElement.textContent = salonData.salonName;
-    
-                            var servicesAndPricesElement = document.getElementById('servicesAndPrices');
-                            
-    
-                            // Create toggle buttons for each service
-                            servicesAndPricesElement.innerHTML += `
-                            
-                            <fieldset class="services-container">
-                            <legend>Select Services</legend>
-                            <div id="servicesAndPrices">
-                                ${Object.entries(servicesAndPrices).map(([service, price]) => `
-                                    <div class="service-item" onclick="toggleSelection(this)">
-                                        <span data-service="${service}" data-price="${price}">
-                                            ${service} - Rs ${price}
-                                        </span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                            <div id="totalAmount"></div>
-                        </fieldset>
-                        `;
-    
-                            // Handle form submission
-                            var bookingForm = document.getElementById('bookingForm');
-                            bookingForm.addEventListener('submit', function (event) {
-                                event.preventDefault();
-    
-                                // Retrieve the current user
-                                var user = auth.currentUser;
-    
-                                if (user) {
-                                    var userId = user.uid;
-                                    var userEmail = user.email; // Get user's email
-    
-                                    // Continue with the rest of the booking logic
-                                    var appointmentDate = document.getElementById('appointmentDate').value;
-                                    var appointmentTime = document.getElementById('appointmentTime').value;
-    
-                                    // Get selected services and prices
-                                    var selectedServices = [];
-                                    var total = 0; // Initialize total
-    
-                                    var selectedServiceItems = document.querySelectorAll('.service-item.selected span');
-    
-                                    selectedServiceItems.forEach(function (span) {
-                                        var service = span.getAttribute('data-service');
-                                        var price = parseFloat(span.getAttribute('data-price'));
-                                        total += price; // Accumulate total
-                                        selectedServices.push({
-                                            service: service,
-                                            price: price
-                                        });
-                                    });
-    
-                                    // Save booking details to the database
-                                    db.collection('Salon_bookings').add({
-                                        userId: userId,
-                                        userEmail: userEmail, // Include userEmail in booking details
-                                        salonId: salonId,
-                                        salonName: salonData.salonName,
-                                        services: selectedServices,
-                                        appointmentDate: appointmentDate,
-                                        appointmentTime: appointmentTime,
-                                        totalAmount: total // Include the total price in the booking details
-                                    })
-                                    .then(function (docRef) {
-                                        console.log('Booking successfully added with ID: ', docRef.id);
-    
-                                        // Send email using server endpoint
-                                        fetch('http://localhost:3000/sendEmail', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                            },
-                                            body: JSON.stringify({ userEmail }),
-                                        })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            console.log(data);
-                                            // Optionally handle the response from the server
-                                        })
-                                        .catch(error => {
-                                            console.error('Error sending email:', error);
-                                            // Optionally handle the error
-                                        });
-    
-                                        // Optionally, redirect the user to a confirmation page
-                                        window.location.href = 'booking_confirmation.html?bookingId=' + docRef.id;
-                                    })
-                                    .catch(function (error) {
-                                        console.error('Error adding booking: ', error);
-                                    });
-                                } else {
-                                    // Handle the case where the user is not authenticated
-                                    console.log('User not authenticated');
-                                }
-                            });
-                        } else {
-                            console.log('No such salon document!');
+
+        function addToCart(service) {
+            selectedServices.push(service);
+            totalPrice += parseFloat(service.price);
+            updateCart();
+            updateTotalPrice();
+            updateSelectDateTimeButton();
+        }
+
+        function removeFromCart(index) {
+            totalPrice -= parseFloat(selectedServices[index].price);
+            selectedServices.splice(index, 1);
+            updateCart();
+            updateTotalPrice();
+            updateSelectDateTimeButton();
+        }
+
+        function updateCart() {
+            cartItemsContainer.innerHTML = '';
+
+            selectedServices.forEach(function (service, index) {
+                var cartItem = document.createElement('li');
+                cartItem.className = 'cart-item';
+
+                var cartItemText = document.createElement('span');
+                cartItemText.textContent = service.name;
+                cartItem.appendChild(cartItemText);
+
+                var removeButton = document.createElement('button');
+                removeButton.className = 'remove-button';
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', function () {
+                    removeFromCart(index);
+                    var serviceContainers = document.querySelectorAll('.service-container');
+                    serviceContainers.forEach(function (container) {
+                        var serviceName = container.querySelector('h3').textContent;
+                        if (serviceName === service.name) {
+                            var bookButton = container.querySelector('.book-button');
+                            bookButton.textContent = 'Add Service';
+                            bookButton.disabled = false;
                         }
-                        loadingContainer.style.display = 'none';
-                    })
-                    .catch((error) => {
-                        console.error('Error getting salon document:', error);
-                        loadingContainer.style.display = 'none';
                     });
+                });
+                cartItem.appendChild(removeButton);
+
+                cartItemsContainer.appendChild(cartItem);
+            });
+
+            // Toggle open class based on whether the cart has items or not
+            cartContainer.classList.toggle('open', selectedServices.length > 0);
+
+            // Remove the 'opened' class to reset the animation
+            cartContainer.classList.remove('opened');
+
+            // Trigger the opened animation after a delay
+            setTimeout(function () {
+                if (selectedServices.length > 0) {
+                    cartContainer.classList.add('opened');
+                }
+            }, 10);
+        }
+
+
+        function updateTotalPrice() {
+            totalPriceDisplay.innerHTML = '<strong>Total Price:</strong> Rs' + totalPrice.toFixed(2);
+        }
+
+        function updateSelectDateTimeButton() {
+            selectDateTimeButton.style.display = selectedServices.length > 0 ? 'block' : 'none';
+            selectDateTimeButton.addEventListener('click', function () {
+                // Create a comma-separated string of selected service names
+                const selectedServiceNames = selectedServices.map(service => service.name).join(',');
+
+                // Calculate the total price and pass it as a query parameter
+                const totalAmount = totalPrice.toFixed(2);
+
+                // Get the salon ID from the URL parameter or local storage
+                const salonId = salonIdFromURL || (salonData && salonData.id) || '';
+
+                // Redirect to the booking.html page with query parameters
+                window.location.href = `booking.html?services=${selectedServiceNames}&total=${totalAmount}&salonId=${salonId}`;
+            });
+        }
+
+        var salonNameContainer = document.createElement('div');
+        salonNameContainer.className = 'salon-name-container';
+        var salonName = document.createElement('h2');
+        salonName.textContent = 'Salon: ' + salonData.salonName;
+        salonNameContainer.appendChild(salonName);
+        container.appendChild(salonNameContainer);
+
+        salonData.selectedServices.forEach(function (service, index) {
+            var serviceContainer = document.createElement('div');
+            serviceContainer.className = 'service-container';
+
+            // Display service image
+            if (service.image) {
+                var serviceImage = document.createElement('img');
+                serviceImage.className = 'service-image';
+                serviceImage.src = service.image;
+                serviceContainer.appendChild(serviceImage);
             }
+
+            // Display service details
+            var serviceDetails = document.createElement('div');
+            serviceDetails.className = 'service-details';
+            var serviceName = document.createElement('h3');
+            serviceName.textContent = service.name;
+            var serviceDescription = document.createElement('p');
+            serviceDescription.textContent = service.description;
+            var servicePrice = document.createElement('p');
+            servicePrice.textContent = 'Price: Rs' + service.price;
+            serviceDetails.appendChild(serviceName);
+            serviceDetails.appendChild(serviceDescription);
+            serviceDetails.appendChild(servicePrice);
+            serviceContainer.appendChild(serviceDetails);
+
+            // Book button
+            var bookButton = document.createElement('button');
+            bookButton.className = 'book-button';
+            bookButton.textContent = 'Add Service';
+            bookButton.addEventListener('click', function () {
+                if (!isServiceInCart(service)) {
+                    addToCart(service);
+                    bookButton.textContent = 'Added';
+                    bookButton.disabled = true;
+                }
+            });
+            serviceContainer.appendChild(bookButton);
+
+            // Append the service container to the main container
+            container.appendChild(serviceContainer);
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-        var today = new Date();
-        var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        
-        var minDate = firstDayOfMonth.toISOString().split('T')[0];
-        var maxDate = lastDayOfMonth.toISOString().split('T')[0];
-
-        document.getElementById('appointmentDate').setAttribute('min', minDate);
-        document.getElementById('appointmentDate').setAttribute('max', maxDate);
-    });
     </script>
 </body>
 </html>

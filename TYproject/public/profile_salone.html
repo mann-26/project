@@ -8,66 +8,311 @@
 
     <meta name="author" content="Codeconvey" />
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-storage-compat.js"></script>
 
-<style>
-    header {
-        background-color: #fff;
-        padding: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center; /* Center items vertically in the header */
-        justify-content: space-between; /* Distribute items horizontally with space between them */
-    }
-        .logo {
-            max-width: 100px;
-        }
-    body {
-        background-color: #f8f9fa;
-    }
-    .logo {
-        max-width: 100px;
-    }
-    .container {
-        background-color: #ffffff;
-        margin-top: 20px;
-        border-radius: 8px;
-        padding: 20px;
-    }
-    
-    .card {
-    background-color: #ffffff;
-    
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    }
-    .card-header h3 {
-    color: rgb(0, 0, 0); /* Replace #your-desired-color with the color you want */
-    font-size: xx-large;
-    }
-    .card-header {
-    background-color: #000000;
-    color: #ffffff;
+    <style>
+        body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#mainHeader {
+    position: fixed; /* Fixed position to stay at the top */
+    top: 0; /* Position at the top of the page */
+    left: 0; /* Align to the left */
+    right: 0; /* Align to the right */
+    z-index: 100; /* Set a high z-index to ensure it appears above other elements */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    height: 50px;
+    border-bottom: 1px solid rgb(225, 220, 220);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.logo {
+    height: 70px;
+    width: auto;
+    margin-right: 10px;
+    margin-top: 6px;
+}
+
+#mainHeader button {
+    background-color: black;
+    color: white;
     border: none;
-    border-radius: 10px 10px 0 0;
-    }
-    
-    .card-body {
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+#container {
+    display: flex;
+}
+
+#leftContainer {
+    width: 200px; /* Adjust the width as needed */
+    height: 200px; /* Adjust the height as needed */
     padding: 20px;
-    }
-    .profile_img {
-        width: 100%;
-        border-radius: 50%;
-    }
-</style>
+    margin-left: 15%;
+    margin-top: 170px;
+    background-color: #f8f8f8;
+    box-shadow: 0 0 23px rgba(0, 0, 0, 0.2);
+    border-radius: 50%; /* Make it round */
+    overflow: hidden; /* Hide overflowing content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+#leftContainer:hover::before {
+    content: "Add a photo";
+    position: absolute;
+    left: 23.5%; /* Adjust as needed */
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: block;
+}
+.email{
+    margin-top: 430px;
+    margin-left: -210px;
+}
+#leftContainer img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    
+}
+
+
+#rightContainer {
+    flex: 1;
+    padding: 20px;
+    margin-left: 10%;
+    margin-right: 130px;
+    margin-top: 40px;
+}
+
+#profile {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border: 1px solid #000000;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#profile img.profile_img {
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+#profile p {
+    margin-top: 10px;
+}
+h3{
+    font-size: x-large;
+    margin-top: -1px;
+}
+#salonInfo, #location, #workInfo, #services {
+    margin-top: 50px;
+}
+
+#salonInfo, #workInfo {
+    background-color: rgba(211, 211, 211, 0.096);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 42px;
+    padding: 30px;
+}
+
+#location, #services {
+    background-color: rgba(211, 211, 211, 0.096);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    padding: 30px;
+}
+
+#map {
+    width: 100%;
+    height: 300px;
+    border-radius: 20px;
+    z-index: 1;
+}
+
+.service-container {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Better styling for service container inputs, textarea, and select */
+.service-container input,
+.service-container textarea,
+.service-container select {
+    width: calc(100% - 20px); /* Adjusted width with padding */
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Add some hover effect for better user experience */
+.service-container input:hover,
+.service-container textarea:hover,
+.service-container select:hover {
+    border-color: black; /* Change color on hover */
+}
+
+/* Add focus styles */
+.service-container input:focus,
+.service-container textarea:focus,
+.service-container select:focus {
+    outline: none;
+    border-color: black; /* Change color on focus */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Add a subtle box shadow on focus */
+}
+
+
+.service-image {
+    margin-top: 10px;
+}
+
+#services button {
+    margin-top: 20px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 1px solid #333; /* Add border */
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Add transition */
+}
+
+#services button:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333; /* Change border color on hover */
+}
+
+#successMessage, #declineMessage {
+    color: #4CAF50;
+    margin-top: 20px;
+}
+form input,#areaName {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+/* Additional styles for checkboxes */
+form input[type="checkbox"] {
+    margin-top: 5px;
+}
+
+/* Styles for buttons */
+button {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 2px solid #fff; /* Add border */
+    padding: 10px 20px;
+    text-align: center;
+    border: 1px solid #333; /* Add border */
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Add transition */
+}
+
+button:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333; /* Change border color on hover */
+}
+
+
+/* Styles for success and decline messages */
+#successMessage, #declineMessage {
+    color: #4CAF50;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #e6ffe6; /* Light green background */
+}
+
+#declineMessage {
+    color: #ff3333;
+    background-color: #ffe6e6; /* Light red background */
+}
+/* Styles for checkboxes */
+form input[type="checkbox"] {
+    margin-top: 5px;
+    margin-right: 5px; /* Add margin between checkboxes */
+}
+
+/* Styles for time inputs */
+form input[type="time"] {
+    width: 80px; /* Adjust the width as needed */
+    padding: 8px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    font-size: 14px;
+}
+.Register-Salon{
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 2px solid #fff; /* Add border */
+    padding: 10px 60px;
+    text-align: center;
+    border: 1px solid #333; /* Add border */
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    margin: 20px auto;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Add transition */
+}
+.Register-Salon:hover{
+    background-color: #333;
+    color: #fff;
+    border-color: #333; /* Change border color on hover */
+}
+ </style>
     
     <script>
         var firebaseConfig = {
@@ -83,126 +328,124 @@
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
         var storage = firebase.storage();
-        // Function to convert image to base64
         
       </script>
 </head>
 <body>
-  <header id="mainHeader">
-    <div>
-        <img src="logo1.png" alt="Snaplooks Logo" class="logo">
-        <button onclick="redirectToSalonDashboard()">Go to Dashboard</button>
-    </div>
-  </header><br>
-  <div id="declineMessage"></div>
-  <div id="successMessage"></div>
-  <section>
-    <div class="rt-container">
-        <div class="col-rt-12">
-            <div class="Scriptcontent">
-                <div class="student-profile py-4">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent text-center">
-                                        <a href="javascript:void(0);" id="changePhotoBtn" onclick="uploadPhoto()">
-                                            <img class="profile_img" alt="salon dp" id="salonDpImage">
-                                        </a>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="mb-0"><strong class="pr-1">Salon ID:</strong>--------</p>
-                                        <p class="mb-0"><strong class="pr-1">Email:</strong><span id="salonEmail">Not Available</span></p>
-                                    </div>
-                                </div>
+    <header id="mainHeader">
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>
+        <div>
+            <button onclick="redirectToSalonDashboard()">Go to Dashboard</button>
+        </div>
+    </header>
+    <br>
+    <div id="container">
+        <div id="leftContainer" onclick="uploadPhoto()">
+            <a href="javascript:void(0);" id="changePhotoBtn">
+                <img class="profile_img"  id="salonDpImage">
+            </a>
+        </div>
+        <div class="email">
+            <label for="email">Email:</label>
+            <span id="salonEmail">Not Available</span>
+        </div>
+        <div id="rightContainer">
+            <section id="salonInfo">
+                <div>
+                    <div>
+                        <h3 class="mb-0">Salon Information</h3><br>
+                    </div>
+                    <div>
+                        <form id="salonForm">
+                            <div>
+                                <label for="ownerName">Owner's Name:</label>
+                                <input type="text" class="form-control" id="ownerName" name="ownerName" autocomplete="off">
                             </div>
-                            <div class="col-lg-8">
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent border-0">
-                                        <h3 class="mb-0">Salon Information</h3><br>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <form id="salonForm">
-                                            <div class="form-group">
-                                                <label for="ownerName">Owner's Name:</label>
-                                                <input type="text" class="form-control" id="ownerName" name="ownerName" autocomplete="off">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="salonName">Salon Name:</label>
-                                                <input type="text" class="form-control" id="salonName" name="salonName" autocomplete="off">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="contact">Contact:</label>
-                                                <input type="text" class="form-control" id="contact" name="contact">
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div><br>
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent border-0">
-                                        <h3 class="mb-0">location</h3><br>
-                                        <label for="location">Your current location</label>
-                                        
-                                        <input type="text" id="areaName" name="areaName" readonly>
-                                        <!-- Add this div to hold the map -->
-                                        <div id="map" style="height: 300px;"></div><br>
-                                        <!-- Add a button to trigger location retrieval -->
-                                        <button type="button" onclick="getCurrentLocation()" class="btn btn-primary">Get Current Location</button>
-                                    </div>
-                                </div>
-                                <div style="height: 26px"></div>
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent border-0">
-                                        <h3 class="mb-0">Work information</h3><br>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <label for="openTime">Working Hours:</label><br>
-                                        <label for="closeTime">Open Time:</label>
-                                        <input type="time" id="openTime" name="openTime">
-                            
-                                        <label for="closeTime">Close Time:</label>
-                                        <input type="time" id="closeTime" name="closeTime">
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <label for="workingDays">Working Days:</label><br>
-                                        <input type="checkbox" id="monday" name="workingDays" value="Monday">
-                                        <label for="monday">Monday</label>
-                                        <input type="checkbox" id="tuesday" name="workingDays" value="Tuesday">
-                                        <label for="tuesday">Tuesday</label>
-                                        <input type="checkbox" id="wednesday" name="workingDays" value="Wednesday">
-                                        <label for="wednesday">Wednesday</label>
-                                        <input type="checkbox" id="thursday" name="workingDays" value="Thursday">
-                                        <label for="thursday">Thursday</label>
-                                        <input type="checkbox" id="friday" name="workingDays" value="Friday">
-                                        <label for="friday">Friday</label>
-                                        <input type="checkbox" id="saturday" name="workingDays" value="Saturday">
-                                        <label for="saturday">Saturday</label>
-                                        <input type="checkbox" id="sunday" name="workingDays" value="Sunday">
-                                        <label for="sunday">Sunday</label>
-                                    </div>
-                                </div> <br>
-                                <div style="height: 26px"></div>
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent border-0">
-                                        <h3 class="mb-0">Add Services</h3><br>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <label for="customServices">Customized Services:</label>
-                                        <div id="customServicesContainer">
-                                            <!-- Custom services will be dynamically added here -->
-                                        </div>
-                                        <button type="button" onclick="addCustomService()" class="btn btn-primary mt-3">Add Custom Service</button>
-                                    </div>
+                            <div>
+                                <label for="salonName">Salon Name:</label>
+                                <input type="text" class="form-control" id="salonName" name="salonName" autocomplete="off">
                             </div>
-                            <button type="button" onclick="saveSalonToFirestore()" class="btn btn-primary mt-3">Save Salon Data</button>
-                        </div>
-
+                            <div>
+                                <label for="contact">Contact:</label>
+                                <input type="text" class="form-control" id="contact" name="contact">
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
+            <section id="location">
+                <div>
+                    <div>
+                        <h3 class="mb-0">Location</h3><br>
+                        <label for="location">Your current location</label>
+                        <input type="text" id="areaName" name="areaName" readonly>
+                        <div id="map" style="height: 300px;"></div><br>
+                        <button type="button" onclick="getCurrentLocation()">Get Current Location</button>
+                    </div>
+                </div>
+            </section>
+            <section id="workInfo">
+                <div>
+                    <div>
+                        <h3 class="mb-0">Work Information</h3><br>
+                    </div>
+                    <div>
+                        <form>
+                            <label for="openTime"><b>Working Hours:</b></label><br>
+                            <label for="closeTime">Open Time:</label>
+                            <input type="time" id="openTime" name="openTime">
+                            <label for="closeTime">Close Time:</label>
+                            <input type="time" id="closeTime" name="closeTime">
+                        </form>
+                    </div><br><br>
+                    <div>
+                        <label for="workingDays"><b>Working Days:</b></label><br>
+                        <input type="checkbox" id="monday" name="workingDays" value="Monday">
+                        <label for="monday">Monday</label>
+                    
+                        <input type="checkbox" id="tuesday" name="workingDays" value="Tuesday">
+                        <label for="tuesday">Tuesday</label>
+                    
+                        <input type="checkbox" id="wednesday" name="workingDays" value="Wednesday">
+                        <label for="wednesday">Wednesday</label>
+                    
+                        <input type="checkbox" id="thursday" name="workingDays" value="Thursday">
+                        <label for="thursday">Thursday</label>
+                    
+                        <input type="checkbox" id="friday" name="workingDays" value="Friday">
+                        <label for="friday">Friday</label>
+                    
+                        <input type="checkbox" id="saturday" name="workingDays" value="Saturday">
+                        <label for="saturday">Saturday</label>
+                    
+                        <input type="checkbox" id="sunday" name="workingDays" value="Sunday">
+                        <label for="sunday">Sunday</label>
+                    </div>
+                </div>
+            </section>
+            <section id="services">
+                <div>
+                    <h3 class="mb-0">Add Services</h3>
+                    <p>Provide details for the services your salon offers.</p>
+                </div>
+                <div>
+                    <label for="customServices"></label>
+                    <div id="customServicesContainer">
+                        <!-- Custom services will be dynamically added here -->
+                    </div>
+                    <button type="button" onclick="addCustomService()" class="btn btn-primary mt-3">Add Service</button>
+                    <button type="button" onclick="undoCustomService()" class="btn btn-secondary mt-3">Remove Service</button>
+                </div>
+            </section>
+            <button type="button" onclick="saveSalonToFirestore()" class="Register-Salon">Register Salon</button>            
+            <section id="messages">
+                <div id="declineMessage"></div>
+                <div id="successMessage"></div>
+            </section>
+            
     </div>
-</section>
 <script>
     function addCustomService() {
     var customServicesContainer = document.getElementById('customServicesContainer');
@@ -239,6 +482,17 @@
 
     customServicesContainer.appendChild(serviceDiv);
 }
+function undoCustomService() {
+    // Add your logic here to undo changes in the service section
+    // For example, you can remove the last added custom service
+    var customServicesContainer = document.getElementById('customServicesContainer');
+    var customServices = customServicesContainer.getElementsByClassName('service-container');
+    
+    if (customServices.length > 0) {
+        customServices[customServices.length - 1].remove();
+    }
+}
+
     function redirectToSalonDashboard() {
             // Assuming the dashboard is named 'salon_dashboard.html'
             window.location.href = 'salon_dashboard.html';
@@ -828,10 +1082,7 @@ function openServicesModal() {
     // Show the modal
     modal.style.display = 'block';
 }
-
-
-
-    // Your existing event listeners and other JavaScript code remain unchanged.
+   // Your existing event listeners and other JavaScript code remain unchanged.
 
     document.addEventListener('DOMContentLoaded', function () {
         initMap();

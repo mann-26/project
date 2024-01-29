@@ -160,9 +160,95 @@
         color: red;
     }
     .salon-item:hover {
-    background-color: #f0f0f0b6; /* Change to the desired background color on hover */
-    transition: background-color 0.3s; /* Add transition for smoother effect */
-}
+        background-color: #f0f0f0b6; /* Change to the desired background color on hover */
+        transition: background-color 0.3s; /* Add transition for smoother effect */
+    }
+    .freelancer-section {
+        width: 45%;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 60px;
+    }
+
+    .freelancer-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .freelancer-item {
+        margin-bottom: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 20px;
+        transition: background-color 0.3s;
+        height: 230px;
+    }
+
+    .freelancer-info {
+        margin-bottom: 5px;
+        position: relative;
+    }
+
+    .freelancer-profile-picture {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Status container for freelancers (similar to salons) */
+    .status-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 5px;
+    }
+
+    .freelancer-status {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .freelancer-status.open {
+        color: green;
+    }
+
+    .freelancer-status.closed {
+        color: red;
+    }
+
+    /* Hover effect for freelancer items (similar to salons) */
+    .freelancer-item:hover {
+        background-color: #f0f0f0b6;
+        transition: background-color 0.3s;
+    }
+
+        /* Add loading styles for the Freelancer Section */
+    #freelancerLoadingContainer {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    #freelancerLoadingSpinner {
+        border: 6px solid #e1dcdce4;
+        border-top: 6px solid #1e2020;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        align-items: center;
+        margin: 0 auto; /* Center the spinner */
+    }
     </style>
 </head>
 <body>
@@ -209,7 +295,9 @@
 
         <div class="freelancer-section">
             <h2>Freelancers</h2>
-            <!-- Add freelancer-related content here -->
+            <ul class="freelancer-list" id="freelancerList">
+                <!-- Freelancer items will be dynamically added here -->
+            </ul>
         </div>
     </section>
 
@@ -350,6 +438,7 @@ function displaySalonsWithDistance(userLatitude, userLongitude) {
                 // Add an event listener to the salon item
                 listItem.addEventListener('click', function () {
                     // Redirect to the salon details page and pass salon ID as a URL parameter
+                    localStorage.setItem('selectedSalon', JSON.stringify(salonData));
                     window.location.href = 'salon_details.html?salonId=' + doc.id;
                 });
 
@@ -624,6 +713,141 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Latitude:', latitude);
             console.log('Longitude:', longitude);
         });
+
+        function displayFreelancers() {
+            var freelancerList = document.getElementById('freelancerList');
+            var loadingContainer = document.getElementById('loadingContainer');
+
+            // Show the loading container
+            loadingContainer.style.display = 'block';
+
+            // Clear existing content
+            freelancerList.innerHTML = '';
+
+            // Get the user's location using Geolocation API
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        // Call the function to display freelancers, passing user's coordinates
+                        var userLatitude = position.coords.latitude;
+                        var userLongitude = position.coords.longitude;
+                        displayFreelancersWithDistance(userLatitude, userLongitude);
+                    },
+                    function (error) {
+                        console.error('Error getting user location:', error);
+
+                        // Hide the loading container in case of an error
+                        loadingContainer.style.display = 'none';
+                    }
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+
+                // Hide the loading container in case of an error
+                loadingContainer.style.display = 'none';
+            }
+        }
+
+        function displayFreelancersWithDistance(userLatitude, userLongitude) {
+            // Get the freelancer list container
+            var freelancerList = document.getElementById('freelancerList');
+
+            // Show the loading container
+            var loadingContainer = document.getElementById('loadingContainer');
+            loadingContainer.style.display = 'block';
+
+            // Clear existing content
+            freelancerList.innerHTML = '';
+
+            // Fetch freelancers from the 'approved_freelancers' collection
+            db.collection('approved_freelancers').get()
+                .then((querySnapshot) => {
+                    // Create an array to store freelancer items with calculated distances
+                    var freelancerItems = [];
+
+                    querySnapshot.forEach((doc) => {
+                        var freelancerData = doc.data();
+
+                        // Calculate distance using Haversine formula
+                        var freelancerLatitude = freelancerData.coordinates.latitude;
+                        var freelancerLongitude = freelancerData.coordinates.longitude;
+                        var distance = calculateHaversineDistance(
+                            userLatitude, userLongitude,
+                            freelancerLatitude, freelancerLongitude
+                        );
+
+                        // Add the freelancer item with its distance to the array
+                        freelancerItems.push({ docId: doc.id, distance: distance });
+                    });
+
+                    // Sort freelancer items based on distance in ascending order
+                    freelancerItems.sort((a, b) => a.distance - b.distance);
+
+                    // Loop through the sorted freelancer items and append them to the freelancer list
+                    freelancerItems.forEach((freelancerItem) => {
+                        var docId = freelancerItem.docId;
+                        var doc = querySnapshot.docs.find((doc) => doc.id === docId);
+                        var freelancerData = doc.data();
+
+                        // Create a list item for each freelancer
+                        var listItem = document.createElement('li');
+                        listItem.classList.add('freelancer-item');
+                        listItem.setAttribute('data-freelancer-id', doc.id); // Store freelancer ID as a data attribute
+
+                        // Create a div to hold freelancer information
+                        var freelancerInfoDiv = document.createElement('div');
+                        freelancerInfoDiv.classList.add('freelancer-info');
+
+                        // Display the freelancer profile picture
+                        var profilePictureElement = document.createElement('img');
+                        profilePictureElement.src = freelancerData.freelancerDpImage;
+                        profilePictureElement.alt = freelancerData.freelancerName;
+                        profilePictureElement.classList.add('freelancer-profile-picture');
+                        freelancerInfoDiv.appendChild(profilePictureElement);
+
+                        // Create and append freelancer name with distance
+                        var freelancerNameElement = document.createElement('h3');
+                        freelancerNameElement.textContent = freelancerData.freelancerName + ' (' + freelancerItem.distance.toFixed(2) + ' km)';
+                        freelancerInfoDiv.appendChild(freelancerNameElement);
+
+                        var statusElement = document.createElement('p');
+                        statusElement.textContent = 'Available'; // Adjust as needed based on freelancer status
+                        statusElement.classList.add('open');
+                        statusElement.classList.add('freelancer-status'); // Add a common class
+                        freelancerInfoDiv.appendChild(statusElement);
+
+                        // Create and append location
+                        var locationElement = document.createElement('p');
+                        locationElement.classList.add('location');
+                        locationElement.textContent = freelancerData.location;
+                        freelancerInfoDiv.appendChild(locationElement);
+
+                        // Append freelancer info div to the list item
+                        listItem.appendChild(freelancerInfoDiv);
+
+                        // Add an event listener to the freelancer item
+                        listItem.addEventListener('click', function () {
+                            // Redirect to the freelancer details page and pass freelancer ID as a URL parameter
+                            window.location.href = 'freelancer_details.html?freelancerId=' + doc.id;
+                        });
+
+                        // Append the list item to the freelancer list
+                        freelancerList.appendChild(listItem);
+                    });
+
+                    // Hide the loading container after data is loaded
+                    loadingContainer.style.display = 'none';
+                })
+                .catch((error) => {
+                    console.error("Error fetching freelancers: ", error);
+
+                    // Hide the loading container in case of an error
+                    loadingContainer.style.display = 'none';
+                });
+        }
+
+        // Call the function to display freelancers
+        displayFreelancers();
     </script>
 
 </body>

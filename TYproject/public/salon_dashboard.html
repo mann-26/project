@@ -19,9 +19,28 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
-        /* Your existing styles... */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
 
-        /* Add styles for the collapsible sections */
+        .dashboard {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+        h2 {
+            text-align: center;
+            color: #343a40;
+        }
+
         .collapsible-section {
             cursor: pointer;
             border: 1px solid #ddd;
@@ -35,11 +54,81 @@
             display: none;
             padding: 10px;
         }
+
+        .booking-entry {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffffff;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .alert {
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 70px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
+        #mainHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 60px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
+            margin-left: 20px;
+        }
     </style>
 </head>
-
 <body>
-
+    <header id="mainHeader">
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>>
+    </header>
     <div class="dashboard">
         <h2>Salon Dashboard</h2>
 
@@ -143,16 +232,6 @@
         }
     });
 }
-
-
-
-
-
-
-
-
-
-
         // Function to automatically fetch salon ID if using Firebase Authentication
         function getSalonId() {
     firebase.auth().onAuthStateChanged(user => {
@@ -169,8 +248,6 @@
         }
     });
 }
-
-
 
 function displayApprovedBookings() {
         var approvedBookingsContainer = document.getElementById('approvedBookings');
@@ -254,10 +331,6 @@ function displayApprovedBookings() {
         // Call this function to display approved bookings on salon dashboard
         displayApprovedBookings();
 
-
-
-
-        <!-- Add the following code inside the <script> tag -->
 function displayDeclinedBookings() {
     var declinedBookingsContainer = document.getElementById('declinedBookings');
     var feedbackMessageContainer = document.getElementById('feedbackMessage');
@@ -324,9 +397,6 @@ function clearDeclinedBookings() {
 
         // Call this function to display declined bookings on salon dashboard
         displayDeclinedBookings();
-
-
-
 
         // Function to confirm before approving a booking
         function confirmApproveBooking(bookingId) {
@@ -409,8 +479,6 @@ function declineBooking(bookingId) {
             showFeedbackMessage('Error declining booking. Please try again.', 'danger');
         });
 }
-
-
         function showFeedbackMessage(message, type) {
             var feedbackMessageContainer = document.getElementById('feedbackMessage');
             feedbackMessageContainer.innerHTML = `<div class="alert alert-${type}" role="alert">${message}</div>`;
