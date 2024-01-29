@@ -227,11 +227,13 @@
                 event.preventDefault();
     
                 // Retrieve form data
-                var fullName = document.getElementById('fullName').value;
-                var email = document.getElementById('email').value;
-                var phoneNumber = document.getElementById('phoneNumber').value;
+                
+                var fullName = document.getElementById('fullName').innerText;
+                var email = document.getElementById('email').innerText;
+                var phoneNumber = document.getElementById('phoneNumber').innerText;
                 var appointmentDate = document.getElementById('appointmentDate').value;
                 var appointmentTime = document.getElementById('appointmentTime').value;
+
     
                 // Retrieve salon ID from URL parameters
                 const salonId = urlParams.get('salonId');
