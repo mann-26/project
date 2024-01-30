@@ -828,6 +828,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Add an event listener to the freelancer item
                         listItem.addEventListener('click', function () {
                             // Redirect to the freelancer details page and pass freelancer ID as a URL parameter
+                            localStorage.setItem('selectedFreelancer', JSON.stringify(freelancerData));
                             window.location.href = 'freelancer_details.html?freelancerId=' + doc.id;
                         });
 

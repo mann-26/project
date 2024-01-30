@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,6 +30,7 @@
             height: 70px;
             width: auto;
             margin-right: 5px;
+            margin-left: 15px;
         }
         header {
             position: fixed;
@@ -48,26 +52,49 @@
             display: flex;
             max-width: 800px; /* Adjust the width as needed */
             padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
+            border-radius: 30px;
             margin-top: -100px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-left: -40px;
         }
 
         .left-section {
-            width: 920px; /* Adjust the padding as needed */
+            width: 700px; /* Adjust the padding as needed */
+        }
+        .left-section fieldset {
+            border: 1px solid #ddd;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            padding: 30px;
+            margin-bottom: 20px;
         }
 
-        .right-section {
-            max-width: 400px; /* Adjust the width as needed */
-            padding: 20px;
-            height: 60%;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
-            margin-left: 50px;
+        .left-section legend {
+            font-size: 42px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
         }
+
+        .left-section p {
+            margin: 6px;
+            margin-left: 30px;
+            padding: 6px;
+        }
+        .right-section {
+            max-width: 400px;
+            padding: 30px 40px;
+            height: 55%;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 0px;
+            margin-left: 40px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Add overflow to hide overflowing content */
+        }
+
 
         .form-group {
             margin-bottom: 20px;
@@ -87,14 +114,21 @@
         }
 
         button {
-            background-color: #3498db;
-            color: #fff;
+            background-color: #ffffffd2;
             padding: 10px;
-            width: 100%;
-            border: none;
-            border-radius: 4px;
+            width: 100%; /* Adjusted to take 100% of the parent container */
+            border: 2px solid #333;
+            border-radius: 50px;
             cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: #333;
+            margin-top: 55px; /* Adjusted margin for spacing */
         }
+        button:hover{
+            background-color: #333;
+            color: #fff;
+        }
+
         .back-button {
             background-color: white;
             padding: 8px 20px;
@@ -118,6 +152,23 @@
         a, .back-button:hover{
             text-decoration: none;
         }
+        #validationMessage {
+            color: red;
+            margin-top: 13px;
+            font-size: small;
+            margin-left: 18px;
+        }
+        form#bookingForm h1 {
+            font-size: 28px; /* Adjust the font size as needed */
+        }
+        #appointmentDate,
+        #appointmentTime {
+            border-radius: 15px; /* Adjust the border radius value as needed */
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -129,14 +180,15 @@
     </header>
     <div class="booking-container">
         <div class="left-section">
-            <h1>Details</h1>
-
-            <!-- Display the selected services, total amount, and user details -->
-            <p><strong>Selected Services:</strong> <span id="selectedServices"></span></p>
-            <p><strong>Total Amount:</strong> <span id="totalAmount"></span></p>
-            <p><strong>Full Name:</strong> <span id="fullName"></span></p>
-            <p><strong>Email:</strong> <span id="email"></span></p>
-            <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
+            <!-- Fieldset and legend for details -->
+            <fieldset>
+                <legend>Details</legend>
+                <p><strong>Selected Services:</strong> <span id="selectedServices"></span></p>
+                <p><strong>Total Amount:</strong> Rs <span id="totalAmount"></span></p>
+                <p><strong>Full Name:</strong> <span id="fullName"></span></p>
+                <p><strong>Email:</strong> <span id="email"></span></p>
+                <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
+            </fieldset>
         </div>
     </div>
 
@@ -148,14 +200,15 @@
             <div class="form-group">
                 <label for="appointmentDate">Select Date:</label>
                 <input type="date" id="appointmentDate" name="appointmentDate" required>
-            </div>
+            </div>            
 
             <div class="form-group">
                 <label for="appointmentTime">Select Time:</label>
                 <input type="time" id="appointmentTime" name="appointmentTime" required>
             </div>
-
+            
             <button type="submit">Book Now</button>
+            <div id="validationMessage"></div>
         </form>
     </div>
 
@@ -220,6 +273,24 @@
             // Display the selected services and total amount in the input fields
             document.getElementById('selectedServices').innerText = selectedServices;
             document.getElementById('totalAmount').innerText = totalAmount;
+
+            document.getElementById('appointmentDate').addEventListener('input', function () {
+                    updateValidationMessage();
+                });
+
+                document.getElementById('appointmentTime').addEventListener('input', function () {
+                    updateValidationMessage();
+                });
+
+                function updateValidationMessage() {
+                    var appointmentDate = document.getElementById('appointmentDate').value;
+                    var appointmentTime = document.getElementById('appointmentTime').value;
+                    var validationMessage = document.getElementById('validationMessage');
+
+                    if (appointmentDate && appointmentTime) {
+                        validationMessage.innerText = ''; // Clear the validation message
+                    }
+                }
     
             // Handle form submission
             var bookingForm = document.getElementById('bookingForm');
@@ -234,7 +305,15 @@
                 var appointmentDate = document.getElementById('appointmentDate').value;
                 var appointmentTime = document.getElementById('appointmentTime').value;
 
-    
+                var validationMessage = document.getElementById('validationMessage');
+
+                if (!appointmentDate || !appointmentTime) {
+                    validationMessage.innerText = 'Please select both date and time before booking.';
+                    return;
+                } else {
+                    validationMessage.innerText = ''; // Clear the validation message if no errors
+                }
+                
                 // Retrieve salon ID from URL parameters
                 const salonId = urlParams.get('salonId');
     
@@ -292,6 +371,19 @@
                     // Handle the case where no user is signed in
                     console.log('No user signed in');
                 }
+            });
+            flatpickr("#appointmentDate", {
+                enableTime: false,
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                maxDate: new Date().fp_incr(60), // 60 days from today
+            });
+
+            flatpickr("#appointmentTime", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "h:i K",
+                minTime: "now",
             });
         });
     </script>

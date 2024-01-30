@@ -6,21 +6,52 @@
     <title>Booking Confirmation</title>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
             background-color: #f4f4f4;
+        }
+        #mainHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 70px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+            margin-right: -40px;
+        }
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
+        }
+        header{
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 60px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+
         }
 
         .confirmation-container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 40px;
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 90px;
         }
 
         h1 {
@@ -37,51 +68,63 @@
             margin-bottom: 10px;
         }
 
-        button {
-            background-color: #3498db;
-            color: #fff;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        
+        #animationContainer {
+            width: 150px; 
+            height: 150px;
+            display: flex;
+            margin: 0 auto;
         }
+        #backToHomeButton {
+            background-color: white;
+            padding: 5px 10px;
+            border: 2px solid #333;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-left: 42%;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-block; /* Ensures the button doesn't take full width */
+            text-decoration: none; /* Remove default anchor text decoration */
+            color: #333; /* Set initial text color */
+        }
+
+        #backToHomeButton span {
+            display: block;
+            background-color: #333;
+            height: 100%;
+            width: 0;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
+        #backToHomeButton:hover span {
+            width: 100%;
+        }
+
+        #backToHomeButton:hover {
+            background-color: #333;
+            color: white;
+        }
+        p{
+            margin-left: 34%;
+        }
+        
     </style>
 </head>
 <body>
+    <header>
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>
+    </header>
     <div class="confirmation-container">
         <h1>Booking Confirmation</h1>
-
-        <div class="booking-details">
-            <div class="booking-detail">
-                <span>User ID:</span>
-                <span id="userId"></span>
-            </div>
-            <div class="booking-detail">
-                <span>Salon ID:</span>
-                <span id="salonId"></span>
-            </div>
-            <div class="booking-detail">
-                <span>Full Name:</span>
-                <span id="fullName"></span>
-            </div>
-            <div class="booking-detail">
-                <span>Email:</span>
-                <span id="email"></span>
-            </div>
-            <div class="booking-detail">
-                <span>Phone Number:</span>
-                <span id="phoneNumber"></span>
-            </div>
-            <div class="booking-detail">
-                <span>Appointment Date:</span>
-                <span id="appointmentDate"></span>
-            </div>
-            <div class="booking-detail">
-                <span>Appointment Time:</span>
-                <span id="appointmentTime"></span>
-            </div>
-
-        <button onclick="goToHome()">Go to Home</button>
+        <div id="animationContainer"></div>
+    
+        <div class="booking-details" id="bookingDetailsContainer">
+            <!-- Dynamic content will be added here -->
+        </div>
+    
     </div>
 
     <script>
@@ -115,24 +158,53 @@
                 const data = doc.data();
 
                 // Update the HTML elements with the booking details
-                document.getElementById('userId').textContent = data.userId;
-                document.getElementById('salonId').textContent = data.salonId;
-                document.getElementById('fullName').textContent = data.fullName;
-                document.getElementById('email').textContent = data.email;
-                document.getElementById('phoneNumber').textContent = data.phoneNumber;
-                document.getElementById('appointmentDate').textContent = data.appointmentDate;
-                document.getElementById('appointmentTime').textContent = data.appointmentTime;
+                var bookingDetailsContainer = document.getElementById('bookingDetailsContainer');
+                bookingDetailsContainer.innerHTML = `
+                    
+                    <div class="confirmation-container">
+                        <span><strong>Full Name:</strong></span>
+                        <span>${data.fullName}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <span><strong>Email:</strong></span>
+                        <span>${data.email}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <span><strong>Phone Number:</strong></span>
+                        <span>${data.phoneNumber}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <span><strong>Appointment Date:</strong></span>
+                        <span>${data.appointmentDate}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <span><strong>Appointment Time:</strong></span>
+                        <span>${data.appointmentTime}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <span><strong>Total Amount:</strong></span>
+                        <span>Rs ${data.totalAmount}</span>
+                    </div>
+                    <a id="backToHomeButton" href="home.html"><span></span>Back to Home</a>
+                    <p>Thank you for choosing Snaplooks!</p>
+                `;
+
+                var animationContainer = document.getElementById('animationContainer');
+                var animation = lottie.loadAnimation({
+                    container: animationContainer,
+                    renderer: 'svg',
+                    loop: false,
+                    autoplay: true,
+                    path: 'https://lottie.host/fdb6fab1-1da7-4911-8d4e-204542ef3bdc/Hrlrv56m6A.json',
+                    scale: 0.5
+                });
             } else {
                 console.log("No such document!");
             }
         }).catch((error) => {
             console.log("Error getting document:", error);
         });
-
-        function goToHome() {
-            // Redirect to the home page or any other destination
-            window.location.href = 'home.html';
-        }
+        
     </script>
 </body>
 </html>
