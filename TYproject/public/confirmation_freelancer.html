@@ -7,7 +7,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -120,11 +119,17 @@
     <div class="confirmation-container">
         <h1>Booking Confirmation</h1>
         <div id="animationContainer"></div>
-    
+
+
+        <!-- Dynamic container for booking details -->
         <div class="booking-details" id="bookingDetailsContainer">
             <!-- Dynamic content will be added here -->
         </div>
-    
+
+        <!-- Container for Lottie animation -->
+
+        <a id="backToHomeButton" href="home.html"><span></span>Back to Home</a>
+        <p>Thank you for choosing Snaplooks!</p>
     </div>
 
     <script>
@@ -150,7 +155,7 @@
         const bookingId = urlParams.get('bookingId');
 
         // Reference to the Firestore collection
-        const bookingsCollection = db.collection('Salon_bookings');
+        const bookingsCollection = db.collection('Freelancer_bookings');
 
         // Retrieve data based on the Booking ID
         bookingsCollection.doc(bookingId).get().then((doc) => {
@@ -162,31 +167,25 @@
                 bookingDetailsContainer.innerHTML = `
                     
                     <div class="booking-detail">
-                        <span><strong>Full Name:</strong></span>
+                        <span>Full Name:</span>
                         <span>${data.fullName}</span>
                     </div>
                     <div class="booking-detail">
-                        <span><strong>Email:</strong></span>
+                        <span>Email:</span>
                         <span>${data.email}</span>
                     </div>
                     <div class="booking-detail">
-                        <span><strong>Phone Number:</strong></span>
+                        <span>Phone Number:</span>
                         <span>${data.phoneNumber}</span>
                     </div>
                     <div class="booking-detail">
-                        <span><strong>Appointment Date:</strong></span>
+                        <span>Appointment Date:</span>
                         <span>${data.appointmentDate}</span>
                     </div>
                     <div class="booking-detail">
-                        <span><strong>Appointment Time:</strong></span>
+                        <span>Appointment Time:</span>
                         <span>${data.appointmentTime}</span>
                     </div>
-                    <div class="booking-detail">
-                        <span><strong>Total Amount:</strong></span>
-                        <span>Rs ${data.totalAmount}</span>
-                    </div>
-                    <a id="backToHomeButton" href="home.html"><span></span>Back to Home</a>
-                    <p>Thank you for choosing Snaplooks!</p>
                 `;
 
                 var animationContainer = document.getElementById('animationContainer');
@@ -204,7 +203,6 @@
         }).catch((error) => {
             console.log("Error getting document:", error);
         });
-        
     </script>
 </body>
 </html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <title>Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #mainHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 60px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 5px;
+            margin-left: 15px;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 50px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+
+        }
+
+        .booking-container {
+            display: flex;
+            max-width: 800px; /* Adjust the width as needed */
+            padding: 20px;
+            border-radius: 30px;
+            margin-top: -100px;
+            margin-left: -40px;
+        }
+        .left-section {
+            width: 700px; /* Adjust the padding as needed */
+        }
+        .left-section fieldset {
+            border: 1px solid #ddd;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .left-section legend {
+            font-size: 42px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .left-section p {
+            margin: 6px;
+            margin-left: 30px;
+            padding: 6px;
+        }
+
+        .right-section {
+            max-width: 400px;
+            padding: 30px 40px;
+            height: 55%;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 0px;
+            margin-left: 40px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Add overflow to hide overflowing content */
+        }
+
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #ffffffd2;
+            padding: 10px;
+            width: 100%; /* Adjusted to take 100% of the parent container */
+            border: 2px solid #333;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: #333;
+            margin-top: 55px; /* Adjusted margin for spacing */
+        }
+        button:hover{
+            background-color: #333;
+            color: #fff;
+        }
+
+        .back-button {
+            background-color: white;
+            padding: 8px 20px;
+            margin-right: 50px;
+            margin-top: -5px;
+            border: 2px solid #333;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            display: block; /* To center the span properly */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: #333;
+        }
+        .back-button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+        a, .back-button{
+            text-decoration: none;
+        }
+        a, .back-button:hover{
+            text-decoration: none;
+        }
+        #validationMessage {
+            color: red;
+            margin-top: 13px;
+            font-size: small;
+            margin-left: 18px;
+        }
+        form#bookingForm h1 {
+            font-size: 28px; /* Adjust the font size as needed */
+        }
+        #appointmentDate,
+        #appointmentTime {
+            border-radius: 15px; /* Adjust the border radius value as needed */
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <header id="mainHeader">
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>
+        <a href="freelancer_details.html" class="back-button">Back</a>
+    </header>
+    <div class="booking-container">
+        <div class="left-section">
+            <fieldset>
+                <legend>Details</legend>
+                <p><strong>Selected Services:</strong> <span id="selectedServices"></span></p>
+                <p><strong>Total Amount:</strong> Rs <span id="totalAmount"></span></p>
+                <p><strong>Full Name:</strong> <span id="fullName"></span></p>
+                <p><strong>Email:</strong> <span id="email"></span></p>
+                <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="right-section">
+        <!-- Booking form -->
+        <form id="bookingForm">
+            <h1>Book Your Appointment</h1>
+
+            <div class="form-group">
+                <label for="appointmentDate">Select Date:</label>
+                <input type="date" id="appointmentDate" name="appointmentDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="appointmentTime">Select Time:</label>
+                <input type="time" id="appointmentTime" name="appointmentTime" required>
+            </div>
+
+            <button type="submit">Book Now</button>
+            <div id="validationMessage"></div>
+        </form>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Initialize Firebase with your project config
+        var firebaseConfig = {
+            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+            authDomain: "snaplooks-bd932.firebaseapp.com",
+            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com",
+            projectId: "snaplooks-bd932",
+            storageBucket: "snaplooks-bd932.appspot.com",
+            messagingSenderId: "680311673132",
+            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+        firebase.initializeApp(firebaseConfig);
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Firebase Auth and Firestore
+            const auth = firebase.auth();
+            const firestore = firebase.firestore();
+    
+            // Check if a user is signed in
+            auth.onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in, fetch user details from Firestore using UID
+                    const uid = user.uid;
+                    const userRef = firestore.collection('users').doc(uid);
+    
+                    userRef.get().then((doc) => {
+                        if (doc.exists) {
+                            // Document exists, retrieve user data
+                            const userData = doc.data();
+                            const userEmail = userData.email;
+                            const userDisplayName = userData.displayName;
+                            const userPhoneNumber = userData.contactNumber;
+    
+                            // Set the fetched user details in the form fields
+                            document.getElementById('fullName').innerText = userDisplayName || '';
+                            document.getElementById('email').innerText = userEmail || '';
+                            document.getElementById('phoneNumber').innerText = userPhoneNumber || '';
+                        } else {
+                            console.log('No such document!');
+                        }
+                    }).catch((error) => {
+                        console.log('Error getting document:', error);
+                    });
+                } else {
+                    // No user is signed in, handle accordingly
+                    console.log('No user signed in');
+                }
+            });
+    
+            // Retrieve query parameters from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedServices = urlParams.get('services');
+            const totalAmount = urlParams.get('total');
+    
+            // Display the selected services and total amount in the input fields
+            document.getElementById('selectedServices').innerText = selectedServices;
+            document.getElementById('totalAmount').innerText = totalAmount;
+
+            document.getElementById('appointmentDate').addEventListener('input', function () {
+                    updateValidationMessage();
+                });
+
+                document.getElementById('appointmentTime').addEventListener('input', function () {
+                    updateValidationMessage();
+                });
+
+                function updateValidationMessage() {
+                    var appointmentDate = document.getElementById('appointmentDate').value;
+                    var appointmentTime = document.getElementById('appointmentTime').value;
+                    var validationMessage = document.getElementById('validationMessage');
+
+                    if (appointmentDate && appointmentTime) {
+                        validationMessage.innerText = ''; // Clear the validation message
+                    }
+                }
+    
+            // Handle form submission
+            var bookingForm = document.getElementById('bookingForm');
+            bookingForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+    
+                // Retrieve form data
+                // Retrieve form data
+                var fullName = document.getElementById('fullName').innerText;
+                var email = document.getElementById('email').innerText;
+                var phoneNumber = document.getElementById('phoneNumber').innerText;
+                var appointmentDate = document.getElementById('appointmentDate').value;
+                var appointmentTime = document.getElementById('appointmentTime').value;
+
+                var validationMessage = document.getElementById('validationMessage');
+
+                if (!appointmentDate || !appointmentTime) {
+                    validationMessage.innerText = 'Please select both date and time before booking.';
+                    return;
+                } else {
+                    validationMessage.innerText = ''; // Clear the validation message if no errors
+                }
+
+    
+                // Retrieve freelancer ID from URL parameters
+                const freelancerId = urlParams.get('freelancerId');
+    
+                // Get the currently signed-in user
+                const user = firebase.auth().currentUser;
+    
+                if (user) {
+                    // User is signed in, get the user ID (UID)
+                    const userId = user.uid;
+    
+                    // Save booking details to Firestore
+                    firestore.collection('Freelancer_bookings').add({
+                        userId: userId,                   // Add user ID to the document
+                        freelancerId: freelancerId,                 // Add freelancer ID to the document
+                        fullName: fullName,
+                        email: email,
+                        phoneNumber: phoneNumber,
+                        appointmentDate: appointmentDate,
+                        appointmentTime: appointmentTime,
+                        selectedServices: selectedServices, // assuming you have this variable defined
+                        totalAmount: totalAmount,           // assuming you have this variable defined
+                    })
+                    .then(function (docRef) {
+                        console.log('Booking added with ID: ', docRef.id);
+    
+                        // After saving, send email to the user
+                        const userEmail = email;
+                        const emailData = { userEmail, services: selectedServices, totalAmount };
+    
+                        fetch('/sendEmail', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(emailData),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Email sent:', data);
+                            // Optionally, you can redirect the user to a confirmation page after the email is sent
+                            // window.location.href = 'confirmation.html';
+                        })
+                        .catch(error => {
+                            console.error('Error sending email:', error);
+                        });
+    
+                        // Redirect to a confirmation page
+                        const bookingId = docRef.id;
+                        window.location.href = `confirmation_freelancer.html?bookingId=${bookingId}`;
+                    })
+                    .catch(function (error) {
+                        console.error('Error adding booking: ', error);
+                    });
+                } else {
+                    // Handle the case where no user is signed in
+                    console.log('No user signed in');
+                }
+            });
+            flatpickr("#appointmentDate", {
+                enableTime: false,
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                maxDate: new Date().fp_incr(60), // 60 days from today
+            });
+
+            flatpickr("#appointmentTime", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "h:i K",
+                minTime: "now",
+            });
+        });
+    </script>
+</body>
+</html>
