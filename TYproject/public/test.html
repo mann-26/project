@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Search</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        form {
+            margin-top: 10px;
+            position: relative;
+        }
+
+        label {
+            color: white;
+            margin-right: 10px;
+        }
+
+        input {
+            padding: 5px;
+            margin-right: 10px;
+            width: 200px;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #searchResults {
+            margin-top: 5px;
+            position: absolute;
+            width: 100%;
+            color: black;
+            background-color: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #searchResults.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .searchResult {
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .searchResult:hover {
+            background-color: #f0f0f0;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Salon Service Search</h1>
+        <form oninput="searchSalonByService(event)">
+            <label for="serviceInput">Enter Service:</label>
+            <input type="text" id="serviceInput" required>
+            <button type="button" onclick="toggleSearchResults()">Search</button>
+            <div id="searchResults" onclick="selectSalon(event)">
+                <!-- Display search results here -->
+            </div>
+        </form>
+    </header>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+            authDomain: "snaplooks-bd932.firebaseapp.com",
+            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com/",
+            projectId: "snaplooks-bd932",
+            storageBucket: "snaplooks-bd932.appspot.com",
+            messagingSenderId: "680311673132",
+            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        function searchSalonByService(event) {
+            var serviceInput = document.getElementById('serviceInput').value.toLowerCase().trim();
+
+            // Query the 'approved' collection to find salons offering the specified service
+            db.collection('approved').get()
+                .then((querySnapshot) => {
+                    var searchResults = document.getElementById('searchResults');
+                    searchResults.innerHTML = ''; // Clear previous results
+
+                    querySnapshot.forEach((doc) => {
+                        var salonData = doc.data();
+                        
+                        // Check if selectedServices is defined and is an array
+                        if (Array.isArray(salonData.selectedServices)) {
+                            // Check if any service in the salon contains the searched service (case-insensitive)
+                            var matchingServices = salonData.selectedServices.filter(service => 
+                                service.name && typeof service.name === 'string' && service.name.toLowerCase().includes(serviceInput)
+                            );
+
+                            if (matchingServices.length > 0) {
+                                var salonEntry = document.createElement('div');
+                                salonEntry.className = 'searchResult';
+                                salonEntry.innerHTML = `<p>${salonData.salonName}</p>`;
+                                searchResults.appendChild(salonEntry);
+                            }
+                        }
+                    });
+
+                    if (searchResults.innerHTML === '') {
+                        searchResults.innerHTML = '<p>No salons found for the specified service.</p>';
+                    }
+
+                    toggleSearchResults(true);
+                })
+                .catch((error) => {
+                    console.error("Error searching for salons:", error);
+                });
+        }
+
+        function toggleSearchResults(show = false) {
+            var searchResults = document.getElementById('searchResults');
+            if (show || searchResults.innerHTML !== '') {
+                searchResults.classList.toggle('show', show);
+            } else {
+                searchResults.classList.remove('show');
+            }
+        }
+
+        function selectSalon(event) {
+            var selectedSalon = event.target.innerText.trim();
+            document.getElementById('serviceInput').value = selectedSalon;
+            toggleSearchResults();
+        }
+    </script>
+
+</body>
+</html>
