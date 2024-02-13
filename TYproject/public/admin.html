@@ -423,16 +423,23 @@
                         questionList.innerHTML = '<p>No questions found.</p>';
                     } else {
                         questionList.innerHTML = ''; // Clear the existing content
+
+                        // Counter for numbering questions
+                        let questionCounter = 1;
+
                         querySnapshot.forEach((doc) => {
                             var questionData = doc.data();
                             var questionEntry = document.createElement('div');
                             questionEntry.classList.add('application');
                             questionEntry.innerHTML = `
-                                <h3>${questionData.question}</h3>
+                                <h3>${questionCounter}. ${questionData.question}</h3>
                                 <!-- Add other details as needed -->
                             `;
 
                             questionList.appendChild(questionEntry);
+
+                            // Increment the question counter
+                            questionCounter++;
                         });
                     }
                 })
@@ -440,6 +447,7 @@
                     console.error("Error fetching questions: ", error);
                 });
         }
+
         function fetchQueryData() {
             var queryList = document.getElementById('queryList');
 
@@ -454,11 +462,11 @@
                             var queryEntry = document.createElement('div');
                             queryEntry.classList.add('application');
                             queryEntry.innerHTML = `
-                                <h3 onclick="toggleDetails(this)">
+                                <h3 onclick="toggleDetails(this)"><br>
                                     ${queryData.userName}'s Query
                                     <span class="toggle-arrow">&#9660;</span>
                                 </h3>
-                                <div class="details">
+                                <div class="details" style="display: none;">
                                     <p><strong>Email:</strong> ${queryData.userEmail}</p>
                                     <p><strong>Query:</strong> ${queryData.userQuery}</p>
                                     <p><strong>Timestamp:</strong> ${queryData.timestamp ? new Date(queryData.timestamp.toMillis()).toLocaleString() : 'N/A'}</p>
@@ -474,6 +482,7 @@
                     console.error("Error fetching user queries: ", error);
                 });
         }
+
 
 
         // Toggle details visibility
