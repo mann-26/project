@@ -22,8 +22,59 @@
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
+            display: flex;
+        }
+
+        #sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh; /* Adjust the height to cover the full viewport height */
+            position: fixed; /* Fixed position to keep it on the screen while scrolling */
+        }
+
+        #mainContent {
+            flex: 1;
+            padding: 20px;
+            margin-left: 250px; /* Adjust the margin to match the width of the sidebar */
+        }
+
+        header {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+            z-index: 1; /* Ensure the header stays on top */
+            height: 70px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header{
+            text-align: center;
+            font-size: xx-large;
+            margin-left: 10%;
+            font-family: "Poppins", sans-serif;
+        }
+        .left-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15.5%;
+            background-color: #000000;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100%; /* Adjust the height as needed */
+            z-index: 2; /* Ensure the left section is above the header */
+            font-family: "Poppins", sans-serif;
+        }
+
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
+            margin-left: 20px;
         }
 
         .dashboard {
@@ -33,7 +84,6 @@
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
         }
 
         h2 {
@@ -93,76 +143,53 @@
             border-color: #f5c6cb;
             color: #721c24;
         }
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: white;
-            color: black;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 30px;
-            height: 70px;
-            border-bottom: 1px solid rgb(225, 220, 220);
-        }
-        #mainHeader {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 30px;
-            height: 60px;
-            border-bottom: 1px solid rgb(225, 220, 220);
-        }
-        .logo {
-            height: 70px;
-            width: auto;
-            margin-right: 10px;
-            margin-left: 20px;
-        }
     </style>
 </head>
+
 <body>
-    <header id="mainHeader">
-        <div>
-            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
-        </div>>
+    <header id="dashboardHeader">
     </header>
-    <div class="dashboard">
-        <h2>Salon Dashboard</h2>
+    <div class="left-section">
 
-        <!-- Pending Bookings Collapsible Section -->
-        <div class="collapsible-section" data-toggle="collapse" data-target="#pendingBookingsSection">
-            <h3>Pending Bookings</h3>
-        </div>
-        <div id="pendingBookingsSection" class="collapse">
-            <div class="bookings" id="pendingBookings">
-                <!-- Pending booking data will be displayed here -->
+
+    <div class="navigation-link-logout-link" onclick="logout()">Logout</div>
+    </div>
+    <div id="mainContent">
+        <div class="dashboard">
+            <h2>Salon Dashboard</h2>
+
+            <!-- Pending Bookings Collapsible Section -->
+            <div class="collapsible-section" data-toggle="collapse" data-target="#pendingBookingsSection">
+                <h3>Pending Bookings</h3>
             </div>
-        </div>
-
-        <!-- Approved Bookings Collapsible Section -->
-        <div class="collapsible-section" data-toggle="collapse" data-target="#approvedBookingsSection">
-            <h3>Approved Bookings</h3>
-        </div>
-        <div id="approvedBookingsSection" class="collapse">
-            <div class="bookings" id="approvedBookings">
-                <!-- Approved booking data will be displayed here -->
+            <div id="pendingBookingsSection" class="collapse">
+                <div class="bookings" id="pendingBookings">
+                    <!-- Pending booking data will be displayed here -->
+                </div>
             </div>
-        </div>
 
-        <!-- Declined Bookings Collapsible Section -->
-        <div class="collapsible-section" data-toggle="collapse" data-target="#declinedBookingsSection">
-            <h3>Declined Bookings</h3>
-        </div>
-        <div id="declinedBookingsSection" class="collapse">
-            <div class="bookings" id="declinedBookings">
-                <!-- Declined booking data will be displayed here -->
+            <!-- Approved Bookings Collapsible Section -->
+            <div class="collapsible-section" data-toggle="collapse" data-target="#approvedBookingsSection">
+                <h3>Approved Bookings</h3>
             </div>
-        </div>
+            <div id="approvedBookingsSection" class="collapse">
+                <div class="bookings" id="approvedBookings">
+                    <!-- Approved booking data will be displayed here -->
+                </div>
+            </div>
 
-        <div id="feedbackMessage"></div>
+            <!-- Declined Bookings Collapsible Section -->
+            <div class="collapsible-section" data-toggle="collapse" data-target="#declinedBookingsSection">
+                <h3>Declined Bookings</h3>
+            </div>
+            <div id="declinedBookingsSection" class="collapse">
+                <div class="bookings" id="declinedBookings">
+                    <!-- Declined booking data will be displayed here -->
+                </div>
+            </div>
+
+            <div id="feedbackMessage"></div>
+        </div>
     </div>
 
     <script>
@@ -205,10 +232,11 @@
                                     <p>Date: ${bookingData.appointmentDate}</p>
                                     <p>Time: ${bookingData.appointmentTime}</p>
                                     <p>Salon ID: ${bookingData.salonId}</p>
-                                    <p>Salon Name: ${bookingData.salonName}</p>
-                                    <p>Services: ${bookingData.services.map(service => service.service).join(', ')}</p>
+                                    
+                                    
+                                    <p>Services: ${bookingData.selectedServices}</p>
                                     <p>Total Amount: ${bookingData.totalAmount}</p>
-                                    <p>User Email: ${bookingData.userEmail}</p>
+                                    <p>User Email: ${bookingData.email}</p>
                                     <p>User ID: ${bookingData.userId}</p>
                                     <button onclick="confirmApproveBooking('${doc.id}')">Approve</button>
                                     <button onclick="confirmDeclineBooking('${doc.id}')">Decline</button>
@@ -266,14 +294,14 @@ function displayApprovedBookings() {
                         var approvedBookingHtml = `
                             <div class="booking-entry">
                                 <p>Date: ${approvedBookingData.appointmentDate}</p>
-                                <p>Time: ${approvedBookingData.appointmentTime}</p>
-                                <p>Salon ID: ${approvedBookingData.salonId}</p>
-                                <p>Salon Name: ${approvedBookingData.salonName}</p>
-                                <p>Services: ${approvedBookingData.services.map(service => service.service).join(', ')}</p>
-                                <p>Total Amount: ${approvedBookingData.totalAmount}</p>
-                                <p>User Email: ${approvedBookingData.userEmail}</p>
-                                <p>User ID: ${approvedBookingData.userId}</p>
+                                    <p>Time: ${approvedBookingData.appointmentTime}</p>
+                                    <p>Salon ID: ${approvedBookingData.salonId}</p
+                                    <p>Services: ${approvedBookingData.selectedServices}</p>
+                                    <p>Total Amount: ${approvedBookingData.totalAmount}</p>
+                                    <p>User Email: ${approvedBookingData.email}</p>
+                                    <p>User ID: ${approvedBookingData.userId}</p>
                                 <button onclick="confirmCancelBooking('${doc.id}')">Cancel Booking</button>
+                                <button onclick="confirmCompleteBooking('${doc.id}')">Booking Completed</button>
                             </div>
                         `;
                         approvedBookingsContainer.appendChild(document.createRange().createContextualFragment(approvedBookingHtml));
@@ -328,6 +356,80 @@ function displayApprovedBookings() {
                     showFeedbackMessage('Error canceling booking. Please try again.', 'danger');
                 });
         }
+
+
+        // Function to confirm before marking a booking as completed
+function confirmCompleteBooking(bookingId) {
+    if (window.confirm('Is this booking completed?')) {
+        completeBooking(bookingId);
+    }
+}
+
+// Function to mark a booking as completed
+// Inside the completeBooking function
+function completeBooking(bookingId) {
+    // Get the reference to the booking document in "Approved_bookings" collection
+    var bookingRef = db.collection('Approved_bookings').doc(bookingId);
+    var bookingData;  // Declare bookingData variable
+
+    // Get the data of the booking to be moved
+    bookingRef.get()
+        .then(doc => {
+            if (doc.exists) {
+                bookingData = doc.data();  // Assign value to bookingData
+                // Add the booking data to "Booking_Completed" collection
+                return db.collection('Booking_Completed').add(bookingData);
+            } else {
+                // Handle the case where the booking document does not exist
+                console.error('Booking document does not exist.');
+                showFeedbackMessage('Error completing booking. Please try again.', 'danger');
+            }
+        })
+        .then(() => {
+            // After successfully adding to "Booking_Completed," delete from "Approved_bookings"
+            return bookingRef.delete();
+        })
+        .then(() => {
+            // Update the displayed bookings on the salon dashboard
+            displayApprovedBookings();
+            showFeedbackMessage('Booking marked as completed successfully!', 'success');
+
+            // Send the review link after marking the booking as completed
+            sendReviewLink(bookingData.email);  // Pass bookingData to sendReviewLink
+        })
+        .catch(error => {
+            console.error('Error marking booking as completed:', error);
+            showFeedbackMessage('Error marking booking as completed. Please try again.', 'danger');
+        });
+}
+
+// Add this function to your script
+function sendReviewLink(userEmail) {
+    // You can use fetch or any other AJAX method to send a request to your server
+    fetch('/send-review-link', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userEmail: userEmail,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response, you can display a message to the user
+        console.log(data);
+        if (data.success) {
+            alert('Review link sent successfully!');
+        } else {
+            alert('Failed to send review link.');
+        }
+    })
+    .catch(error => {
+        console.error('Error sending review link:', error);
+        alert('Error sending review link. Please try again.');
+    });
+}
         // Call this function to display approved bookings on salon dashboard
         displayApprovedBookings();
 
@@ -351,7 +453,8 @@ function displayDeclinedBookings() {
                             <p>Time: ${declinedBookingData.appointmentTime}</p>
                             <p>Salon ID: ${declinedBookingData.salonId}</p>
                             <p>Salon Name: ${declinedBookingData.salonName}</p>
-                            <p>Services: ${declinedBookingData.services.map(service => service.service).join(', ')}</p>
+                            <p>Services: ${declinedBookingData.services ? declinedBookingData.services.map(service => service.service).join(', ') : 'N/A'}</p>
+
                             <p>Total Amount: ${declinedBookingData.totalAmount}</p>
                             <p>User Email: ${declinedBookingData.userEmail}</p>
                             <p>User ID: ${declinedBookingData.userId}</p>

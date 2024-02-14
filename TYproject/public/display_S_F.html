@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Webpage Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,14 +82,12 @@
         }
         #searchForm {
             display: flex;
-            align-items: center;
-            margin-left: 60%;
             position: relative; /* Add position relative to make absolute positioning work */
         }
         #searchInput {
             padding: 8px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 30px;
             margin-right: 5px;
             width: 200px;
         }
@@ -96,12 +95,14 @@
             background-color: #000000;
             color: #ffffff;
             border: none;
-            border-radius: 4px;
+            border-radius: 30px;
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
+            margin-right: 30px;
             padding: 9px;
-            margin-right: 70px;
+            width: 80px;
         }
         #searchResultsContainer {
             position: absolute;
@@ -229,25 +230,24 @@
         background-color: #f0f0f0b6;
         transition: background-color 0.3s;
     }
-
-        /* Add loading styles for the Freelancer Section */
-    #freelancerLoadingContainer {
-        display: none;
-        text-align: center;
-        padding: 20px;
+    #homeButton {
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
         display: flex;
+        width: 70px;
+        justify-content: center;
         align-items: center;
+        margin-right: 80px;
+        padding: 9px;
+        transition: background-color 0.3s; /* Add transition for smoother effect */
+        margin-right: 70px;
     }
 
-    #freelancerLoadingSpinner {
-        border: 6px solid #e1dcdce4;
-        border-top: 6px solid #1e2020;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
-        align-items: center;
-        margin: 0 auto; /* Center the spinner */
+    #homeButton:hover {
+        background-color: #3d3e3d; /* Change the background color on hover */
     }
     </style>
 </head>
@@ -255,15 +255,20 @@
     <header id="mainHeader">
         <div>
             <img src="logo1.png" alt="Snaplooks Logo" class="logo">
-            <a href="home.html" id="homeButton">Home</a>
         </div>
 
         <form id="searchForm">
             <input type="text" id="searchInput" placeholder="Search your favorite salon...">
-            <button type="button" id="searchButton" onclick="searchServices()">Search</button>
+            <button type="button" id="searchButton" onclick="searchServices()">
+                <!-- Inline SVG for search icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>           
             <div id="searchResultsContainer"></div>
+            <button type="button" id="homeButton" onclick="navigateToHome()">Home</button>        
         </form>
-        
     </header><br>
 
     <section>

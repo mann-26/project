@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const nodemailer = require('nodemailer');
 
-
 const app = express();
 const port = 3000;
 
@@ -30,7 +29,7 @@ app.post('/sendEmail', (req, res) => {
         from: 'snaplooks204@gmail.com',
         to: userEmail,
         subject: 'Booking Request',
-        text: 'Thank you for using snaplooks. We recived you booking request you will be informed shortly.',
+        text: 'Thank you for using snaplooks. We received your booking request. You will be informed shortly.',
     };
 
     // Send email
@@ -42,6 +41,42 @@ app.post('/sendEmail', (req, res) => {
         }
         console.log('Email sent:', info.response);
         res.send('Email sent successfully');
+    });
+});
+
+// New endpoint for sending review form link
+app.post('/send-review-link', (req, res) => {
+    const { userEmail } = req.body;
+
+    // Your review form link
+    const reviewFormLink = 'https://example.com/review-form';
+
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'snaplooks204@gmail.com',
+            pass: 'olil bxpu dfhd hall',
+        },
+    });
+
+    // Email options
+    const mailOptions = {
+        from: 'snaplooks204@gmail.com',
+        to: userEmail,
+        subject: 'Complete Your Booking - Leave a Review',
+        text: `Dear user,\n\nThank you for using snaplooks! Please take a moment to leave a review for your recent booking.\n\n${reviewFormLink}`,
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending review link:', error);
+            res.status(500).json({ success: false, message: 'Failed to send review link.' });
+        } else {
+            console.log('Review link sent:', info.response);
+            res.status(200).json({ success: true, message: 'Review link sent successfully.' });
+        }
     });
 });
 
