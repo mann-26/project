@@ -78,11 +78,12 @@
         }
 
         .dashboard {
-            max-width: 800px;
-            margin: 80px auto;
+            max-width: 100%;
+            margin: 20px auto;
+            margin-left: -70px;
             padding: 20px;
             background-color: #ffffff;
-            border-radius: 10px;
+            border-radius: 30px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -107,7 +108,7 @@
 
         .booking-entry {
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 30px;
             margin-top: 10px;
             padding: 10px;
             background-color: #ffffff;
@@ -143,6 +144,79 @@
             border-color: #f5c6cb;
             color: #721c24;
         }
+        .navigation-link {
+            cursor: pointer;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            text-align: left;
+            font-size: larger;
+        }
+
+        .navigation-link:hover {
+            background-color: #333;
+
+        }
+        .dashboard {
+            display: none;
+        }
+        h4{
+            color: white;
+        }
+        .edit-services-section {
+            display: none; /* Initially hide the section */
+            position: fixed; /* Fixed position to center the section */
+            top: 50%;
+            left: 55%;
+            transform: translate(-50%, -50%); /* Center the section */
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .edit-service-entry {
+            margin-bottom: 20px;
+        }
+
+        .edit-service-input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 30px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da; /* Add a border when focused if desired */
+            outline: none; /* Remove the outline */
+        }
+        
+
+        .update-button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .update-button:hover {
+            background-color: #218838;
+        }
+        .add-service-button {
+            background-color: #000000; /* Button background color */
+            color: #fff; /* Text color */
+            border: none; /* Remove border */
+            padding: 8px 12px; /* Padding for the button */
+            margin-top: 10px; /* Add some top margin to separate from existing services */
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .add-service-button:hover {
+            background-color: #353636; /* Button background color on hover */
+        }
     </style>
 </head>
 
@@ -150,9 +224,10 @@
     <header id="dashboardHeader">
     </header>
     <div class="left-section">
-
-
-    <div class="navigation-link-logout-link" onclick="logout()">Logout</div>
+        <h4 id="Title">Salon Dashboard</h4><br><br>
+        <div class="navigation-link" onclick="Bookings()">Bookings</div>
+        <div class="navigation-link" onclick="EditServices()">Edit Services</div>
+        <div class="navigation-link" onclick="logout()">Logout</div>
     </div>
     <div id="mainContent">
         <div class="dashboard">
@@ -160,7 +235,7 @@
 
             <!-- Pending Bookings Collapsible Section -->
             <div class="collapsible-section" data-toggle="collapse" data-target="#pendingBookingsSection">
-                <h3>Pending Bookings</h3>
+                <h3>Pending Appointments</h3>
             </div>
             <div id="pendingBookingsSection" class="collapse">
                 <div class="bookings" id="pendingBookings">
@@ -170,7 +245,7 @@
 
             <!-- Approved Bookings Collapsible Section -->
             <div class="collapsible-section" data-toggle="collapse" data-target="#approvedBookingsSection">
-                <h3>Approved Bookings</h3>
+                <h3>Approved Appointments</h3>
             </div>
             <div id="approvedBookingsSection" class="collapse">
                 <div class="bookings" id="approvedBookings">
@@ -180,18 +255,24 @@
 
             <!-- Declined Bookings Collapsible Section -->
             <div class="collapsible-section" data-toggle="collapse" data-target="#declinedBookingsSection">
-                <h3>Declined Bookings</h3>
+                <h3>Declined Appointments</h3>
             </div>
             <div id="declinedBookingsSection" class="collapse">
                 <div class="bookings" id="declinedBookings">
                     <!-- Declined booking data will be displayed here -->
                 </div>
             </div>
-
             <div id="feedbackMessage"></div>
         </div>
     </div>
-
+    <div class="edit-services-section">
+        <h2>Edit Services</h2>
+       
+        <div id="editServicesContainer">
+            <!-- Existing services will be displayed here dynamically -->
+        </div>
+    </div>
+    
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
@@ -260,6 +341,139 @@
         }
     });
 }
+
+        function Bookings() {
+            var mainContent = document.getElementById('mainContent');
+            var dashboard = document.querySelector('.dashboard');
+
+            // Toggle the visibility of the dashboard
+            if (dashboard.style.display === 'none' || dashboard.style.display === '') {
+                dashboard.style.display = 'block';
+                mainContent.style.marginLeft = '250px'; // Adjust the margin to show the sidebar
+            } else {
+                dashboard.style.display = 'none';
+                mainContent.style.marginLeft = '0'; // Adjust the margin to hide the sidebar
+            }
+        }
+        // Inside the EditServices() function
+
+        // Inside the EditServices() function
+        // Inside the EditServices() function
+function EditServices() {
+    var mainContent = document.getElementById('mainContent');
+    var dashboard = document.querySelector('.dashboard');
+    var editServicesSection = document.querySelector('.edit-services-section');
+
+    // Hide the main dashboard
+    dashboard.style.display = 'none';
+
+    // Show the edit-services-section
+    editServicesSection.style.display = 'block';
+
+    // Clear existing content in edit-services-section
+    editServicesSection.innerHTML = '<h2>Edit Services</h2>';
+
+    // Fetch existing services from Firebase Firestore
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            var loggedInSalonId = user.uid;
+
+            db.collection('approved').doc(loggedInSalonId).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        var salonData = doc.data();
+                        var selectedServices = salonData.selectedServices;
+
+                        if (selectedServices && selectedServices.length > 0) {
+                            // Display existing services
+                            selectedServices.forEach(service => {
+                                var serviceElement = document.createElement('div');
+                                serviceElement.className = 'edit-service-entry';
+                                serviceElement.innerHTML = `
+                                    <input type="text" value="${service.name}" placeholder="Service Name" class="edit-service-input" />
+                                    <input type="text" value="${service.description}" placeholder="Service Description" class="edit-service-input" />
+                                    <input type="text" value="${service.price}" placeholder="Service Price" class="edit-service-input" />
+                                    <button onclick="updateService('${service.id}')">Update</button>
+                                `;
+                                editServicesSection.appendChild(serviceElement);
+                            });
+                            
+                            // Add a button for a new service
+                            var addServiceButton = document.createElement('button');
+                            addServiceButton.innerText = 'Add New Service';
+                            addServiceButton.className = 'add-service-button';
+                            addServiceButton.onclick = function () {
+                                // Implement logic to add a new service here
+                                // You can create input fields for the new service
+                                // and perform necessary actions.
+                            };
+                            editServicesSection.appendChild(addServiceButton);
+                        } else {
+                            // Show a message when there are no services
+                            editServicesSection.innerHTML += '<p>No services available.</p>';
+                        }
+                    } else {
+                        // Handle the case where the salon document does not exist
+                        console.error('Salon document does not exist.');
+                        editServicesSection.innerHTML += '<p>Error fetching salon data. Please try again.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching salon data:', error);
+                    editServicesSection.innerHTML += '<p>Error fetching salon data. Please try again.</p>';
+                });
+        } else {
+            // Handle the case where the user is not authenticated.
+            console.error('User not authenticated.');
+            editServicesSection.innerHTML += '<p>User not authenticated. Please log in.</p>';
+        }
+    });
+}
+
+function updateService(serviceId) {
+    var nameInput = document.querySelector(`input[data-service-id="${serviceId}"][data-field="name"]`);
+    var descriptionInput = document.querySelector(`input[data-service-id="${serviceId}"][data-field="description"]`);
+    var priceInput = document.querySelector(`input[data-service-id="${serviceId}"][data-field="price"]`);
+
+    var updatedService = {
+        name: nameInput.value,
+        description: descriptionInput.value,
+        price: priceInput.value,
+    };
+
+    // Get the logged-in user
+    var user = firebase.auth().currentUser;
+
+    // Check if the user is authenticated
+    if (user) {
+        var loggedInSalonId = user.uid;
+
+        // Reference to the specific service document in Firestore
+        var serviceRef = db.collection('approved').doc(loggedInSalonId);
+
+        // Update the service data
+        serviceRef.update({
+            selectedServices: firebase.firestore.FieldValue.arrayUnion(updatedService),
+        })
+        .then(() => {
+            // Optionally, you can provide user feedback after the update
+            showFeedbackMessage('Service updated successfully!', 'success');
+
+            // Refresh the displayed services on the dashboard
+            EditServices();
+        })
+        .catch(error => {
+            console.error('Error updating service:', error);
+            showFeedbackMessage('Error updating service. Please try again.', 'danger');
+        });
+    } else {
+        // Handle the case where the user is not authenticated.
+        console.error('User not authenticated.');
+        showFeedbackMessage('User not authenticated. Please log in.', 'danger');
+    }
+}
+
+
         // Function to automatically fetch salon ID if using Firebase Authentication
         function getSalonId() {
     firebase.auth().onAuthStateChanged(user => {

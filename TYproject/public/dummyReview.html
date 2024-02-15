@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5%;
+        }
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%; /* Adjust the width as needed */
+            margin: auto; /* Center the container */
+        }
+        #mainHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 60px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
+        .logo {
+            height: 70px;
+            width: auto;
+            margin-right: 10px;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            height: 50px;
+            border-bottom: 1px solid rgb(225, 220, 220);
+        }
+        .container {
+            max-width: 650px;
+            margin: 5px 10px;
+            padding: 20px;
+            border-radius: 50px;
+            flex: 1; /* Occupy remaining space */
+            overflow-y: auto;
+        }
+
+        .service-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .service-image {
+            max-height: 50%;
+            width: 20%;
+            object-fit: cover;
+            object-position: center;
+            margin-right: 18px;
+            border-radius: 50px;
+            padding: 10px;
+        }
+
+        .service-details {
+            flex-grow: 1; /* Allow the text to take up remaining space */
+        }
+
+        .book-button {
+            background-color: #000000d4;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-right: 30px;
+        }
+
+        .remove-button {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 9px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .back-button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .cart-container {
+            width: 300px;
+            margin: 20px 0px;
+            border: 1px solid #ddd;
+            padding: 45px;
+            border-radius: 50px;
+            background-color: #fff;
+            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            position: fixed;
+            top: 100px;
+            right: 90px;
+            overflow: hidden;
+        }
+
+        /* Adjust the height and show overflow after a certain height is reached */
+        .cart-container.open {
+            max-height: 250px; /* Adjust the value as needed */
+            overflow: auto;
+        }
+        /* Hide the scrollbar */
+        .cart-container {
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+
+        .cart-container::-webkit-scrollbar {
+            width: 1px; 
+        }
+
+        .cart-container::-webkit-scrollbar-thumb {
+            background-color: transparent; 
+        }
+
+        .cart-container::-webkit-scrollbar-track {
+            background-color: transparent; 
+        }
+        .cart-title {
+            font-size: 20px;
+            margin-top: -5px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .cart-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-details h4 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .cart-item-details p {
+            margin: 0;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .cart-item-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .salon-name-container{
+            font-size: large;
+        }
+        .back-button {
+            background-color: white;
+            padding: 8px 20px;
+            margin-right: 50px;
+            margin-top: -5px;
+            border: 2px solid #333;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            display: block; /* To center the span properly */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            color: #333;
+        }
+        .back-button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+        a, .back-button{
+            text-decoration: none;
+        }
+        a, .back-button:hover{
+            text-decoration: none;
+        }
+        .select-date-time-container {
+            position: fixed;
+            width: 24%;
+            top: 500px; /* Adjust the top position as needed */
+            right: 90px; /* Adjust the right position as needed */
+        }
+
+        .select-date-time-button {
+            background-color: #000000d4;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            width: 90%;
+            border-radius: 50px;
+            cursor: pointer;
+            display: none; /* Initially hidden */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 2px solid #333;
+            z-index: 1001;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #333;
+        }
+    </style>
+</head>
+    <header id="mainHeader">
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>
+        <a href="display_S_F.html" class="back-button">Back</a>
+    </header>
+
+    <div class="main-container">
+        <div class="container" id="servicesContainer"></div>
+
+        <div class="cart-container" id="cartContainer">
+            <h2 class="cart-title">Service Selected</h2>
+            <ul class="cart-items" id="cartItems"></ul><br>
+            <p id="totalPrice"><strong>Total Price:</strong> Rs0</p>
+        </div>
+        <div class="select-date-time-container">
+            <button class="select-date-time-button" id="selectDateTimeButton">Select Date and Time</button>
+        </div>
+    </div>
+    <script>
+        var salonData = JSON.parse(localStorage.getItem('selectedSalon'));
+        if (!salonData) {
+            alert('Salon data not found.');
+            window.location.href = 'home.html';
+        }
+
+        var salonIdFromURL = new URLSearchParams(window.location.search).get('salonId');
+        var container = document.getElementById('servicesContainer');
+        var cartContainer = document.getElementById('cartContainer');
+        var cartItemsContainer = document.getElementById('cartItems');
+        var totalPriceDisplay = document.getElementById('totalPrice');
+        var selectDateTimeButton = document.getElementById('selectDateTimeButton');
+        var selectedServices = [];
+        var totalPrice = 0;
+
+        function isServiceInCart(service) {
+            return selectedServices.some(function (cartService) {
+                return cartService.name === service.name;
+            });
+        }
+
+        function addToCart(service) {
+            selectedServices.push(service);
+            totalPrice += parseFloat(service.price);
+            updateCart();
+            updateTotalPrice();
+            updateSelectDateTimeButton();
+        }
+
+        function removeFromCart(index) {
+            totalPrice -= parseFloat(selectedServices[index].price);
+            selectedServices.splice(index, 1);
+            updateCart();
+            updateTotalPrice();
+            updateSelectDateTimeButton();
+        }
+        function showReviewsPopup(service) {
+            // Create the popup container
+            var popup = document.createElement('div');
+            popup.className = 'popup';
+
+            // Create a close button for the popup
+            var closeButton = document.createElement('span');
+            closeButton.className = 'close-popup';
+            closeButton.innerHTML = '&times;';
+            closeButton.addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+
+            // Create a container for reviews
+            var reviewsContainer = document.createElement('div');
+            reviewsContainer.innerHTML = `<h2>${service.name} Reviews</h2>`;
+
+            // Get dummy reviews for the service
+            var serviceReviews = getDummyReviews(service.name);
+
+            // Display dummy reviews
+            serviceReviews.forEach(function (review) {
+                var reviewElement = document.createElement('div');
+                reviewElement.innerHTML = `<p><strong>${review.user}</strong>: ${review.comment} (Rating: ${review.rating})</p>`;
+                reviewsContainer.appendChild(reviewElement);
+            });
+
+            // Append the close button and reviews container to the popup
+            popup.appendChild(closeButton);
+            popup.appendChild(reviewsContainer);
+
+            // Append the popup to the body
+            document.body.appendChild(popup);
+
+            // Display the popup
+            popup.style.display = 'block';
+        }
+
+        var dummyReviews = {
+            "Service1": [
+                { "user": "User1", "comment": "Great service!", "rating": 5 },
+                { "user": "User2", "comment": "Amazing experience!", "rating": 4 }
+            ],
+            "Service2": [
+                { "user": "User3", "comment": "Good job!", "rating": 4 },
+                { "user": "User4", "comment": "Satisfied with the service.", "rating": 3 }
+            ],
+            // Add more services and reviews as needed
+        };
+
+        function updateCart() {
+            cartItemsContainer.innerHTML = '';
+
+            selectedServices.forEach(function (service, index) {
+                var cartItem = document.createElement('li');
+                cartItem.className = 'cart-item';
+
+                var cartItemText = document.createElement('span');
+                cartItemText.textContent = service.name;
+                cartItem.appendChild(cartItemText);
+
+                var removeButton = document.createElement('button');
+                removeButton.className = 'remove-button';
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', function () {
+                    removeFromCart(index);
+                    var serviceContainers = document.querySelectorAll('.service-container');
+                    serviceContainers.forEach(function (container) {
+                        var serviceName = container.querySelector('h3').textContent;
+                        if (serviceName === service.name) {
+                            var bookButton = container.querySelector('.book-button');
+                            bookButton.textContent = 'Add Service';
+                            bookButton.disabled = false;
+                        }
+                    });
+                });
+                cartItem.appendChild(removeButton);
+
+                cartItemsContainer.appendChild(cartItem);
+            });
+
+            // Toggle open class based on whether the cart has items or not
+            cartContainer.classList.toggle('open', selectedServices.length > 0);
+
+            // Remove the 'opened' class to reset the animation
+            cartContainer.classList.remove('opened');
+
+            // Trigger the opened animation after a delay
+            setTimeout(function () {
+                if (selectedServices.length > 0) {
+                    cartContainer.classList.add('opened');
+                }
+            }, 10);
+        }
+
+
+        function updateTotalPrice() {
+            totalPriceDisplay.innerHTML = '<strong>Total Price:</strong> Rs' + totalPrice.toFixed(2);
+        }
+
+        function updateSelectDateTimeButton() {
+            selectDateTimeButton.style.display = selectedServices.length > 0 ? 'block' : 'none';
+            selectDateTimeButton.addEventListener('click', function () {
+                // Create a comma-separated string of selected service names
+                const selectedServiceNames = selectedServices.map(service => service.name).join(',');
+
+                // Calculate the total price and pass it as a query parameter
+                const totalAmount = totalPrice.toFixed(2);
+
+                // Get the salon ID from the URL parameter or local storage
+                const salonId = salonIdFromURL || (salonData && salonData.id) || '';
+
+                // Redirect to the booking.html page with query parameters
+                window.location.href = `booking.html?services=${selectedServiceNames}&total=${totalAmount}&salonId=${salonId}`;
+            });
+        }
+
+        var salonNameContainer = document.createElement('div');
+        salonNameContainer.className = 'salon-name-container';
+        var salonName = document.createElement('h2');
+        salonName.textContent = 'Salon: ' + salonData.salonName;
+        salonNameContainer.appendChild(salonName);
+        container.appendChild(salonNameContainer);
+
+        salonData.selectedServices.forEach(function (service, index) {
+            var serviceContainer = document.createElement('div');
+            serviceContainer.className = 'service-container';
+
+            // Display service details
+            var serviceDetails = document.createElement('div');
+            serviceDetails.className = 'service-details';
+            var serviceName = document.createElement('h3');
+            serviceName.textContent = service.name;
+            var serviceDescription = document.createElement('p');
+            serviceDescription.textContent = service.description;
+            var servicePrice = document.createElement('p');
+            servicePrice.textContent = 'Price: Rs' + service.price;
+            serviceDetails.appendChild(serviceName);
+            serviceDetails.appendChild(serviceDescription);
+            serviceDetails.appendChild(servicePrice);
+
+            // View Reviews button
+            var viewReviewsButton = document.createElement('button');
+            viewReviewsButton.textContent = 'View Reviews';
+            viewReviewsButton.addEventListener('click', function () {
+                showReviewsPopup(service);
+            });
+            serviceDetails.appendChild(viewReviewsButton);
+
+            // Display service image
+            if (service.image) {
+                var serviceImage = document.createElement('img');
+                serviceImage.className = 'service-image';
+                serviceImage.src = service.image;
+                serviceContainer.appendChild(serviceImage);
+            }
+
+            serviceContainer.appendChild(serviceDetails);
+
+            // Book button
+            var bookButton = document.createElement('button');
+            bookButton.className = 'book-button';
+            bookButton.textContent = 'Add Service';
+            bookButton.addEventListener('click', function () {
+                if (!isServiceInCart(service)) {
+                    addToCart(service);
+                    bookButton.textContent = 'Added';
+                    bookButton.disabled = true;
+                }
+            });
+            serviceContainer.appendChild(bookButton);
+
+            // Append the service container to the main container
+            container.appendChild(serviceContainer);
+        });
+
+        function getDummyReviews(serviceName) {
+            return dummyReviews[serviceName] || [];
+        }
+    </script>
+</body>
+</html>
