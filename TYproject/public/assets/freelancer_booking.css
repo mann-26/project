@@ -1,0 +1,161 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+#mainHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    height: 60px;
+    border-bottom: 1px solid rgb(225, 220, 220);
+}
+.logo {
+    height: 70px;
+    width: auto;
+    margin-right: 5px;
+    margin-left: 15px;
+}
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: white;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    height: 50px;
+    border-bottom: 1px solid rgb(225, 220, 220);
+
+}
+
+.booking-container {
+    display: flex;
+    max-width: 800px; /* Adjust the width as needed */
+    padding: 20px;
+    border-radius: 30px;
+    margin-top: -100px;
+    margin-left: -40px;
+}
+.left-section {
+    width: 700px; /* Adjust the padding as needed */
+}
+.left-section fieldset {
+    border: 1px solid #ddd;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.left-section legend {
+    font-size: 42px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.left-section p {
+    margin: 6px;
+    margin-left: 30px;
+    padding: 6px;
+}
+
+.right-section {
+    max-width: 400px;
+    padding: 30px 40px;
+    height: 55%;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 0px;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Add overflow to hide overflowing content */
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #ffffffd2;
+    padding: 10px;
+    width: 100%; /* Adjusted to take 100% of the parent container */
+    border: 2px solid #333;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    color: #333;
+    margin-top: 55px; /* Adjusted margin for spacing */
+}
+button:hover{
+    background-color: #333;
+    color: #fff;
+}
+
+.back-button {
+    background-color: white;
+    padding: 8px 20px;
+    margin-right: 50px;
+    margin-top: -5px;
+    border: 2px solid #333;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: block; /* To center the span properly */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    color: #333;
+}
+.back-button:hover {
+    background-color: #333;
+    color: #fff;
+}
+a, .back-button{
+    text-decoration: none;
+}
+a, .back-button:hover{
+    text-decoration: none;
+}
+#validationMessage {
+    color: red;
+    margin-top: 13px;
+    font-size: small;
+    margin-left: 18px;
+}
+form#bookingForm h1 {
+    font-size: 28px; /* Adjust the font size as needed */
+}
+#appointmentDate,
+#appointmentTime {
+    border-radius: 15px; /* Adjust the border radius value as needed */
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}

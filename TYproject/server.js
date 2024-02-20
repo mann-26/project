@@ -3,7 +3,6 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 
 const app = express();
-const hostname = '0.0.0l0';
 const port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -82,5 +81,5 @@ app.post('/send-review-link', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is running at http://${hostname}:${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
 });

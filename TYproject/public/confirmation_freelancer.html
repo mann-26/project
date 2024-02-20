@@ -7,108 +7,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        #mainHeader {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 30px;
-            height: 70px;
-            border-bottom: 1px solid rgb(225, 220, 220);
-            margin-right: -40px;
-        }
-        .logo {
-            height: 70px;
-            width: auto;
-            margin-right: 10px;
-        }
-        header{
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: white;
-            color: black;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 30px;
-            height: 60px;
-            border-bottom: 1px solid rgb(225, 220, 220);
-
-        }
-
-        .confirmation-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 40px;
-            box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 90px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        .booking-details {
-            margin-top: 20px;
-        }
-
-        .booking-detail {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        
-        #animationContainer {
-            width: 150px; 
-            height: 150px;
-            display: flex;
-            margin: 0 auto;
-        }
-        #backToHomeButton {
-            background-color: white;
-            padding: 5px 10px;
-            border: 2px solid #333;
-            border-radius: 50px;
-            cursor: pointer;
-            margin-left: 42%;
-            transition: background-color 0.3s, color 0.3s;
-            display: inline-block; /* Ensures the button doesn't take full width */
-            text-decoration: none; /* Remove default anchor text decoration */
-            color: #333; /* Set initial text color */
-        }
-
-        #backToHomeButton span {
-            display: block;
-            background-color: #333;
-            height: 100%;
-            width: 0;
-            border-radius: 5px;
-            transition: width 0.3s;
-        }
-
-        #backToHomeButton:hover span {
-            width: 100%;
-        }
-
-        #backToHomeButton:hover {
-            background-color: #333;
-            color: white;
-        }
-        p{
-            margin-left: 34%;
-        }
-        
-    </style>
+    <script src="/scripts/confirmation_freelancer.js"></script>
+    <link rel="stylesheet" href="/assets/confirmation_freelancer.css">
 </head>
 <body>
     <header>
@@ -119,90 +19,13 @@
     <div class="confirmation-container">
         <h1>Booking Confirmation</h1>
         <div id="animationContainer"></div>
-
-
         <!-- Dynamic container for booking details -->
         <div class="booking-details" id="bookingDetailsContainer">
             <!-- Dynamic content will be added here -->
         </div>
-
         <!-- Container for Lottie animation -->
-
         <a id="backToHomeButton" href="home.html"><span></span>Back to Home</a>
         <p>Thank you for choosing Snaplooks!</p>
     </div>
-
-    <script>
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
-            authDomain: "snaplooks-bd932.firebaseapp.com",
-            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com",
-            projectId: "snaplooks-bd932",
-            storageBucket: "snaplooks-bd932.appspot.com",
-            messagingSenderId: "680311673132",
-            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // Reference to the Firestore database
-        const db = firebase.firestore();
-
-        // Retrieve query parameters from the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = urlParams.get('bookingId');
-
-        // Reference to the Firestore collection
-        const bookingsCollection = db.collection('Freelancer_bookings');
-
-        // Retrieve data based on the Booking ID
-        bookingsCollection.doc(bookingId).get().then((doc) => {
-            if (doc.exists) {
-                const data = doc.data();
-
-                // Update the HTML elements with the booking details
-                var bookingDetailsContainer = document.getElementById('bookingDetailsContainer');
-                bookingDetailsContainer.innerHTML = `
-                    
-                    <div class="booking-detail">
-                        <span>Full Name:</span>
-                        <span>${data.fullName}</span>
-                    </div>
-                    <div class="booking-detail">
-                        <span>Email:</span>
-                        <span>${data.email}</span>
-                    </div>
-                    <div class="booking-detail">
-                        <span>Phone Number:</span>
-                        <span>${data.phoneNumber}</span>
-                    </div>
-                    <div class="booking-detail">
-                        <span>Appointment Date:</span>
-                        <span>${data.appointmentDate}</span>
-                    </div>
-                    <div class="booking-detail">
-                        <span>Appointment Time:</span>
-                        <span>${data.appointmentTime}</span>
-                    </div>
-                `;
-
-                var animationContainer = document.getElementById('animationContainer');
-                var animation = lottie.loadAnimation({
-                    container: animationContainer,
-                    renderer: 'svg',
-                    loop: false,
-                    autoplay: true,
-                    path: 'https://lottie.host/fdb6fab1-1da7-4911-8d4e-204542ef3bdc/Hrlrv56m6A.json',
-                    scale: 0.5
-                });
-            } else {
-                console.log("No such document!");
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
-    </script>
 </body>
 </html>

@@ -1,0 +1,48 @@
+header {
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center; /* Center items vertically in the header */
+    justify-content: space-between; /* Distribute items horizontally with space between them */
+}
+    .logo {
+        max-width: 100px;
+    }
+body {
+    background-color: #f8f9fa;
+}
+.logo {
+    max-width: 100px;
+}
+.container {
+    background-color: #ffffff;
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.card {
+background-color: #ffffff;
+
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+.card-header h3 {
+color: rgb(0, 0, 0); /* Replace #your-desired-color with the color you want */
+font-size: xx-large;
+}
+.card-header {
+background-color: #000000;
+color: #ffffff;
+border: none;
+border-radius: 10px 10px 0 0;
+}
+
+.card-body {
+padding: 20px;
+}
+.profile_img {
+    width: 100%;
+    border-radius: 50%;
+}

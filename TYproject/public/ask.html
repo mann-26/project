@@ -4,375 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask a Question - Snaplooks</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        #mainHeader {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 30px;
-            height: 70px;
-            border-bottom: 1px solid rgb(225, 220, 220);
-        }
-        .logo {
-            height: 70px;
-            width: auto;
-            margin-right: 10px;
-            margin-left: 20px;
-        }
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: white;
-            color: black;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 30px;
-            height: 60px;
-            border-bottom: 1px solid rgb(225, 220, 220);
-        }
-
-        .home-button {
-            background-color: white;
-            padding: 8px 20px;
-            margin-right: 15px;
-            border: 2px solid #333;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-            display: block; /* To center the span properly */
-            transition: background-color 0.3s ease, color 0.3s ease;
-            color: #333;
-        }
-        .home-button:hover {
-            background-color: #333;
-            color: #fff;
-        }
-        a, .home-button{
-            text-decoration: none;
-        }
-        a, .home-button:hover{
-            text-decoration: none;
-        }
-
-        h2 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2em;
-            
-        }
-
-        #questionInput {
-            width: 60%;
-            margin-bottom: 20px;
-            padding: 15px;
-            font-size: 15px;
-            border-radius: 20px;
-            border: none;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #submitQuestionButton {
-            background-color: #333;
-            padding: 8px 20px;
-            margin-right: 15px;
-            border: 2px solid #333;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-            display: block; /* To center the span properly */
-            transition: background-color 0.3s ease, color 0.3s ease;
-            color: white;
-        }
-
-        #submitQuestionButton:hover {
-            background-color: #8180807e;
-            color: #000000;
-        }
-        footer {
-            background-color: white;
-            color: #555;
-            text-align: center;
-            padding: 40px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        footer p {
-            font-size: 15px;
-            margin-left: 80px;
-            
-        }
-        .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1000; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden; /* Enable scroll if needed */
-        background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto; /* 15% from the top and centered */
-        padding: 20px;
-        border: 1px solid #888;
-        border-radius: 10px;
-        max-width: 400px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    .checkmark {
-        color: #4CAF50; /* Green color for the checkmark */
-        font-size: 80px; /* Adjust the size as needed */
-        margin-bottom: 20px;
-    }
-
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .back-to-home-link {
-        display: block;
-        margin-top: 20px; /* Adjust as needed */
-        color: #333;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 16px;
-        transition: color 0.3s;
-    }
-
-    .back-to-home-link:hover {
-        color: #555;
-    }
-    #validationModal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1001; /* Sit on top (above the submission modal) */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden; /* Disable scroll */
-        background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
-    }
-
-    #validationModal .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto; /* 15% from the top and centered */
-        padding: 20px;
-        border: 1px solid #888;
-        border-radius: 10px;
-        max-width: 400px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    #validationModal .exclamation {
-        color: #ff9800; /* Exclamation mark color (orange) */
-        font-size: 60px; /* Adjust the size as needed */
-        margin-bottom: 20px;
-    }
-
-    #validationModal .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    #validationModal .close:hover,
-    #validationModal .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    #validationModal p {
-        color: #333;
-        font-size: 16px;
-    }
-   
-        #pleaseWaitModal .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #ffffff;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-top: -55px; /* Half of the height */
-            margin-left: -29px; /* Half of the width */
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
-    <!-- Include Firebase SDK with compatibility builds -->
-        <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-
-        <!-- Your Firebase configuration and other script tags remain the same -->
-        <script>
-            // Your Firebase configuration
-            const firebaseConfig = {
-                apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
-                authDomain: "snaplooks-bd932.firebaseapp.com",
-                databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com",
-                projectId: "snaplooks-bd932",
-                storageBucket: "snaplooks-bd932.appspot.com",
-                messagingSenderId: "680311673132",
-                appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
-            };
-
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-
-            // Get a reference to the Firestore database
-            const db = firebase.firestore();
-        </script>
-
+    <link rel="stylesheet" href="assets/ask.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="/scripts/ask.js"></script>
 </head>
-<body>
-    <header>
+    <body>
+        <header>
+            <div>
+                <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+            </div>
+            <a href="home.html" class="home-button">Home</a>
+        </header>
+
+        <h2>Ask a Question - Snaplooks</h2>
+        
+        <label for="questionInput"><p>Your Question:</p></label>
+        <input type="text" id="questionInput" placeholder="Type your question here...">
+
+        <button id="submitQuestionButton" onclick="submitQuestion()">Submit Question</button>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="checkmark">&#10003;</span> <!-- Big tick mark -->
+            <p>Your question is submitted!</p><br>
+            <b><a href="home.html" onclick="goToHome()" class="back-to-home-link">Back to Home</a>
+            </b>
+        </div>
+    </div>
+    <div id="validationModal" class="modal">
+        <div class="modal-content">
+            <span class="exclamation">&#9888;</span> <!-- Exclamation mark -->
+            <span class="close" onclick="closeValidationModal()">&times;</span>
+            <p>Please enter a question before submitting.</p>
+        </div>
+    </div>
+    <div id="pleaseWaitModal" class="modal">
         <div>
-            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+            <div class="spinner"></div>
+        
         </div>
-        <a href="home.html" class="home-button">Home</a>
-    </header>
-
-    <h2>Ask a Question - Snaplooks</h2>
-    
-    <label for="questionInput"><p>Your Question:</p></label>
-    <input type="text" id="questionInput" placeholder="Type your question here...">
-
-    <button id="submitQuestionButton" onclick="submitQuestion()">Submit Question</button>
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="checkmark">&#10003;</span> <!-- Big tick mark -->
-        <p>Your question is submitted!</p><br>
-        <b><a href="home.html" onclick="goToHome()" class="back-to-home-link">Back to Home</a>
-        </b>
     </div>
-</div>
-<div id="validationModal" class="modal">
-    <div class="modal-content">
-        <span class="exclamation">&#9888;</span> <!-- Exclamation mark -->
-        <span class="close" onclick="closeValidationModal()">&times;</span>
-        <p>Please enter a question before submitting.</p>
-    </div>
-</div>
-<div id="pleaseWaitModal" class="modal">
-    <div>
-        <div class="spinner"></div>
-       
-    </div>
-</div>
-
-<script>
-    function submitQuestion() {
-        const questionInput = document.getElementById('questionInput').value.trim();
-
-        // Simple validation: Check if the question is not empty
-        if (questionInput === '') {
-            openValidationModal();
-            return; // Stop the function if validation fails
-        }
-
-        openPleaseWaitModal();
-
-        // Save the question to Firestore
-        saveQuestionToFirestore(questionInput);
-    }
-
-    function saveQuestionToFirestore(question) {
-        db.collection('question_asked').add({
-            question: question,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            // Firestore operation successful, close the "Please Wait" modal
-            closePleaseWaitModal();
-
-            // Show the success modal
-            openModal();
-        })
-        .catch(error => {
-            console.error('Error adding document: ', error);
-            // Handle error if needed
-            closePleaseWaitModal();
-        });
-    }
-    function openPleaseWaitModal() {
-            const pleaseWaitModal = document.getElementById('pleaseWaitModal');
-            pleaseWaitModal.style.display = 'block';
-        }
-
-        function closePleaseWaitModal() {
-            const pleaseWaitModal = document.getElementById('pleaseWaitModal');
-            pleaseWaitModal.style.display = 'none';
-        }
-
-    function openModal() {
-        const modal = document.getElementById('myModal');
-        modal.style.display = 'block';
-    }
-
-    function openValidationModal() {
-        const validationModal = document.getElementById('validationModal');
-        validationModal.style.display = 'block';
-    }
-
-    function closeValidationModal() {
-        const validationModal = document.getElementById('validationModal');
-        validationModal.style.display = 'none';
-    }
-
-    function goToHome() {
-        // Redirect to home.html
-        window.location.href = 'home.html';
-    }
-</script>
-
-    <footer>
-        <div class="container">
-            <p><b>&copy; 2023 Snaplooks - A Home Salon and Beauty Services Website</b></p>
-        </div>
-    </footer>
-</body>
+        <footer>
+            <div class="container">
+                <p><b>&copy; 2023 Snaplooks - A Home Salon and Beauty Services Website</b></p>
+            </div>
+        </footer>
+    </body>
 </html>
