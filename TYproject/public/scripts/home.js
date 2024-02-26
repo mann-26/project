@@ -239,3 +239,23 @@ if (navigator.geolocation) {
 function openCustomerBookings() {
     window.location.href = 'YourBookings.html';
 }
+// Function to handle location
+function handleLocation(pos) {
+    position = pos.coords;
+    var latitude = position.latitude;
+    var longitude = position.longitude;
+    console.log("Latitude:", latitude);
+    console.log("Longitude:", longitude);
+}
+// Function to handle errors in location retrieval
+function handleLocationError(error) {
+    console.error("Error getting location:", error.message);
+    // You can handle errors here, such as displaying a message to the user
+}
+// Try to fetch the user's location using the Geolocation API
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError);
+} else {
+    console.error("Geolocation is not supported by this browser");
+    // You can handle this case, such as displaying a message to the user
+}
