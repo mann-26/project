@@ -14,7 +14,7 @@ firebase.initializeApp(firebaseConfig);
 function loginUser() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const userType = document.querySelector('.toggle-button.active').innerText.toLowerCase(); // Update this line
+    const userType = document.querySelector('.toggle-button.active').innerText.toLowerCase();
     const loadingSpinner = document.getElementById("loadingSpinner");
 
     if (loadingSpinner) {
@@ -29,17 +29,24 @@ function loginUser() {
 
             // Check if the email is verified
             if (user.emailVerified) {
-                // Check if the logged-in user has the correct user type
                 const userId = user.uid;
-                const userCollection = (userType === 'salon') ? 'R_salons' : 'R_freelancers';
+                const approvedCollection = (userType === 'salon') ? 'approved' : 'approved_freelancers';
 
-                firebase.firestore().collection(userCollection).doc(userId).get()
-                    .then((doc) => {
-                        if (doc.exists) {
-                            // User exists in the correct collection
-                            alert("Login successful!");
-
-                            // Redirect based on user type
+                // Check if the salon/freelancer is approved by admin
+                firebase.firestore().collection(approvedCollection).doc(userId).get()
+                    .then((approvedDoc) => {
+                        if (approvedDoc.exists) {
+                            // Salon or freelancer is approved
+                            if (userType === 'salon') {
+                                window.location.href = "salon_dashboard.html";
+                            } else if (userType === 'freelancer') {
+                                window.location.href = "freelancer_dashboard.html";
+                            } else {
+                                alert("Invalid user type.");
+                            }
+                        } else {
+                            // Salon or freelancer is not yet approved
+                            // Redirect to profile page for non-approved users
                             if (userType === 'salon') {
                                 window.location.href = "profile_salone.html";
                             } else if (userType === 'freelancer') {
@@ -47,9 +54,6 @@ function loginUser() {
                             } else {
                                 alert("Invalid user type.");
                             }
-                        } else {
-                            // User does not exist in the correct collection
-                            alert("Invalid user type or credentials.");
                         }
                     })
                     .catch((error) => {

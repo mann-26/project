@@ -1,0 +1,335 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5%;
+    transition: background-color 0.3s ease;
+}
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%; /* Adjust the width as needed */
+    margin: auto; /* Center the container */
+    transition: width 0.3s ease;
+}
+
+#mainHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    height: 60px;
+    border-bottom: 1px solid rgb(225, 220, 220);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logo {
+    height: 70px;
+    width: auto;
+    margin-right: 10px;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: white;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    height: 50px;
+    border-bottom: 1px solid rgb(225, 220, 220);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    max-width: 650px;
+    margin: 5px 10px;
+    padding: 20px;
+    border-radius: 50px;
+    flex: 1; /* Occupy remaining space */
+    overflow-y: auto;
+    transition: max-width 0.3s ease;
+}
+
+.service-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 50px;
+    overflow: hidden;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-image {
+    max-height: 50%;
+    width: 20%;
+    object-fit: cover;
+    object-position: center;
+    margin-right: 18px;
+    border-radius: 50px;
+    padding: 10px;
+}
+
+.service-details {
+    flex-grow: 1; /* Allow the text to take up remaining space */
+}
+
+.book-button,
+.remove-button,
+.back-button {
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+}
+
+.book-button {
+    background-color: #000000d4;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 50px;
+    margin-right: 30px;
+}
+
+.remove-button {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 9px;
+    border: none;
+    border-radius: 30px;
+}
+
+.back-button {
+    background-color: white;
+    padding: 8px 20px;
+    margin-right: 50px;
+    margin-top: -5px;
+    border: 2px solid #333;
+    border-radius: 50px;
+}
+
+.back-button:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+a, .back-button {
+    text-decoration: none;
+}
+
+a, .back-button:hover {
+    text-decoration: none;
+}
+
+.cart-container {
+    width: 300px;
+    margin: 20px 0px;
+    border: 1px solid #ddd;
+    padding: 45px;
+    border-radius: 50px;
+    background-color: #fff;
+    box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    position: fixed;
+    top: 100px;
+    right: 90px;
+    overflow: hidden;
+    transition: width 0.3s ease, right 0.3s ease;
+}
+
+.cart-container.open {
+    max-height: 250px; /* Adjust the value as needed */
+    overflow: auto;
+}
+
+.cart-container {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.cart-container::-webkit-scrollbar {
+    width: 1px;
+}
+
+.cart-container::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.cart-container::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.cart-title {
+    font-size: 20px;
+    margin-top: -5px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.cart-items {
+    list-style: none;
+    padding: 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-details h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.cart-item-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #777;
+}
+
+.cart-item-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.freelancer-name-container {
+    font-size: large;
+}
+
+.select-date-time-container {
+    position: fixed;
+    width: 24%;
+    top: 500px; /* Adjust the top position as needed */
+    right: 90px; /* Adjust the right position as needed */
+}
+
+.select-date-time-button {
+    background-color: #000000d4;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    width: 90%;
+    border-radius: 50px;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.select-date-time-button:hover {
+    background-color: #000;
+}
+
+.reviews-text {
+    color: #333; /* Adjust the color as needed */
+    font-size: 18px; /* Adjust the font size as needed */
+    margin-top: 10px; /* Adjust the margin-top as needed */
+    margin-bottom: 15px; /* Adjust the margin-bottom as needed */
+    cursor: pointer;
+    margin-right: -70%;
+}
+/* Add a class for the reviews container */
+.reviews-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 35%;
+    height: 100%;
+    background-color: white;
+    z-index: 1001; /* Set a higher z-index to overlay the main content */
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Make the close button visible inside the reviews container */
+.reviews-container .close-button {
+    display: block;
+    margin-bottom: 20px;
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.reviews-container .close-button:hover {
+    background-color: #2980b9;
+}
+
+/* Add a class to show the reviews container */
+.reviews-container.open {
+    transform: translateX(0);
+}
+
+.reviews-container .star {
+    color: #f1c40f; /* Adjust the color as needed */
+    font-size: 20px; /* Adjust the font size as needed */
+}
+
+.reviews-container .review-info {
+    margin-bottom: 20px; /* Adjust the margin as needed */
+    padding: 15px; /* Adjust the padding as needed */
+    border: 1px solid #ddd; /* Optional border style, adjust as needed */
+    border-radius: 30px; /* Optional border radius, adjust as needed */
+    background-color: #dddddd3c; /* Optional background color, adjust as needed */
+}
+.user-profile-picture img {
+    width: 40px; /* Adjust the width of the profile picture */
+    height: 40px; /* Adjust the height of the profile picture */
+    border-radius: 50%; /* Make the profile picture round */
+    margin-right: 10px; /* Adjust the margin between the picture and the name */
+}
+
+.personalInfo{
+    display: flex;
+    align-items: center;
+}
+
+.user-name {
+    margin: 0; /* Remove default margin for consistency */
+}
+
+.coreInfo{
+    margin-top: -20px;
+    margin-left: 50px;
+}
+
+
+.cross-button {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 95%;
+    margin-top: -60px;
+    border-radius: 30px; /* This gives round corners */
+    padding: 8px; /* Adjust padding as needed */
+    color: #333; /* Set the color of the cross symbol */
+}
+
+.cross-button:hover {
+    background-color: #ddd; /* Add a background color on hover if desired */
+}

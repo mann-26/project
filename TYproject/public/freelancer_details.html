@@ -4,255 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freelancer Services</title>
-    <style>
-        /* Add your styles here */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5%;
-    transition: background-color 0.3s ease;
-}
+    <link rel="stylesheet" href="/assets/freelancer_details.css">
 
-.main-container {
-    display: flex;
-    justify-content: space-between;
-    width: 80%; /* Adjust the width as needed */
-    margin: auto; /* Center the container */
-    transition: width 0.3s ease;
-}
-
-#mainHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 30px;
-    height: 60px;
-    border-bottom: 1px solid rgb(225, 220, 220);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.logo {
-    height: 70px;
-    width: auto;
-    margin-right: 10px;
-}
-
-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: white;
-    color: black;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 30px;
-    height: 50px;
-    border-bottom: 1px solid rgb(225, 220, 220);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.container {
-    max-width: 650px;
-    margin: 5px 10px;
-    padding: 20px;
-    border-radius: 50px;
-    flex: 1; /* Occupy remaining space */
-    overflow-y: auto;
-    transition: max-width 0.3s ease;
-}
-
-.service-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 30px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    border-radius: 50px;
-    overflow: hidden;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.service-image {
-    max-height: 50%;
-    width: 20%;
-    object-fit: cover;
-    object-position: center;
-    margin-right: 18px;
-    border-radius: 50px;
-    padding: 10px;
-}
-
-.service-details {
-    flex-grow: 1; /* Allow the text to take up remaining space */
-}
-
-.book-button,
-.remove-button,
-.back-button {
-    transition: background-color 0.3s ease, color 0.3s ease;
-    cursor: pointer;
-}
-
-.book-button {
-    background-color: #000000d4;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 50px;
-    margin-right: 30px;
-}
-
-.remove-button {
-    background-color: #e74c3c;
-    color: #fff;
-    padding: 9px;
-    border: none;
-    border-radius: 30px;
-}
-
-.back-button {
-    background-color: white;
-    padding: 8px 20px;
-    margin-right: 50px;
-    margin-top: -5px;
-    border: 2px solid #333;
-    border-radius: 50px;
-}
-
-.back-button:hover {
-    background-color: #333;
-    color: #fff;
-}
-
-a, .back-button {
-    text-decoration: none;
-}
-
-a, .back-button:hover {
-    text-decoration: none;
-}
-
-.cart-container {
-    width: 300px;
-    margin: 20px 0px;
-    border: 1px solid #ddd;
-    padding: 45px;
-    border-radius: 50px;
-    background-color: #fff;
-    box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    position: fixed;
-    top: 100px;
-    right: 90px;
-    overflow: hidden;
-    transition: width 0.3s ease, right 0.3s ease;
-}
-
-.cart-container.open {
-    max-height: 250px; /* Adjust the value as needed */
-    overflow: auto;
-}
-
-.cart-container {
-    scrollbar-width: thin;
-    scrollbar-color: transparent transparent;
-}
-
-.cart-container::-webkit-scrollbar {
-    width: 1px;
-}
-
-.cart-container::-webkit-scrollbar-thumb {
-    background-color: transparent;
-}
-
-.cart-container::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-.cart-title {
-    font-size: 20px;
-    margin-top: -5px;
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.cart-items {
-    list-style: none;
-    padding: 0;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.cart-item-details {
-    flex-grow: 1;
-}
-
-.cart-item-details h4 {
-    margin: 0;
-    font-size: 16px;
-    color: #333;
-}
-
-.cart-item-details p {
-    margin: 0;
-    font-size: 14px;
-    color: #777;
-}
-
-.cart-item-price {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
-.freelancer-name-container {
-    font-size: large;
-}
-
-.select-date-time-container {
-    position: fixed;
-    width: 24%;
-    top: 500px; /* Adjust the top position as needed */
-    right: 90px; /* Adjust the right position as needed */
-}
-
-.select-date-time-button {
-    background-color: #000000d4;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    width: 90%;
-    border-radius: 50px;
-    cursor: pointer;
-    display: none; /* Initially hidden */
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.select-date-time-button:hover {
-    background-color: #000;
-}
-
-    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    
 </head>
 <body>
     <header id="mainHeader">
         <div>
             <img src="logo1.png" alt="Freelancer Logo" class="logo">
         </div>
+        <div class="reviews-text">Reviews</div>
         <a href="display_S_F.html" class="back-button">Back</a>
     </header>
 
@@ -270,6 +33,23 @@ a, .back-button:hover {
     </div>
 
     <script>
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBj1haaSvpv6SHe8PwX5wazT56DahPOKQQ",
+            authDomain: "snaplooks-bd932.firebaseapp.com",
+            databaseURL: "https://snaplooks-bd932-default-rtdb.firebaseio.com",
+            projectId: "snaplooks-bd932",
+            storageBucket: "snaplooks-bd932.appspot.com",
+            messagingSenderId: "680311673132",
+            appId: "1:680311673132:web:5d55f0b0fe817b8ac39c89"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Get a reference to the Firestore database
+        const db = firebase.firestore();
+
         var freelancerData = JSON.parse(localStorage.getItem('selectedFreelancer'));
 
         console.log('Freelancer Data:', freelancerData);
@@ -411,6 +191,136 @@ a, .back-button:hover {
 
             container.appendChild(serviceContainer);
         });
+
+        var reviewsText = document.querySelector('.reviews-text');
+        var reviewsContainer = document.createElement('div');
+        reviewsContainer.className = 'reviews-container';
+
+        // Add a close button to the reviews container
+        var crossButton = document.createElement('button');
+        crossButton.className = 'cross-button';
+        crossButton.innerHTML = '&#10005;'; // Unicode for a cross symbol
+        crossButton.addEventListener('click', function () {
+            reviewsContainer.classList.remove('open');
+        });
+
+        reviewsContainer.appendChild(crossButton);
+
+        var reviewLabel = document.createElement('h2');
+        reviewLabel.textContent = 'Reviews';
+        reviewsContainer.appendChild(reviewLabel);
+
+        // Add your review content here, you can customize this part
+        var reviewContent = document.createElement('p');
+        reviewContent.textContent = 'Please Wait...';
+
+        // Append elements to the reviews container
+        reviewsContainer.appendChild(reviewContent);
+
+        // Append the reviews container to the body
+        document.body.appendChild(reviewsContainer);
+
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner';
+        reviewsText.appendChild(spinner);
+
+        // Add a click event listener to show the reviews container
+        reviewsText.addEventListener('click', function () {
+            const freelancerId = freelancerData.id || freelancerIdFromURL;
+            if (freelancerId) {
+                // Show the reviews container immediately
+                reviewsContainer.classList.add('open');
+
+                // Fetch and display reviews asynchronously
+                fetchAndDisplayReviews(freelancerId);
+            }
+        });
+
+        async function fetchAndDisplayReviews(freelancerId) {
+            // Reference to the reviews collection for the specific freelancer
+            const reviewsCollection = db.collection('review_freelancer').doc(freelancerId).collection('reviews');
+
+            try {
+                // Fetch reviews
+                const snapshot = await reviewsCollection.get();
+
+                // Clear existing reviews
+                reviewContent.innerHTML = '';
+
+                // Display reviews in the reviewContent element
+                const reviewsPromises = snapshot.docs.map(async (doc) => {
+                    const reviewData = doc.data();
+
+                    // Fetch user details using user ID
+                    const userData = await fetchUserDetails(reviewData.userId);
+
+                    const reviewText = document.createElement('div');
+                    reviewText.innerHTML = `
+                        <div class="review-info">
+                            <div class="personalInfo">
+                                <p class="user-profile-picture"><img src="${userData.picture}" alt="User Profile"></p>
+                                <p class="user-name">${userData.name}</p>
+                            </div>
+                            <div class="coreInfo">
+                                <p class="service-taken">Service Taken: ${reviewData.services}</p>
+                                <p class="rating">Rating: ${generateStarRating(reviewData.rating)}</p>
+                                <p class="comment">Comment: ${reviewData.comment}</p>
+                            </div>
+                        </div>
+                    `;
+                    reviewContent.appendChild(reviewText);
+                });
+
+                // Wait for all user details to be fetched before showing reviews
+                await Promise.all(reviewsPromises);
+
+                // Remove the loading spinner after data is loaded
+                spinner.remove();
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+            }
+        }
+
+        function generateStarRating(rating) {
+            const maxRating = 5;
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 !== 0;
+            const emptyStars = maxRating - fullStars - (halfStar ? 1 : 0);
+
+            // Generate HTML for full stars
+            const fullStarsHTML = '<span class="star">&#9733;</span>'.repeat(fullStars);
+
+            // Generate HTML for half star
+            const halfStarHTML = halfStar ? '<span class="star">&#9733;&#189;</span>' : '';
+
+            // Generate HTML for empty stars
+            const emptyStarsHTML = '<span class="star">&#9734;</span>'.repeat(emptyStars);
+
+            // Combine all HTML parts
+            return `${fullStarsHTML}${halfStarHTML}${emptyStarsHTML}`;
+        }
+
+        async function fetchUserDetails(userId) {
+            try {
+                // Reference to the users collection
+                const usersCollection = db.collection('users');
+
+                // Fetch user details using user ID
+                const userDoc = await usersCollection.doc(userId).get();
+
+                if (userDoc.exists) {
+                    // Return user details
+                    const userData = userDoc.data();
+                    return { name: userData.displayName, picture: userData.photoURL };
+                } else {
+                    console.warn(`User with ID ${userId} not found.`);
+                    return { name: 'Unknown', picture: 'default-picture-url' };
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+                return { name: 'Unknown', picture: 'default-picture-url' };
+            }
+        }
 
     </script>
 </body>

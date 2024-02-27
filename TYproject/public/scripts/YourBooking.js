@@ -154,7 +154,11 @@ async function displayBookingInfo(doc, type) {
     }
 
     // Display reviews
+
+    console.log("Before fetching reviews");
     const reviews = await fetchReviews(type, id);
+    console.log("Reviews:", reviews);
+
     const reviewsHtml = reviews.map(review => {
         return `<div class="review">
                     <p>${review.comment}</p>
@@ -190,13 +194,19 @@ async function displayBookingInfo(doc, type) {
 
 //implement this function properly later 
 async function fetchReviews(bookingId, type) {
-    const reviewCollection = type === 'Salon' ? 'review_salon' : 'review_freelancer';
-    const reviewsRef = db.collection(reviewCollection).doc(bookingId).collection('reviews');
+    try {
+        const reviewCollection = type === 'Salon' ? 'review_salon' : 'review_freelancer';
+        const reviewsRef = db.collection(reviewCollection).doc(bookingId).collection('reviews');
 
-    const reviewsSnapshot = await reviewsRef.get();
+        const reviewsSnapshot = await reviewsRef.get();
 
-    return reviewsSnapshot.docs.map(doc => doc.data());
+        return reviewsSnapshot.docs.map(doc => doc.data());
+    } catch (error) {
+        console.error("Error fetching reviews:", error);
+        throw error; // Rethrow the error to be caught by the caller
+    }
 }
+
 
 
 function getStarsHtml(rating, bookingId, type) {
@@ -258,22 +268,20 @@ async function submitReview(bookingId, type, salonOrFreelancerId) {
     const bookingEntryId = `${type}_${bookingId}`;
     const selectedStars = getSelectedStars(bookingEntryId);
 
-    // Fetch the services from the appropriate collection based on the type
-    const servicesCollection = type === 'Salon' ? 'Booking_Completed' : 'Freelancer_Booking_Completed';
-    const servicesRef = db.collection(servicesCollection).doc(bookingId);
-    const servicesSnapshot = await servicesRef.get();
-
-    // Extract services from the snapshot
-    const servicesData = servicesSnapshot.exists ? servicesSnapshot.data().selectedServices : 'Unknown';
+    // Fetch the service information from the corresponding completed booking collection
+    const completedBookingCollection = type === 'Salon' ? 'Booking_Completed' : 'Freelancer_Booking_Completed';
+    const completedBookingRef = db.collection(completedBookingCollection).doc(bookingId);
+    const completedBookingData = await completedBookingRef.get().then(doc => doc.data());
 
     // Update the review in the appropriate subcollection
     const reviewCollection = type === 'Salon' ? 'review_salon' : 'review_freelancer';
+    const reviewDocumentId = bookingId; // Set review document ID to the booking ID
     const reviewData = {
         userId: currentUser.uid,
         comment: comment,
         rating: selectedStars,
         bookingId: bookingId,
-        services: servicesData, // Include services in the review data
+        services: completedBookingData.selectedServices, // Add the services information
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -288,16 +296,20 @@ async function submitReview(bookingId, type, salonOrFreelancerId) {
     }
 
     // Add the review to the reviews subcollection within the appropriate collection
-    await db.collection(reviewCollection).doc(salonOrFreelancerId).collection('reviews').add(reviewData);
+    await db.collection(reviewCollection).doc(salonOrFreelancerId).collection('reviews').doc(reviewDocumentId).set(reviewData);
 
     // After submitting the review, you might want to update the UI or take further actions
-    console.log(`Review submitted for ${type} booking with ID: ${bookingId}, Comment: ${comment}, Services: ${servicesData}`);
+    console.log(`Review submitted for ${type} booking with ID: ${bookingId}, Comment: ${comment}`);
+
+    document.getElementById('reviewSubmittedModal').style.display = 'block';
 
     // You can add further logic here, such as updating the UI or displaying a success message
 }
 
 
-
+function closeModal() {
+    document.getElementById('reviewSubmittedModal').style.display = 'none';
+}
 
 function getSelectedStars(bookingEntryId) {
     const stars = document.querySelectorAll(`#${bookingEntryId} .star-rating i.selected`);
