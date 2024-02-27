@@ -7,7 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0)), url(https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Flogin-blur.jpg?alt=media&token=1b1b0ee3-1279-4378-a8dc-6a803175772e);
+    background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0)), url(https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/Pictures%2Flogin-blur.jpg?alt=media&token=f6c22d70-460d-4c91-a5d4-9f2596343ed2);
     background-size: cover;
     background-position: center;
 }

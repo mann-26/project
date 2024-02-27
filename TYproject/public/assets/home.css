@@ -315,12 +315,11 @@ p {
 }
 .modal-cont {
     background-color: #fefefe;
-    margin: 5% auto;
-    padding: 30px;
-    border: 1px solid #888;
-    width: 400px; /* Adjust the width as needed */
-    max-height: 520px; /* Adjust the maximum height as needed */
-    border-radius: 25px;
+    margin: 4% auto;
+    padding: 35px;
+    width: 430px; /* Adjust the width as needed */
+    max-height: 500px; /* Adjust the maximum height as needed */
+    border-radius: 30px;
 }
 h1{
     text-align: center;
@@ -359,11 +358,11 @@ input {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #000000;
+    border: 4px solid rgba(255, 255, 255, 0.61);
+    border-top: 4px solid #000000;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     animation: spin 1s linear infinite;
 }
 
@@ -404,4 +403,30 @@ input {
     background-color: #7171713e; /* White background on hover */
     color: #000000; /* Black text color on hover */
     border-color: #ffffff; /* White border on hover */
+}
+/* Style for the tick mark */
+.tick-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: green; /* Customize the color if needed */
+    margin-top: 10px; /* Adjust the spacing from other content */
+}
+
+/* Optional: Animation for the tick mark */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.tick-mark {
+    animation: fadeIn 0.5s ease-in-out; /* Customize the animation duration */
+}
+.error-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
 }

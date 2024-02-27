@@ -7,7 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0)), url(https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/pictures%2Fregister_salon1blure.jpg?alt=media&token=912d5e68-c036-464a-9997-db1deb1f7c7a);
+    background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0)), url('https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/Pictures%2Fregister_salon1blure.jpg?alt=media&token=e012b26d-efd7-4791-bce7-5e0266c1269b');
     background-size: cover;
     background-position: center;
 }

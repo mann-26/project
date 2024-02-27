@@ -29,31 +29,54 @@ bookingsCollection.doc(bookingId).get().then((doc) => {
         // Update the HTML elements with the booking details
         var bookingDetailsContainer = document.getElementById('bookingDetailsContainer');
         bookingDetailsContainer.innerHTML = `
-            
+        
+            <div class="left-section">
             <div class="booking-detail">
-                <span><strong>Full Name:</strong></span>
+            <span><strong>Full Name:</strong></span>
+                <div class = "space">
                 <span>${data.fullName}</span>
+                </div>
             </div>
             <div class="booking-detail">
                 <span><strong>Email:</strong></span>
+                <div class = "space">
                 <span>${data.email}</span>
+                </div>
             </div>
             <div class="booking-detail">
                 <span><strong>Phone Number:</strong></span>
+                <div class = "space">
                 <span>${data.phoneNumber}</span>
+                </div>
             </div>
             <div class="booking-detail">
                 <span><strong>Appointment Date:</strong></span>
+                <div class = "space">
                 <span>${data.appointmentDate}</span>
+                </div>
             </div>
             <div class="booking-detail">
                 <span><strong>Appointment Time:</strong></span>
+                <div class = "space">
                 <span>${data.appointmentTime}</span>
+                </div>
             </div>
             <div class="booking-detail">
                 <span><strong>Total Amount:</strong></span>
+                <div class = "space">
                 <span>Rs ${data.totalAmount}</span>
+                </div>
             </div>
+            </div>
+
+            <div class="right-section">
+                <!-- Add your text or content for the right section here -->
+                <p><b>You will receive confirmation email shortly</b></p>
+                <a href="https://www.gmail.com" target="_blank">
+                <img class="email-logo" src="/assets/images/email_logo.png" alt="Email Icon">
+                <p class = "gmail"><b>Click above to open Gmail</b></p>
+            </div>
+                
             <a id="backToHomeButton" href="home.html"><span></span>Back to Home</a>
             <p>Thank you for choosing Snaplooks!</p>
         `;

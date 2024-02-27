@@ -174,14 +174,31 @@ function createProfile() {
     const user = firebase.auth().currentUser;
 
     if (user) {
+        const contactNumberInput = document.getElementById('userContact');
+        const addressInput = document.getElementById('userAddress');
+
+        // Get values from the modal
+        const contactNumber = contactNumberInput.value.trim(); // Trim to remove leading/trailing spaces
+        const address = addressInput.value.trim();
+
+        // Clear previous error messages
+        clearErrorMessages();
+
+        // Validate required fields
+        if (!contactNumber) {
+            displayErrorMessage(contactNumberInput, 'Please enter your contact number.');
+            return; // Exit the function if validation fails
+        }
+
+        if (!address) {
+            displayErrorMessage(addressInput, 'Please enter your address.');
+            return; // Exit the function if validation fails
+        }
+
+        // Update user profile in Firestore
         const db = firebase.firestore();
         const usersCollection = db.collection('users');
 
-        // Get values from the modal
-        const contactNumber = document.getElementById('userContact').value;
-        const address = document.getElementById('userAddress').value;
-
-        // Update user profile in Firestore
         usersCollection.doc(user.uid).set({
             displayName: user.displayName,
             email: user.email,
@@ -193,22 +210,35 @@ function createProfile() {
             .then(() => {
                 console.log("Profile created successfully");
 
-                // Update content in the profile-section immediately
-                const userNameDisplay = document.getElementById('userNameDisplay');
-                const userEmailDisplay = document.getElementById('userEmailDisplay');
-                const userContactDisplay = document.getElementById('userContactDisplay');
-                const userAddressDisplay = document.getElementById('userAddressDisplay');
+                // Display a tick mark
+                const tickMark = document.createElement('span');
+                tickMark.innerHTML = '&#10004; Profile Created!';
+                tickMark.classList.add('tick-mark');
+                tickMark.style.marginLeft = '10px'; // Adjust the spacing
 
-                userNameDisplay.textContent = user.displayName;
-                userEmailDisplay.textContent = "Email: " + user.email;
-                userContactDisplay.textContent = "Contact Number: " + contactNumber;
-                userAddressDisplay.textContent = "Address: " + address;
+                // Append the tick mark to the user modal
+                const userModalContent = document.querySelector('#userModal .modal-cont');
+                userModalContent.appendChild(tickMark);
 
-                // Close the modal
-                closeUserModal();
-                hideLoadingSpinner();
+                // Close the modal after a delay (adjust the timing if needed)
+                setTimeout(() => {
+                    // Update content in the profile-section immediately
+                    const userNameDisplay = document.getElementById('userNameDisplay');
+                    const userEmailDisplay = document.getElementById('userEmailDisplay');
+                    const userContactDisplay = document.getElementById('userContactDisplay');
+                    const userAddressDisplay = document.getElementById('userAddressDisplay');
 
-                // Perform additional actions if needed
+                    userNameDisplay.textContent = user.displayName;
+                    userEmailDisplay.textContent = "Email: " + user.email;
+                    userContactDisplay.textContent = "Contact Number: " + contactNumber;
+                    userAddressDisplay.textContent = "Address: " + address;
+
+                    // Close the modal
+                    closeUserModal();
+                    hideLoadingSpinner();
+
+                    // Perform additional actions if needed
+                }, 2000); // 10 seconds delay
             })
             .catch((error) => {
                 console.error("Error creating profile:", error);
@@ -218,6 +248,40 @@ function createProfile() {
         console.error("User not authenticated");
     }
 }
+
+// Function to display an error message next to the input field
+function displayErrorMessage(inputElement, message) {
+    const errorMessage = document.createElement('div');
+    errorMessage.classList.add('error-message');
+    errorMessage.textContent = message;
+
+    // Append the error message to the parent container
+    inputElement.parentNode.appendChild(errorMessage);
+
+    // Add an event listener to both input elements
+    const checkAndRemoveError = function () {
+        const contactNumber = document.getElementById('userContact').value.trim();
+        const address = document.getElementById('userAddress').value.trim();
+
+        // Check if both fields are filled, and remove the error message if true
+        if (contactNumber && address) {
+            errorMessage.remove();
+        }
+    };
+
+    inputElement.addEventListener('input', checkAndRemoveError);
+
+    // You can add the same event listener to the other input element if needed
+}
+
+
+// Function to clear all error messages
+function clearErrorMessages() {
+    const errorMessages = document.querySelectorAll('.error-message');
+    errorMessages.forEach(message => message.remove());
+}
+
+
 
 function closeUserModal() {
     document.getElementById('userModal').style.display = 'none';
