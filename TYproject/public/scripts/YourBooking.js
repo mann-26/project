@@ -51,6 +51,9 @@ async function displayBookingStatus(userId) {
     // Reference to the "Freelancer_Booking_Completed" collection
     var freelancerCompletedBookingsRef = db.collection('Freelancer_Booking_Completed').where('userId', '==', userId);
 
+    // Reference to the "Freelancer_Booking_Completed" collection
+    var freelancerDeclineBookingRef = db.collection('Freelancer_Declined_bookings').where('userId', '==', userId);
+
     // Fetch bookings from each collection
     var hasBookings = false;
 
@@ -117,6 +120,16 @@ async function displayBookingStatus(userId) {
     await freelancerCompletedBookingsRef.get().then(querySnapshot => {
         if (!querySnapshot.empty) {
             // Display "Complete" bookings for freelancer
+            querySnapshot.forEach(doc => {
+                displayBookingInfo(doc, 'Freelancer');
+            });
+            hasBookings = true;
+        }
+    });
+
+    await freelancerDeclineBookingRef.get().then(querySnapshot => {
+        if (!querySnapshot.empty) {
+            // Display "decline" bookings for freelancer
             querySnapshot.forEach(doc => {
                 displayBookingInfo(doc, 'Freelancer');
             });
@@ -345,6 +358,7 @@ function getStatusLabel(collectionName) {
         case 'Freelancer_Booking_Completed':
             return 'Completed';
         case 'Declined_bookings':
+        case 'Freelancer_Declined_bookings':
             return 'Declined';
         default:
             return 'Unknown';

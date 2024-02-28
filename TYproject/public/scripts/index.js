@@ -52,3 +52,39 @@ window.onclick = function(event) {
     }
 };
 
+// Assuming you have an HTML anchor with class="spa-link"
+const spaLinks = document.querySelectorAll('.spa-link');
+
+// Event listener for each link
+spaLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const target = link.getAttribute('data-target');
+        navigateTo(target);
+
+        // Update the URL without a page reload
+        history.pushState({ page: target }, null, `/${target}`);
+    });
+});
+
+// Function to handle navigation
+function navigateTo(target) {
+    // Make a POST request to the server's corresponding route
+    fetch(`/${target}`, {
+        method: 'POST', // or 'GET' depending on your server configuration
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        // You can include a body if needed
+        // body: JSON.stringify({ /* data */ }),
+    })
+    .then(response => response.json()) // Assuming the server returns JSON
+    .then(data => {
+        // Handle the response data as needed
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
