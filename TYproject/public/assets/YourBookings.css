@@ -73,17 +73,7 @@ header select {
     padding: 30px;
     justify-content: space-between;
 }
-.home-button {
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: #007bff;
-}
 
-.home-button:hover {
-    background-color: #0056b3;
-}
 .booking-entry .left-section {
     flex-basis: 30%; /* Adjust the width of the left section */
 }
@@ -149,7 +139,8 @@ header select {
     content: '\25BC'; /* Unicode character for a down-pointing triangle */
     position: absolute;
     top: 50%;
-    right: 10px;
+    right: 150px;
+    margin-left: 200px;
     transform: translateY(-50%);
   }
   
@@ -198,4 +189,28 @@ header select {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.home-button {
+    background-color: white;
+    padding: 8px 20px;
+    margin-right: 50px;
+    margin-left: -900px;
+    border: 2px solid #333;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: block; /* To center the span properly */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    color: #333;
+}
+.home-button:hover {
+    background-color: #333;
+    color: #fff;
+}
+a, .home-button{
+    text-decoration: none;
+}
+a, .home-button:hover{
+    text-decoration: none;
 }

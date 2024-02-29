@@ -62,14 +62,39 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('appointmentTime').addEventListener('input', function () {
             updateValidationMessage();
         });
-
+        
         function updateValidationMessage() {
             var appointmentDate = document.getElementById('appointmentDate').value;
             var appointmentTime = document.getElementById('appointmentTime').value;
             var validationMessage = document.getElementById('validationMessage');
-
+        
             if (appointmentDate && appointmentTime) {
-                validationMessage.innerText = ''; // Clear the validation message
+                // Parse the selected time
+                var selectedTime = new Date("2000-01-01 " + appointmentTime);
+        
+                // Query the database to get salon operating hours based on salonId
+                const salonId = urlParams.get('salonId');
+                const salonRef = firestore.collection('approved').doc(salonId);
+        
+                salonRef.get().then((doc) => {
+                    if (doc.exists) {
+                        // Document exists, retrieve salon data
+                        const salonData = doc.data();
+                        const openingTime = new Date("2000-01-01 " + salonData.openTime);
+                        const closingTime = new Date("2000-01-01 " + salonData.closeTime);
+        
+                        // Check if the selected time is within the salon's working hours
+                        if (selectedTime >= openingTime && selectedTime <= closingTime) {
+                            validationMessage.innerText = ''; // Clear the validation message
+                        } else {
+                            validationMessage.innerText = 'The salon is not open during the selected time. Please choose a different time.';
+                        }
+                    } else {
+                        console.log('No such document!');
+                    }
+                }).catch((error) => {
+                    console.log('Error getting document:', error);
+                });
             }
         }
 
