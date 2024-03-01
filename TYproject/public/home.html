@@ -24,6 +24,16 @@
             <img src="logo1.png" alt="Snaplooks Logo" class="logo">
         </a>
     </div>
+
+    <form oninput="searchSalonByService(event)">
+        <input type="text" id="serviceInput"  placeholder="Search service..." autocomplete="off">
+        <!-- Datalist for autocomplete suggestions -->
+        <datalist id="serviceSuggestions"></datalist>
+        <div id="searchResults">
+            <!-- Display search results here -->
+        </div>
+    </form>
+
     <div class="profile-picture-container">
         <img id="userProfilePicture" alt="Profile Picture" class="profile-picture">
     </div>
@@ -238,6 +248,17 @@
             }, { threshold: 0.5 }); 
             serviceContainers.forEach(container => {
                 observer.observe(container);
+            });
+
+            document.addEventListener('click', function (event) {
+                var searchInput = document.getElementById('serviceInput');
+                var searchResults = document.getElementById('searchResults');
+
+                // Check if the click is outside the search input and search results
+                if (event.target !== searchInput && !searchInput.contains(event.target) &&
+                    event.target !== searchResults && !searchResults.contains(event.target)) {
+                    clearSearchResults();
+                }
             });
     </script>
         <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">

@@ -430,3 +430,127 @@ input {
     font-size: 14px;
     margin-top: 5px;
 }
+form {
+    margin-top: 10px;
+    position: relative;
+    margin-right: -49%;
+}
+input {
+    padding: 8px;
+    width: 380px;
+    border: 1.2px solid #ccc;
+    border-radius: 25px;
+    box-shadow: none;
+}
+#searchResults {
+    margin-top: -20px;
+    margin-left: 10px;
+    position: absolute;
+    padding: 6px;
+    width: 94.5%;
+    color: black;
+    z-index: -1;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+::-webkit-scrollbar{
+    width: 5px;
+}
+#searchResults::-webkit-scrollbar-thumb {
+    background: #00000053;
+    border-radius: 40px;
+}
+
+
+.profileImage {
+    max-width: 70px; /* Adjust the width as needed */
+    max-height: 70px; /* Adjust the height as needed */
+    border-radius: 50%; /* To make it a circular image */
+    margin-right: 1px;
+
+}
+
+.freelancerName {
+    font-size: 16px; /* Adjust the font size as needed */
+    font-weight: bold; /* Adjust the font weight as needed */
+}
+
+.salonName {
+    font-size: 16px; /* Adjust the font size as needed */
+    font-weight: bold; /* Adjust the font weight as needed */
+}
+/* .FresultIndication{
+   
+} */
+.SresultIndication{
+    margin-left: 5px;
+}
+#searchResults.show {
+    display: block;
+    opacity: 1;
+}
+
+.searchResult {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.searchResult:hover {
+    background-color: #f0f0f0;
+}
+
+p {
+    margin: 5px 0;
+    color: #333;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#searchResults.show {
+    display: block;
+    animation: slideIn 0.1s ease-in-out;
+}
+/* Additional styles for the datalist
+#serviceSuggestions {
+    display: none;
+    position: absolute;
+    width: 200px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#serviceSuggestions.show {
+    display: block;
+}
+
+.suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    background-color: #f0f0f0;
+} */

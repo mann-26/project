@@ -10,6 +10,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
 
 function showLoadingSpinner() {
     const loadingSpinner = document.getElementById('loadingSpinner');
@@ -323,3 +324,234 @@ if (navigator.geolocation) {
     console.error("Geolocation is not supported by this browser");
     // You can handle this case, such as displaying a message to the user
 }
+
+var debounceTimer;
+
+async function searchFreelancerByService(serviceInput) {
+    var searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+
+    if (serviceInput === '') {
+        clearSearchResults();
+        return;
+    }
+
+    try {
+        var freelancerQuerySnapshot = await db.collection('approved_freelancers').get();
+        var fragment = document.createDocumentFragment();
+        var foundResults = false;
+
+        freelancerQuerySnapshot.forEach((doc) => {
+            var freelancerData = doc.data();
+            var matchingServices = freelancerData.selectedServices.filter(service =>
+                service.name && typeof service.name === 'string' && service.name.toLowerCase().includes(serviceInput)
+            );
+
+            if (matchingServices.length > 0) {
+                foundResults = true;
+
+                var freelancerEntry = document.createElement('div');
+                freelancerEntry.className = 'searchResult';
+
+                // Add profile image
+                var freelancerProfileImage = document.createElement('img');
+                freelancerProfileImage.src = freelancerData.freelancerDpImage; // Adjust the field name based on your database structure
+                freelancerProfileImage.alt = 'Freelancer Profile Image';
+                freelancerProfileImage.className = 'profileImage';
+                freelancerEntry.appendChild(freelancerProfileImage);
+
+                // Add freelancer indication text
+                var freelancerIndication = document.createElement('p');
+                freelancerIndication.textContent = 'Freelancer';
+                freelancerIndication.className = 'FresultIndication';
+                freelancerEntry.appendChild(freelancerIndication);
+
+                var freelancerNameElement = document.createElement('p');
+                freelancerNameElement.textContent = freelancerData.freelancerName;
+                freelancerNameElement.className = 'freelancerName';
+                freelancerEntry.appendChild(freelancerNameElement);
+
+                matchingServices.forEach(service => {
+                    var serviceElement = document.createElement('p');
+                    serviceElement.textContent = `Service: ${service.name}, Price: ${service.price}`;
+                    freelancerEntry.appendChild(serviceElement);
+                });
+
+                freelancerEntry.addEventListener('click', function () {
+                    localStorage.setItem('selectedFreelancer', JSON.stringify(freelancerData));
+                    window.location.href = 'freelancer_details.html?freelancerId=' + doc.id;
+                });
+
+                fragment.appendChild(freelancerEntry);
+            }
+        });
+
+        searchResults.appendChild(fragment);
+        toggleSearchResults(true);
+    } catch (error) {
+        console.error("Error searching for freelancers:", error);
+    }
+}
+
+async function searchSalonByService(event) {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async function () {
+        var serviceInput = document.getElementById('serviceInput').value.toLowerCase().trim();
+
+        if (serviceInput === '') {
+            clearSearchResults();
+            return; // Return early if the input is empty
+        }
+
+            // Search for salons and freelancers
+        searchSalonResults(serviceInput);
+        searchFreelancerByService(serviceInput);
+    }, 300);
+}
+
+async function searchSalonResults(serviceInput) {
+        var searchResults = document.getElementById('searchResults');
+        searchResults.innerHTML = '';
+
+        try {
+            var salonQuerySnapshot = await db.collection('approved').get();
+            var fragment = document.createDocumentFragment();
+
+            salonQuerySnapshot.forEach((doc) => {
+                var salonData = doc.data();
+
+                if (Array.isArray(salonData.selectedServices)) {
+                    var matchingServices = salonData.selectedServices.filter(service =>
+                        service.name && typeof service.name === 'string' && service.name.toLowerCase().includes(serviceInput)
+                    );
+
+                    if (matchingServices.length > 0) {
+                        var salonEntry = document.createElement('div');
+                        salonEntry.className = 'searchResult';
+
+                        // Add profile image
+                        var salonProfileImage = document.createElement('img');
+                        salonProfileImage.src = salonData.salonDpImage; // Adjust the field name based on your database structure
+                        salonProfileImage.alt = 'salon Profile Image';
+                        salonProfileImage.className = 'profileImage';
+                        salonEntry.appendChild(salonProfileImage);
+
+                        // Add freelancer indication text
+                        var salonIndication = document.createElement('p');
+                        salonIndication.textContent = 'salon';
+                        salonIndication.className = 'SresultIndication';
+                        salonEntry.appendChild(salonIndication);
+
+                        var salonNameElement = document.createElement('p');
+                        salonNameElement.textContent = salonData.salonName;
+                        salonNameElement.className = 'salonName';
+                        salonEntry.appendChild(salonNameElement);
+
+                        matchingServices.forEach(service => {
+                            var serviceElement = document.createElement('p');
+                            serviceElement.textContent = `Service: ${service.name}, Price: ${service.price}`;
+                            salonEntry.appendChild(serviceElement);
+                        });
+
+                        salonEntry.addEventListener('click', function () {
+                            localStorage.setItem('selectedSalon', JSON.stringify(salonData));
+                            window.location.href = 'salon_details.html?salonId=' + doc.id;
+                        });
+
+                        fragment.appendChild(salonEntry);
+                    }
+                }
+            });
+
+            searchResults.appendChild(fragment);
+            toggleSearchResults(true);
+        } catch (error) {
+            console.error("Error searching for salons:", error);
+        }
+    }
+
+function clearSearchResults() {
+    var searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+    toggleSearchResults(false);
+}
+
+
+
+function toggleSearchResults(show = false) {
+    var searchResults = document.getElementById('searchResults');
+    if (show || searchResults.innerHTML !== '') {
+        searchResults.classList.toggle('show', show);
+    } else {
+        searchResults.classList.remove('show');
+    }
+}
+
+document.getElementById('serviceInput').addEventListener('focus', function () {
+    searchSalonByService();
+});
+
+document.getElementById('serviceInput').addEventListener('input', function () {
+    updateAutocompleteSuggestions();
+});
+
+async function updateAutocompleteSuggestions() {
+    var serviceInput = document.getElementById('serviceInput').value.toLowerCase().trim();
+    var suggestionsDatalist = document.getElementById('serviceSuggestions');
+
+    try {
+        var suggestionsSet = new Set();
+
+        await fetchSalonSuggestions(serviceInput, suggestionsSet);
+        await fetchFreelancerSuggestions(serviceInput, suggestionsSet);
+
+        suggestionsDatalist.innerHTML = '';
+
+        suggestionsSet.forEach(suggestion => {
+            var option = document.createElement('option');
+            option.value = suggestion;
+            suggestionsDatalist.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error updating autocomplete suggestions:", error);
+    }
+}
+
+async function fetchSalonSuggestions(serviceInput, suggestionsSet) {
+    try {
+        var salonQuerySnapshot = await db.collection('approved').get();
+
+        salonQuerySnapshot.forEach((doc) => {
+            var salonData = doc.data();
+
+            if (Array.isArray(salonData.selectedServices)) {
+                salonData.selectedServices.forEach(service => {
+                    if (service.name && typeof service.name === 'string' && service.name.toLowerCase().includes(serviceInput)) {
+                        suggestionsSet.add(service.name);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching salon suggestions:", error);
+    }
+}
+
+async function fetchFreelancerSuggestions(serviceInput, suggestionsSet) {
+    try {
+        var freelancerQuerySnapshot = await db.collection('approved_freelancers').get();
+
+        freelancerQuerySnapshot.forEach((doc) => {
+            var freelancerData = doc.data();
+
+            freelancerData.selectedServices.forEach(service => {
+                if (service.name && typeof service.name === 'string' && service.name.toLowerCase().includes(serviceInput)) {
+                    suggestionsSet.add(service.name);
+                }
+            });
+        });
+    } catch (error) {
+        console.error("Error fetching freelancer suggestions:", error);
+    }
+}
+
