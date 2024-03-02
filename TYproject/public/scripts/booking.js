@@ -87,7 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (selectedTime >= openingTime && selectedTime <= closingTime) {
                             validationMessage.innerText = ''; // Clear the validation message
                         } else {
-                            validationMessage.innerText = 'The salon is not open during the selected time. Please choose a different time.';
+                            validationMessage.innerText = 'The selected time is outside salon hours. Select other time';
+                            return; // Do not proceed with booking if validation fails
                         }
                     } else {
                         console.log('No such document!');
@@ -97,14 +98,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
         }
-
+        
     // Handle form submission
     var bookingForm = document.getElementById('bookingForm');
     bookingForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
         // Retrieve form data
-        
         var fullName = document.getElementById('fullName').innerText;
         var email = document.getElementById('email').innerText;
         var phoneNumber = document.getElementById('phoneNumber').innerText;
@@ -116,10 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!appointmentDate || !appointmentTime) {
             validationMessage.innerText = 'Please select both date and time before booking.';
             return;
-        } else {
-            validationMessage.innerText = ''; // Clear the validation message if no errors
         }
-        
+
         // Retrieve salon ID from URL parameters
         const salonId = urlParams.get('salonId');
 
@@ -130,54 +128,77 @@ document.addEventListener('DOMContentLoaded', function () {
             // User is signed in, get the user ID (UID)
             const userId = user.uid;
 
-            // Save booking details to Firestore
-            firestore.collection('Salon_bookings').add({
-                userId: userId,                   // Add user ID to the document
-                salonId: salonId,                 // Add salon ID to the document
-                fullName: fullName,
-                email: email,
-                phoneNumber: phoneNumber,
-                appointmentDate: appointmentDate,
-                appointmentTime: appointmentTime,
-                selectedServices: selectedServices, // assuming you have this variable defined
-                totalAmount: totalAmount,           // assuming you have this variable defined
-            })
-            .then(function (docRef) {
-                console.log('Booking added with ID: ', docRef.id);
+            // Parse the selected time
+            var selectedTime = new Date("2000-01-01 " + appointmentTime);
 
-                // After saving, send email to the user
-                const userEmail = email;
-                const emailData = { userEmail, services: selectedServices, totalAmount };
+            // Query the database to get salon operating hours based on salonId
+            const salonRef = firestore.collection('approved').doc(salonId);
 
-                fetch('/sendEmail', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(emailData),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Email sent:', data);
-                    // Optionally, you can redirect the user to a confirmation page after the email is sent
-                    // window.location.href = 'confirmation.html';
-                })
-                .catch(error => {
-                    console.error('Error sending email:', error);
-                });
+            salonRef.get().then((doc) => {
+                if (doc.exists) {
+                    // Document exists, retrieve salon data
+                    const salonData = doc.data();
+                    const openingTime = new Date("2000-01-01 " + salonData.openTime);
+                    const closingTime = new Date("2000-01-01 " + salonData.closeTime);
 
-                // Redirect to a confirmation page
-                const bookingId = docRef.id;
-                window.location.href = `confirmation.html?bookingId=${bookingId}`;
-            })
-            .catch(function (error) {
-                console.error('Error adding booking: ', error);
+                    // Check if the selected time is within the salon's working hours
+                    if (selectedTime >= openingTime && selectedTime <= closingTime) {
+                        validationMessage.innerText = ''; // Clear the validation message
+
+                        // Save booking details to Firestore
+                        firestore.collection('Salon_bookings').add({
+                            userId: userId,
+                            salonId: salonId,
+                            fullName: fullName,
+                            email: email,
+                            phoneNumber: phoneNumber,
+                            appointmentDate: appointmentDate,
+                            appointmentTime: appointmentTime,
+                            selectedServices: selectedServices,
+                            totalAmount: totalAmount,
+                        }).then(function (docRef) {
+                            console.log('Booking added with ID: ', docRef.id);
+
+                            // After saving, send email to the user
+                            const userEmail = email;
+                            const emailData = { userEmail, services: selectedServices, totalAmount };
+
+                            fetch('/sendEmail', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(emailData),
+                            }).then(response => response.json())
+                                .then(data => {
+                                    console.log('Email sent:', data);
+                                    // Optionally, you can redirect the user to a confirmation page after the email is sent
+                                    // window.location.href = 'confirmation.html';
+                                }).catch(error => {
+                                    console.error('Error sending email:', error);
+                                });
+
+                            // Redirect to a confirmation page
+                            const bookingId = docRef.id;
+                            window.location.href = `confirmation.html?bookingId=${bookingId}`;
+                        }).catch(function (error) {
+                            console.error('Error adding booking: ', error);
+                        });
+                    } else {
+                        validationMessage.innerText = 'The selected time is outside salon hours. Select other time';
+                    }
+                } else {
+                    console.log('No such document!');
+                }
+            }).catch((error) => {
+                console.log('Error getting document:', error);
             });
         } else {
             // Handle the case where no user is signed in
             console.log('No user signed in');
         }
     });
+
     flatpickr("#appointmentDate", {
         enableTime: false,
         dateFormat: "Y-m-d",

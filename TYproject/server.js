@@ -58,10 +58,13 @@ app.post('/sendEmail', (req, res) => {
 
 // New endpoint for sending review form link
 app.post('/send-review-link', (req, res) => {
-    const { userEmail } = req.body;
+    const { userEmail, userId } = req.body;
+
+    // Your website URL
+    const websiteUrl = 'http://localhost:3000';  // Update the port if necessary
 
     // Your review form link
-    const reviewFormLink = 'https://example.com/review-form';
+    const reviewFormLink = `${websiteUrl}/YouBookings.html`;
 
     // Create Nodemailer transporter
     const transporter = nodemailer.createTransport({

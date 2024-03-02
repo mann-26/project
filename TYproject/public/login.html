@@ -9,6 +9,7 @@
     <script src="/scripts/login.js"></script>
     <link rel="stylesheet" href="/assets/login.css">
     <link rel="icon" type="image/png" href="assets/Images/tittle_logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <div>
@@ -26,8 +27,14 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility()">
+                    <i class="material-icons" id="eyeIcon">visibility</i>
+                </span>
+            </div>
+            <a href="#" onclick="resetPassword()" class="forgot-password">Forgot Password?</a>
 
             <button type="button" onclick="loginUser()">Login</button>
             <div class="loading-spinner" id="loadingSpinner"></div>
@@ -35,6 +42,7 @@
                 Don't have an account? <a href="register.html">Register</a>
             </p>
         </form>
+        <div id="messageContainer" class="messageContainer"></div>
     </div>
 </body>
 </html>

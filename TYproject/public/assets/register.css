@@ -18,7 +18,7 @@ body {
     border-radius: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px; /* Adjusted width */
-    height: 48%;
+    height: 49%;
     margin-left: auto;
     margin-right: 10%;
 }
@@ -133,4 +133,54 @@ button:hover {
     cursor: pointer;
     filter: invert(100%);
     margin-bottom: -20px;
+}
+.error-message{
+    font-size: small;
+    color: red;
+    text-align: center;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    background-color: #fefefeef;
+    margin: 15% auto;
+    border-radius: 30px;
+    font-size: medium;
+    padding: 20px;
+    width: 22%;
+    text-align: center;
+  }
+
+  #modalOkBtn {
+    margin-top: 10px;
+  }
+  .registrationErrorMessage{
+    font-size: small;
+    color: red;
+    text-align: center;
+  }
+  .toggle-password {
+    position: absolute;
+    top: 56.5%;
+    margin-left: -35px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Adjust the styling for Material Icons */
+.material-icons {
+    font-size: 5px;
+    color: #333; /* Adjust the color as needed */
+}
+a {
+    text-decoration: none;
 }

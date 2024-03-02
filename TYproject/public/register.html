@@ -8,8 +8,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="/scripts/register.js"></script>
     <link rel="stylesheet" href="/assets/register.css">
+    <!-- Inside the head section of your HTML -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <div>
@@ -32,14 +35,27 @@
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility()">
+                    <i class="material-icons" id="eyeIcon">visibility</i>
+                </span>
             </div>
 
             <button type="button" onclick="registerUser()">Register</button>
             <div class="loading-spinner" id="loadingSpinner"></div>
             <p style="margin-top: 10px; text-align: center; font-size: 14px;">
-                Already have an account? <a href="login.html">Login here</a>.
+                Already have an account? <a href="login.html">Login here</a>
             </p>
         </form>
+        <div id="registrationMessage" class="error-message"></div>
+        <div id="registrationSuccessMessage" class="verification-message"></div>
+        <div id="registrationErrorMessage" class="registrationErrorMessage"></div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+          <p id="modalMessage"></p>
+          <button id="modalOkBtn">OK</button>
+        </div>
     </div>
 </body>
 </html>

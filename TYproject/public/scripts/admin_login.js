@@ -15,6 +15,17 @@ function adminLogin() {
     const username = document.getElementById("adminUsername").value;
     const password = document.getElementById("adminPassword").value;
     const loadingSpinner = document.getElementById("loadingSpinner");
+    const messageContainer = document.getElementById("messageContainer");
+
+    // Check if either username or password is empty
+    if (!username || !password) {
+        // Display an error message to the user
+        messageContainer.innerHTML = "Username and password are required.";
+        return; // Skip login logic
+    }
+
+    // Clear any previous error messages
+    messageContainer.innerHTML = "";
 
     // Display loading spinner while processing
     loadingSpinner.style.display = "block";
@@ -29,10 +40,25 @@ function adminLogin() {
         .catch((error) => {
             // Handle login errors
             console.error("Error logging in as admin:", error.message);
-            // You may want to display an error message to the user
+
+            // Display user-friendly error message
+            let errorMessage;
+            switch (error.code) {
+                case "auth/user-not-found":
+                case "auth/wrong-password":
+                    errorMessage = "Error";
+                    break;
+                default:
+                    errorMessage = "Invalid username or password.";
+                    break;
+            }
+
+            // Display the error message in the container
+            messageContainer.innerHTML = errorMessage;
         })
         .finally(() => {
             // Hide loading spinner after processing
             loadingSpinner.style.display = "none";
         });
 }
+

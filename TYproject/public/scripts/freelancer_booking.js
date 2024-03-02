@@ -66,9 +66,36 @@ document.addEventListener('DOMContentLoaded', function () {
             var appointmentDate = document.getElementById('appointmentDate').value;
             var appointmentTime = document.getElementById('appointmentTime').value;
             var validationMessage = document.getElementById('validationMessage');
-
+    
             if (appointmentDate && appointmentTime) {
-                validationMessage.innerText = ''; // Clear the validation message
+                // Parse the selected time
+                var selectedTime = new Date("2000-01-01 " + appointmentTime);
+    
+                // Retrieve freelancer ID from URL parameters
+                const freelancerId = urlParams.get('freelancerId');
+    
+                // Query the database to get freelancer working hours based on freelancerId
+                const freelancerRef = firestore.collection('approved_freelancers').doc(freelancerId);
+    
+                freelancerRef.get().then((doc) => {
+                    if (doc.exists) {
+                        // Document exists, retrieve freelancer data
+                        const freelancerData = doc.data();
+                        const openingTime = new Date("2000-01-01 " + freelancerData.openTime);
+                        const closingTime = new Date("2000-01-01 " + freelancerData.closeTime);
+    
+                        // Check if the selected time is within the freelancer's working hours
+                        if (selectedTime >= openingTime && selectedTime <= closingTime) {
+                            validationMessage.innerText = ''; // Clear the validation message
+                        } else {
+                            validationMessage.innerText = 'The freelancer is unavailable at this time. Select other time';
+                        }
+                    } else {
+                        console.log('No such document!');
+                    }
+                }).catch((error) => {
+                    console.log('Error getting document:', error);
+                });
             }
         }
 
@@ -77,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
     bookingForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        // Retrieve form data
         // Retrieve form data
         var fullName = document.getElementById('fullName').innerText;
         var email = document.getElementById('email').innerText;
@@ -90,10 +116,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!appointmentDate || !appointmentTime) {
             validationMessage.innerText = 'Please select both date and time before booking.';
             return;
-        } else {
-            validationMessage.innerText = ''; // Clear the validation message if no errors
         }
 
+        // Check if there is a validation message, and if so, prevent booking
+        if (validationMessage.innerText) {
+            console.log('Booking validation failed:', validationMessage.innerText);
+            return;
+        }
 
         // Retrieve freelancer ID from URL parameters
         const freelancerId = urlParams.get('freelancerId');
@@ -107,15 +136,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Save booking details to Firestore
             firestore.collection('Freelancer_bookings').add({
-                userId: userId,                   // Add user ID to the document
-                freelancerId: freelancerId,                 // Add freelancer ID to the document
+                userId: userId,
+                freelancerId: freelancerId,
                 fullName: fullName,
                 email: email,
                 phoneNumber: phoneNumber,
                 appointmentDate: appointmentDate,
                 appointmentTime: appointmentTime,
-                selectedServices: selectedServices, // assuming you have this variable defined
-                totalAmount: totalAmount,           // assuming you have this variable defined
+                selectedServices: selectedServices,
+                totalAmount: totalAmount,
             })
             .then(function (docRef) {
                 console.log('Booking added with ID: ', docRef.id);

@@ -54,7 +54,7 @@ function logout() {
     // Add your logout logic here, such as clearing authentication tokens or any other necessary steps.
 
     // For the sake of this example, let's redirect to the index.html file.
-    window.location.href = 'index.html';
+    window.location.href = 'admin_login.html';
 }
 
 function fetchSalonData() {
@@ -137,29 +137,46 @@ function fetchFreelancerData() {
                 freelancerList.innerHTML = ''; // Clear the existing content
                 querySnapshot.forEach((doc) => {
                     var freelancerData = doc.data();
-                    var freelancerEntry = document.createElement('div');
-                    freelancerEntry.classList.add('salon-container');
-                    freelancerEntry.innerHTML = `
-                        <h3 onclick="toggleDetails(this)">${freelancerData.freelancerName}</h3>
-                        <div class="details">
-                            <img src="${freelancerData.freelancerDpImage}" alt="Freelancer DP">
-                            <p><strong>Freelancer's Name:</strong> ${freelancerData.freelancerName}</p>
-                            <p><strong>Location:</strong> ${freelancerData.location}</p>
-                            <p><strong>Contact:</strong> ${freelancerData.contact}</p>
-                            <!-- Add other details as needed -->
-                        </div>
-                    `;
+                    console.log('Freelancer Data:', freelancerData); // Log all freelancer data for debugging
 
-                    // Create approve and decline buttons for each freelancer
-                    var actionButtons = document.createElement('div');
-                    actionButtons.classList.add('action-buttons');
-                    actionButtons.innerHTML = `
+                    // Create a container for each freelancer
+                    var freelancerContainer = document.createElement('div');
+                    freelancerContainer.classList.add('salon-container'); // Keeping the same class for styling consistency
+
+                    freelancerContainer.innerHTML = `
+                    <div class="application-details">
+                        <img src="${freelancerData.freelancerDpImage}" alt="Freelancer DP">
+                    </div>
+
+                    <h3 onclick="toggleDetails(this)">${freelancerData.freelancerName}</h3>
+                    <div class="details">
+                        <p><strong>Freelancer's Name:</strong> ${freelancerData.freelancerName}</p>
+                        <p><strong>Location:</strong> ${freelancerData.areaName}</p>
+                        <p><strong>Contact:</strong> ${freelancerData.contact}</p>
+                        <p><strong>Open Time:</strong> ${freelancerData.openTime}</p>
+                        <p><strong>Close Time:</strong> ${freelancerData.closeTime}</p>
+                        <p><strong>Working Days:</strong> ${freelancerData.workingDays ? freelancerData.workingDays.join(', ') : 'N/A'}</p>
+                        <p><strong>Services Provided By Salon:</strong></p>
+                        <ul>
+                            ${freelancerData.selectedServices ? freelancerData.selectedServices.map(service => `
+                                <li style="margin-left: 40px;">
+                                <strong>Name:</strong> ${service.name}<br>
+                                <strong>Description:</strong> ${service.description}<br>
+                                <strong>Price:</strong> ${service.price}<br>
+                                <img src="${service.image}" alt="Service Image" style="max-width: 100%; height: 50px; margin-top: 10px; border-radius: 50px;">
+                                </li>
+                            `).join('') : '<li>N/A</li>'}
+                        </ul>
+
+                    <div class="actions-container">
                         <button class="btn btn-success approve-btn" onclick="approveFreelancer('${doc.id}')">Approve</button>
                         <button class="btn btn-danger decline-btn" onclick="declineFreelancer('${doc.id}')">Decline</button>
-                    `;
-                    freelancerEntry.appendChild(actionButtons);
+                    </div>
 
-                    freelancerList.appendChild(freelancerEntry);
+                    </div>
+                    `;
+
+                    freelancerList.appendChild(freelancerContainer);
                 });
             }
         })
@@ -167,6 +184,7 @@ function fetchFreelancerData() {
             console.error("Error fetching freelancers: ", error);
         });
 }
+
 
 function fetchQuestionData() {
     var questionList = document.getElementById('questionList');

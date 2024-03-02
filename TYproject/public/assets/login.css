@@ -18,7 +18,7 @@ body {
     border-radius: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px; /* Adjusted width */
-    height: 48%;
+    height: 51%;
     margin-left: auto;
     margin-right: 10%;
 }
@@ -26,12 +26,12 @@ body {
 h2 {
     text-align: center;
     color: #333;
-    margin-top: 1px;
+    margin-top: -5px;
 }
 
 label {
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     color: #555;
     font-size: 14px;
 }
@@ -44,7 +44,7 @@ input {
     border: 1px solid #ccc;
     border-radius: 13px;
     font-size: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 9px;
 }
 
 .toggle-group {
@@ -133,4 +133,35 @@ button:hover {
     cursor: pointer;
     filter: invert(100%);
     margin-bottom: -20px;
+}
+a {
+    text-decoration: none;
+}
+.forgot-password{
+    font-size: small;
+    margin-left: 8px;
+}
+.messageContainer{
+    font-size: small;
+    color: red;
+    text-align: center;
+}
+.success-message {
+    color: green;
+}
+.toggle-password {
+    position: absolute;
+    top: 55.3%;
+    margin-left: -35px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Adjust the styling for Material Icons */
+.material-icons {
+    font-size: 5px;
+    color: #333; /* Adjust the color as needed */
+}
+a {
+    text-decoration: none;
 }
