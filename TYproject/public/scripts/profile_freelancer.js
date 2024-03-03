@@ -49,7 +49,7 @@ function addCustomService() {
 }
     function redirectTofreelancerDashboard() {
             // Assuming the dashboard is named 'freelancer_dashboard.html'
-            window.location.href = 'freelancer_dashboard.html';
+            window.location.href = 'login.html';
         }
 
         function uploadPhoto() {
@@ -109,11 +109,50 @@ function addCustomService() {
                     // User is signed in, you can proceed to savefreelancerToFirestore or update UI
                     console.log("User is authenticated");
                     fetchfreelancerDataForLoggedInUser(user.uid);
+                    checkSalonStatus(user.uid);
                 } else {
                     // User is signed out, handle accordingly
                     console.error("User not authenticated.");
                     // Optionally, display a message or handle the scenario where the user is not authenticated
                 }
+            });
+        }
+
+        function checkSalonStatus(userId) {
+            // Check if data is present in the salons collection
+            db.collection('freelancers').doc(userId).get()
+                .then((salonDoc) => {
+                    if (salonDoc.exists) {
+                        // Salon data is in the "salons" collection
+                        hidePageElements(); // Add your logic to hide elements
+                    } else {
+                        // Check if data is present in the declined collection
+                        db.collection('declined_freelancers').doc(userId).get()
+                            .then((declinedDoc) => {
+                                if (declinedDoc.exists) {
+                                    // Salon data is in the "declined" collection
+                                    hidePageElements(); // Add your logic to hide elements
+                                } else {
+                                    // Salon is neither in "salons" nor in "declined" collection
+                                    // Proceed with your logic to display or update the page
+                                }
+                            })
+                            .catch((error) => {
+                                console.error("Error checking declined collection: ", error);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error checking salons collection: ", error);
+                });
+        }
+        
+        function hidePageElements() {
+            // Add your logic to hide elements on the page
+            var elementsToHide = document.querySelectorAll(' #leftContainer, #salonInfo, #registerButton, #successMessage, #location, #workInfo, #services');
+            
+            elementsToHide.forEach(function (element) {
+                element.style.display = 'none';
             });
         }
 
@@ -134,6 +173,60 @@ function addCustomService() {
         var openTime = document.getElementById('openTime').value;
         var closeTime = document.getElementById('closeTime').value;
         var areaName = document.getElementById('areaName').value;
+        var checkboxes = document.getElementsByName('workingDays');
+        var checkedDays = 0;
+        var freelancerDpImage = document.getElementById('freelancerDpImage');
+
+        if (!validateInputLength(freelancerName, 3, 20)) {
+            alert("Enter your name.");
+            return;
+        }
+
+        if (!validateInputLength(contact, 10, 10) || !validateInputAsNumber(contact)) {
+            alert("Enter a valid 10-digit contact number consisting of numbers.");
+            return;
+        }
+        if (!openTime || !closeTime) {
+            alert("Select open and close times.");
+            return;
+        }
+        
+        if (openTime === closeTime) {
+            alert("Open and close times cannot be the same.");
+            return;
+        }
+        
+        // Validate the time gap
+        var timeGap = getTimeGap(openTime, closeTime);
+        if (timeGap < 180) { // Assuming 180 minutes (3 hours) as the minimum time gap
+            alert("There should be at least a 3-hour gap between open and close times.");
+            return;
+        }
+        
+        // Function to calculate the time gap in minutes
+        function getTimeGap(startTime, endTime) {
+            var start = new Date("1970-01-01T" + startTime + "Z");
+            var end = new Date("1970-01-01T" + endTime + "Z");
+            var timeDiff = end - start;
+            return Math.floor(timeDiff / 60000); // Convert milliseconds to minutes
+        }
+
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                checkedDays++;
+            }
+        });
+    
+        // Validate that at least one working day is selected
+        if (checkedDays === 0) {
+            alert("Select at least one working day.");
+            return;
+        }
+        
+        if (!freelancerDpImage.src || freelancerDpImage.src === 'about:blank') {
+            alert("Upload your prifile Picture");
+            return;
+        }
 
         // Get working days
         var workingDays = [];
@@ -151,6 +244,23 @@ function addCustomService() {
         // Get selected services
         var selectedServices = [];
         var serviceElements = document.querySelectorAll('.service-container');
+
+        if (serviceElements.length === 0) {
+            alert("Add at least one service.");
+            return;
+        }
+        
+        for (var i = 0; i < serviceElements.length; i++) {
+            var serviceName = serviceElements[i].querySelector('.service-name').value;
+            var serviceDescription = serviceElements[i].querySelector('.service-description').value;
+            var servicePrice = serviceElements[i].querySelector('.service-price').value;
+        
+            // Validate service name, description, and price
+            if (!serviceName.trim() || !serviceDescription.trim() || !servicePrice.trim()) {
+                alert("Fill in all service details.");
+                return;
+            }
+        }
 
         // Process all service elements asynchronously
         await Promise.all(Array.from(serviceElements).map(async function (serviceElement, index) {
@@ -230,6 +340,18 @@ function updateServicesCollection(selectedServices, userID) {
         }, { merge: true }); // Use merge to update the document without overwriting existing data
     });
 }
+
+function validateInputLength(inputValue, minLength, maxLength) {
+    const trimmedValue = inputValue.trim(); // Remove leading and trailing whitespaces
+    return trimmedValue.length >= minLength && trimmedValue.length <= maxLength;
+}
+
+function validateInputAsNumber(input) {
+    // Use a regular expression to check if the input consists only of digits
+    var numberRegex = /^\d+$/;
+    return numberRegex.test(input);
+}
+
 async function getBase64Image(img) {
     return new Promise(async function (resolve) {
         if (img instanceof HTMLImageElement) {

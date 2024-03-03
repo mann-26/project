@@ -86,7 +86,7 @@ body {
     flex: 1;
     padding: 20px;
     margin-left: 10%;
-    margin-right: 130px;
+    margin-right: 110px;
     margin-top: 40px;
 }
 
@@ -255,6 +255,7 @@ button:hover {
 
 #declineMessage {
     color: #ff3333;
+    text-align: center;
     background-color: #ffe6e6; /* Light red background */
 }
 /* Styles for checkboxes */
@@ -265,7 +266,7 @@ form input[type="checkbox"] {
 
 /* Styles for time inputs */
 form input[type="time"] {
-    width: 80px; /* Adjust the width as needed */
+    width: 120px; /* Adjust the width as needed */
     padding: 8px;
     margin: 8px 0;
     display: inline-block;

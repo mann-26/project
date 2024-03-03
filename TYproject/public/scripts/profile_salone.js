@@ -57,10 +57,14 @@ var firebaseConfig = {
             customServices[customServices.length - 1].remove();
         }
     }
+    function validateInputLength(inputValue, minLength, maxLength) {
+        const trimmedValue = inputValue.trim(); // Remove leading and trailing whitespaces
+        return trimmedValue.length >= minLength && trimmedValue.length <= maxLength;
+    }
     
         function redirectToSalonDashboard() {
                 // Assuming the dashboard is named 'salon_dashboard.html'
-                window.location.href = 'salon_dashboard.html';
+                window.location.href = 'login.html';
             }
     
             function uploadPhoto() {
@@ -120,6 +124,7 @@ var firebaseConfig = {
                         // User is signed in, you can proceed to saveSalonToFirestore or update UI
                         console.log("User is authenticated");
                         fetchSalonDataForLoggedInUser(user.uid);
+                        checkSalonStatus(user.uid);
                     } else {
                         // User is signed out, handle accordingly
                         console.error("User not authenticated.");
@@ -127,108 +132,237 @@ var firebaseConfig = {
                     }
                 });
             }
-    
+            function checkSalonStatus(userId) {
+                // Check if data is present in the salons collection
+                db.collection('salons').doc(userId).get()
+                    .then((salonDoc) => {
+                        if (salonDoc.exists) {
+                            // Salon data is in the "salons" collection
+                            hidePageElements(); // Add your logic to hide elements
+                        } else {
+                            // Check if data is present in the declined collection
+                            db.collection('declined').doc(userId).get()
+                                .then((declinedDoc) => {
+                                    if (declinedDoc.exists) {
+                                        // Salon data is in the "declined" collection
+                                        hidePageElements(); // Add your logic to hide elements
+                                    } else {
+                                        // Salon is neither in "salons" nor in "declined" collection
+                                        // Proceed with your logic to display or update the page
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error("Error checking declined collection: ", error);
+                                });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error checking salons collection: ", error);
+                    });
+            }
+            
+            function hidePageElements() {
+                // Add your logic to hide elements on the page
+                var elementsToHide = document.querySelectorAll(' #leftContainer, #salonInfo, #registerButton, #successMessage, #location, #workInfo, #services');
+                
+                elementsToHide.forEach(function (element) {
+                    element.style.display = 'none';
+                });
+            }
+            
         // Function to add new service inputs
         
         async function saveSalonToFirestore() {
-        var user = firebase.auth().currentUser;
-    
-        if (user) {
-            var userID = user.uid;
-    
-            // Get coordinates
-            var { latitude, longitude } = await getCurrentLocation();
-    
-            // Get values from the form
-            var salonName = document.getElementById('salonName').value;
-            var contact = document.getElementById('contact').value;
-            var ownerName = document.getElementById('ownerName').value;
-            var openTime = document.getElementById('openTime').value;
-            var closeTime = document.getElementById('closeTime').value;
-            var areaName = document.getElementById('areaName').value;
-    
-            // Get working days
-            var workingDays = [];
-            var checkboxes = document.getElementsByName('workingDays');
-            checkboxes.forEach(function (checkbox) {
-                if (checkbox.checked) {
-                    workingDays.push(checkbox.value);
+            var user = firebase.auth().currentUser;
+        
+            if (user) {
+                var userID = user.uid;
+        
+                // Get coordinates
+                var { latitude, longitude } = await getCurrentLocation();
+        
+                // Get values from the form
+                var ownerName = document.getElementById('ownerName').value;
+                var salonName = document.getElementById('salonName').value;
+                var contact = document.getElementById('contact').value;
+                var openTime = document.getElementById('openTime').value;
+                var closeTime = document.getElementById('closeTime').value;
+                var checkboxes = document.getElementsByName('workingDays');
+                var checkedDays = 0;
+                var salonDpImage = document.getElementById('salonDpImage');
+                
+        
+                // Validate input length
+                if (!validateInputLength(ownerName, 3, 20)) {
+                    alert("Owner's name should be between 3 and 10 characters.");
+                    return;
                 }
-            });
-    
-            // Get salonDP image
-            var salonDpImage = document.getElementById('salonDpImage');
-            var salonDpImageFile = await getBase64Image(salonDpImage);
-    
-            // Get selected services
-            var selectedServices = [];
-            var serviceElements = document.querySelectorAll('.service-container');
-    
-            // Process all service elements asynchronously
-            await Promise.all(Array.from(serviceElements).map(async function (serviceElement, index) {
-                var serviceName = serviceElement.querySelector('.service-name').value;
-                var serviceDescription = serviceElement.querySelector('.service-description').value;
-                var servicePrice = serviceElement.querySelector('.service-price').value;
-                var serviceImage = serviceElement.querySelector('.service-image').files[0];
-                var downloadURLInput = serviceElement.querySelector('input[name="service-image-url"]');
-                var serviceImageURL = downloadURLInput ? downloadURLInput.value : '';
-    
-                // You can add validation for required fields
-    
-                try {
-                    // Convert service image to base64 with the specified format
-                    var base64Image = await getBase64Image(serviceImage);
-    
-                    // Add the service details to the selectedServices array
-                    selectedServices.push({
-                        name: serviceName,
-                        description: serviceDescription,
-                        price: servicePrice,
-                        image: serviceImageURL || base64Image, // Use base64 image if URL is empty
-                    });
-    
-                    console.log(`Service ${index} processed successfully.`);
-                } catch (error) {
-                    console.error(`Error processing service ${index}:`, error);
+        
+                if (!validateInputLength(salonName, 3, 10)) {
+                    alert("Salon name should be between 3 and 10 characters.");
+                    return;
                 }
-            }));
-    
-            // Prepare salon data for Firestore
-            var salonData = {
-                salonName: salonName,
-                contact: contact,
-                ownerName: ownerName,
-                openTime: openTime,
-                closeTime: closeTime,
-                areaName: areaName,
-                workingDays: workingDays,
-                salonDpImage: salonDpImageFile, // Save salonDP image with the specified format
-                selectedServices: selectedServices, // Include selected services as an array
-                coordinates: {
-                    latitude: latitude,
-                    longitude: longitude
+        
+                if (!validateInputLength(contact, 10, 10) || !validateInputAsNumber(contact)) {
+                    alert("Enter a valid 10-digit contact number consisting of numbers.");
+                    return;
                 }
-                // Add other fields as needed
-            };
-    
-            // Save salon data to Firestore
-            db.collection('salons').doc(userID).set(salonData)
-                .then(function () {
-                    // Index services by updating the "services" collection
-                    updateServicesCollection(selectedServices, userID);
-                    
-                    var successMessageContainer = document.getElementById('successMessage');
-                    successMessageContainer.innerHTML = '<p>Your salon data has been successfully registered!</p>';
-                })
-                .catch(function (error) {
-                    console.error('Error adding salon information:', error);
-                    // Optionally, display an error message or handle the error
+                if (!openTime || !closeTime) {
+                    alert("Select open and close times.");
+                    return;
+                }
+                
+                if (openTime === closeTime) {
+                    alert("Open and close times cannot be the same.");
+                    return;
+                }
+                
+                // Validate the time gap
+                var timeGap = getTimeGap(openTime, closeTime);
+                if (timeGap < 180) { // Assuming 180 minutes (3 hours) as the minimum time gap
+                    alert("There should be at least a 3-hour gap between open and close times.");
+                    return;
+                }
+                
+                // Function to calculate the time gap in minutes
+                function getTimeGap(startTime, endTime) {
+                    var start = new Date("1970-01-01T" + startTime + "Z");
+                    var end = new Date("1970-01-01T" + endTime + "Z");
+                    var timeDiff = end - start;
+                    return Math.floor(timeDiff / 60000); // Convert milliseconds to minutes
+                }
+
+                checkboxes.forEach(function (checkbox) {
+                    if (checkbox.checked) {
+                        checkedDays++;
+                    }
                 });
-        } else {
-            console.error("User not authenticated.");
-            // Optionally, display a message or handle the scenario where the user is not authenticated
+            
+                // Validate that at least one working day is selected
+                if (checkedDays === 0) {
+                    alert("Select at least one working day.");
+                    return;
+                }
+                
+                if (!salonDpImage.src || salonDpImage.src === 'about:blank') {
+                    alert("Upload a salon profile picture.");
+                    return;
+                }
+        
+                // Get other values from the form
+                var openTime = document.getElementById('openTime').value;
+                var closeTime = document.getElementById('closeTime').value;
+                var areaName = document.getElementById('areaName').value;
+        
+                // Get working days
+                var workingDays = [];
+                var checkboxes = document.getElementsByName('workingDays');
+                checkboxes.forEach(function (checkbox) {
+                    if (checkbox.checked) {
+                        workingDays.push(checkbox.value);
+                    }
+                });
+        
+                // Get salonDP image
+                var salonDpImage = document.getElementById('salonDpImage');
+                var salonDpImageFile = await getBase64Image(salonDpImage);
+        
+                // Get selected services
+                var selectedServices = [];
+                var serviceElements = document.querySelectorAll('.service-container');
+
+                if (serviceElements.length === 0) {
+                    alert("Add at least one service.");
+                    return;
+                }
+                
+                for (var i = 0; i < serviceElements.length; i++) {
+                    var serviceName = serviceElements[i].querySelector('.service-name').value;
+                    var serviceDescription = serviceElements[i].querySelector('.service-description').value;
+                    var servicePrice = serviceElements[i].querySelector('.service-price').value;
+                
+                    // Validate service name, description, and price
+                    if (!serviceName.trim() || !serviceDescription.trim() || !servicePrice.trim()) {
+                        alert("Fill in all service details.");
+                        return;
+                    }
+                }
+                
+                // Process all service elements asynchronously
+                await Promise.all(Array.from(serviceElements).map(async function (serviceElement, index) {
+                    var serviceName = serviceElement.querySelector('.service-name').value;
+                    var serviceDescription = serviceElement.querySelector('.service-description').value;
+                    var servicePrice = serviceElement.querySelector('.service-price').value;
+                    var serviceImage = serviceElement.querySelector('.service-image').files[0];
+                    var downloadURLInput = serviceElement.querySelector('input[name="service-image-url"]');
+                    var serviceImageURL = downloadURLInput ? downloadURLInput.value : '';
+                
+                    // Validate service price as a number
+                    if (!validateInputAsNumber(servicePrice)) {
+                        alert(`Enter a valid numeric price for service ${serviceName}`);
+                        return;
+                    }
+                
+                    try {
+                        // Convert service image to base64 with the specified format
+                        var base64Image = await getBase64Image(serviceImage);
+                
+                        // Add the service details to the selectedServices array
+                        selectedServices.push({
+                            name: serviceName,
+                            description: serviceDescription,
+                            price: parseFloat(servicePrice), // Convert to a numeric value
+                            image: serviceImageURL || base64Image, // Use base64 image if URL is empty
+                        });
+                
+                        console.log(`Service ${index} processed successfully.`);
+                    } catch (error) {
+                        console.error(`Error processing service ${index}:`, error);
+                    }
+                }));
+        
+                // Prepare salon data for Firestore
+                var salonData = {
+                    salonName: salonName,
+                    contact: contact,
+                    ownerName: ownerName,
+                    openTime: openTime,
+                    closeTime: closeTime,
+                    areaName: areaName,
+                    workingDays: workingDays,
+                    salonDpImage: salonDpImageFile, // Save salonDP image with the specified format
+                    selectedServices: selectedServices, // Include selected services as an array
+                    coordinates: {
+                        latitude: latitude,
+                        longitude: longitude
+                    }
+                    // Add other fields as needed
+                };
+        
+                // Save salon data to Firestore
+                db.collection('salons').doc(userID).set(salonData)
+                    .then(function () {
+                        // Index services by updating the "services" collection
+                        updateServicesCollection(selectedServices, userID);
+        
+                        var successMessageContainer = document.getElementById('successMessage');
+                        successMessageContainer.innerHTML = '<p>Your salon data has been successfully registered!</p>';
+                    })
+                    .catch(function (error) {
+                        console.error('Error adding salon information:', error);
+                        // Optionally, display an error message or handle the error
+                    });
+            } else {
+                console.error("User not authenticated.");
+                // Optionally, display a message or handle the scenario where the user is not authenticated
+            }
         }
-    }
+
+        function validateInputAsNumber(input) {
+            // Use a regular expression to check if the input consists only of digits
+            var numberRegex = /^\d+$/;
+            return numberRegex.test(input);
+        }
     
     // Function to update the "services" collection
     function updateServicesCollection(selectedServices, userID) {
@@ -282,9 +416,7 @@ var firebaseConfig = {
             }
         });
     }
-    
-    
-      
+
     // Function to compress the image using the browser's built-in image compression
     function compressImage(dataURL) {
         return new Promise(function (resolve) {
@@ -484,7 +616,7 @@ var firebaseConfig = {
     
     async function getCurrentLocation() {
         console.log('Getting current location...');
-        
+    
         return new Promise((resolve, reject) => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -521,6 +653,7 @@ var firebaseConfig = {
             }
         });
     }
+    
     
     function storeCoordinatesInDatabase(latitude, longitude) {
         // Modify this part to save the coordinates in your database
@@ -649,13 +782,13 @@ var firebaseConfig = {
     }
        // Your existing event listeners and other JavaScript code remain unchanged.
     
-        document.addEventListener('DOMContentLoaded', function () {
-            initMap();
-            handleAuthStateChange();
-            var registeredEmail = localStorage.getItem('registeredEmail');
-            var emailElement = document.getElementById('salonEmail');
-            if (emailElement) {
-                emailElement.textContent = registeredEmail || 'Not Available';
-            }
-            var modalCloseButton = document.querySelector('#servicesModal .close');
-        });
+       document.addEventListener('DOMContentLoaded', function () {
+        initMap();
+        handleAuthStateChange();
+        var registeredEmail = localStorage.getItem('registeredEmail');
+        var emailElement = document.getElementById('salonEmail');
+        if (emailElement) {
+            emailElement.textContent = registeredEmail || 'Not Available';
+        }
+        var modalCloseButton = document.querySelector('#servicesModal .close');
+    });

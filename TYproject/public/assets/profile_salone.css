@@ -256,6 +256,7 @@ button:hover {
 
 #declineMessage {
     color: #ff3333;
+    text-align: center;
     background-color: #ffe6e6; /* Light red background */
 }
 /* Styles for checkboxes */

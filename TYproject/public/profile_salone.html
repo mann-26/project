@@ -24,9 +24,9 @@
         <div>
             <img src="logo1.png" alt="Snaplooks Logo" class="logo">
         </div>
-        <!-- <div>
-            <button onclick="redirectToSalonDashboard()">Go to Dashboard</button>
-        </div> -->
+        <div>
+            <button onclick="redirectToSalonDashboard()">Exit</button>
+        </div>
     </header>
     <br>
     <div id="container">
@@ -49,15 +49,15 @@
                         <form id="salonForm">
                             <div>
                                 <label for="ownerName">Owner's Name:</label>
-                                <input type="text" class="form-control" id="ownerName" name="ownerName" autocomplete="off">
+                                <input type="text" class="form-control" id="ownerName" name="ownerName" autocomplete="off" maxlength="20" minlength="3">
                             </div>
                             <div>
                                 <label for="salonName">Salon Name:</label>
-                                <input type="text" class="form-control" id="salonName" name="salonName" autocomplete="off">
+                                <input type="text" class="form-control" id="salonName" name="salonName" autocomplete="off" maxlength="20" minlength="3">
                             </div>
                             <div>
                                 <label for="contact">Contact:</label>
-                                <input type="text" class="form-control" id="contact" name="contact">
+                                <input type="text" class="form-control" id="contact" name="contact" maxlength="10" minlength="3">
                             </div>
                         </form>
                     </div>
@@ -127,7 +127,7 @@
                     <button type="button" onclick="undoCustomService()" class="btn btn-secondary mt-3">Remove Service</button>
                 </div>
             </section>
-            <button type="button" onclick="saveSalonToFirestore()" class="Register-Salon">Register Salon</button>            
+            <button type="button" id="registerButton" onclick="saveSalonToFirestore()" class="Register-Salon">Register Salon</button>            
             <section id="messages">
                 <div id="declineMessage"></div>
                 <div id="successMessage"></div>

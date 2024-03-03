@@ -196,3 +196,23 @@ h4{
 .add-service-button:hover {
     background-color: #353636; /* Button background color on hover */
 }
+
+
+
+
+
+
+
+.edit-services-section {
+    height: 700px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+/* Additional styling for scrollable content, if needed */
+.edit-service-entry {
+    margin-bottom: 10px; /* Add some spacing between service entries */
+}
+
+.add-service-button {
+    margin-top: 10px; /* Add spacing above the "Add New Service" button */
+}

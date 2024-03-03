@@ -799,6 +799,17 @@ function declineBooking(bookingId) {
 
         // Call this function to display pending bookings on salon dashboard
         getSalonId();
+
+
+        function logout() {
+            firebase.auth().signOut().then(function() {
+                console.log("User logged out successfully.");
+                window.location.href = 'login.html'; 
+            }).catch(function(error) {
+                console.error("Error during logout:", error);
+            });
+        }
+        
     </script>
 </body>
 

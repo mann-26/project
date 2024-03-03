@@ -24,9 +24,9 @@
         <div>
             <img src="logo1.png" alt="Snaplooks Logo" class="logo">
         </div>
-        <!-- <div>
-            <button onclick="redirectTofreelancerDashboard()">Go to Dashboard</button>
-        </div> -->
+        <div>
+            <button onclick="redirectTofreelancerDashboard()">Exit</button>
+        </div>
     </header>
     <br>
     <div id="container">
@@ -127,7 +127,7 @@
                     <button type="button" onclick="undoCustomService()" class="btn btn-secondary mt-3">Remove Service</button>
                 </div>
             </section>
-            <button type="button" onclick="savefreelancerToFirestore()" class="Register-Salon">Register Freelancer</button>            
+            <button type="button" id="registerButton" onclick="savefreelancerToFirestore()" class="Register-Salon">Register Freelancer</button>            
             <section id="messages">
                 <div id="declineMessage"></div>
                 <div id="successMessage"></div>
