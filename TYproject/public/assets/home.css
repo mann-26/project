@@ -212,14 +212,17 @@ p {
     display: flex;
     justify-content: space-around;
     margin-top: 150px;
-    background-color: #ecf0f1;
+    background-color: #ecf0f100;
     border-radius: 20px;
-    height: 250px;
+    height: 260px;
+    /* box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2); */
     overflow: hidden;
-    width: 570px;
+    width: 590px;
     margin-left: 60px;
 }
-
+.fade-in-out {
+    transition: transform 1s ease-out;
+}
 .offer-slider {
     height: 100%;
 }
@@ -236,9 +239,6 @@ p {
     opacity: 0;
 }
 
-.material-icons {
-    margin-right: 8px;
-}
 .exp {
     margin-bottom: 0.1em;
     margin-top: 1em;
@@ -459,6 +459,11 @@ input {
     transition: opacity 0.3s ease-in-out;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+.search-icon-container{
+    margin-top: -38px;
+    margin-left: 340px;
+    z-index: 1;
 }
 ::-webkit-scrollbar{
     width: 5px;

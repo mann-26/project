@@ -16,6 +16,7 @@
     <script src="/scripts/home.js"></script>
     <link rel="stylesheet" href="/assets/home.css">
     <link rel="icon" type="image/png" href="assets/Images/tittle_logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <header id="mainHeader">
@@ -24,16 +25,19 @@
             <img src="logo1.png" alt="Snaplooks Logo" class="logo">
         </a>
     </div>
-
+    
     <form oninput="searchSalonByService(event)">
-        <input type="text" id="serviceInput"  placeholder="Search service..." autocomplete="off">
+        <input type="text" id="serviceInput" placeholder="Search service..." autocomplete="off">
         <!-- Datalist for autocomplete suggestions -->
         <datalist id="serviceSuggestions"></datalist>
         <div id="searchResults">
             <!-- Display search results here -->
         </div>
+        <div class="search-icon-container">
+            <i class="material-icons search-icon">search</i>
+        </div>
     </form>
-
+    
     <div class="profile-picture-container">
         <img id="userProfilePicture" alt="Profile Picture" class="profile-picture">
     </div>
@@ -43,14 +47,14 @@
             <div class="col-md-6">
                 <h2 class="exp">Explore Services</h2><br>
                 <div class="services">
-                    <div class="service mb-3" onclick="openServiceModal('Beauty Treatments', 'Pamper yourself with luxurious beauty treatments', ['https://via.placeholder.com/300x200', 'https://via.placeholder.com/300x200'], 'Beauty Treatments')">
+                    <div class="service mb-3" onclick="openServiceModal('Beauty Treatments', 'Pamper yourself with luxurious beauty treatments', ['/assets/images/beauty_treatment.jpg', '/assets/images/beauty_treatment2.jpg'], 'Beauty Treatments')">
                         <a href="#Beauty-Treatments">
                             <img src="assets/Images/rosa-rafael-Pe9IXUuC6QU-unsplash.jpg" alt="Salon Services">
                             <h3>Beauty Treatments</h3>
                             <p>Pamper yourself with luxurious beauty treatments</p>
                         </a>
                     </div>
-                    <div class="service mb-3" onclick="openServiceModal('Hair Styling', 'Professional hair styling for all occasions', ['https://via.placeholder.com/300x200', 'https://via.placeholder.com/300x200'], 'Hair Styling')">
+                    <div class="service mb-3" onclick="openServiceModal('Hair Styling', 'Professional hair styling for all occasions', ['/assets/images/Hair_cut.jpg', '/assets/images/Hair_cut2.jpg'], 'Hair Styling')">
                         <a href="#Hair-Styling">
                             <img src="assets/Images/client-doing-hair-cut-barber-shop-salon.jpg" alt="Salon Services">
                             <h3>Hair Styling</h3>
@@ -58,7 +62,7 @@
                         </a>
                     </div>
                     
-                    <div class="service mb-3" onclick="openServiceModal('Massage Therapy', 'Relax with rejuvenating massage sessions', ['https://via.placeholder.com/300x200', 'https://via.placeholder.com/300x200'], 'Massage Therapy')">
+                    <div class="service mb-3" onclick="openServiceModal('Massage Therapy', 'Relax with rejuvenating massage sessions', ['/assets/images/Massage.jpg', '/assets/images/Massage2.jpg'], 'Massage Therapy')">
                         <a href="#Massage-Therapy">
                             <img src="assets/Images/alan-caishan-cU53ZFBr3lk-unsplash.jpg" alt="Salon Services">
                             <h3>Massage Therapy</h3>
@@ -66,7 +70,7 @@
                         </a>
                     </div>
                     
-                    <div class="service mb-3" onclick="openServiceModal('Nail Care', 'Get beautiful and trendy nail services', ['https://via.placeholder.com/300x200', 'https://via.placeholder.com/300x200'], 'Nail Care')">
+                    <div class="service mb-3" onclick="openServiceModal('Nail Care', 'Get beautiful and trendy nail services', ['/assets/images/Nail_care.jpg', '/assets/images/Nail_care2.jpg'], 'Nail Care')">
                         <a href="#Nail-Care">
                             <img src="assets/Images/element5-digital-Xf7o2W7qgP0-unsplash.jpg" alt="Salon Services">
                             <h3>Nail Care</h3>
@@ -74,7 +78,7 @@
                         </a>
                     </div>
                     
-                    <div class="service mb-3" onclick="openServiceModal('Makeup Artistry', 'Expert makeup artists for any occasion', ['https://via.placeholder.com/300x200', 'https://via.placeholder.com/300x200'], 'Makeup Artistry')">
+                    <div class="service mb-3" onclick="openServiceModal('Makeup Artistry', 'Expert makeup artists for any occasion', ['assets/images/MakeUp.jpg', 'assets/images/MakeUp2.jpg'], 'Makeup Artistry')">
                         <a href="#Makeup-Artistry">
                             <img src="assets/Images/element5-digital-ceWgSMd8rvQ-unsplash.jpg" alt="Salon Services">
                             <h3>Makeup </h3>
@@ -82,9 +86,9 @@
                         </a>
                     </div>
                     
-                    <div class="service mb-3" onclick="openServiceModal('Wedding Services', 'Specialized services for your wedding day', ['https://via.placeholder.com/300x200', 'https://via.placeholder.com/300x200'], 'Wedding Services')">
+                    <div class="service mb-3" onclick="openServiceModal('Wedding Services', 'Specialized services for your wedding day', ['/assets/images/wedding.jpg', 'assets/images/wedding2.jpg'], 'Wedding Services')">
                         <a href="#Wedding-Services">
-                            <img src="assets/Images/airbrush-makeup-weddingplz-feature.jpg" alt="Salon Services">
+                            <img src="assets/images/wedding3.png" alt="Salon Services">
                             <h3>Wedding Services</h3>
                             <p>Specialized services for your wedding day</p>
                         </a>
@@ -128,7 +132,7 @@
             <div class="col-md-6">
                 <div class="offers-container mt-4">
                     <div class="offer-slider">
-                        <img src="assets/Images/airbrush-makeup-weddingplz-feature.jpg" alt="Salon Services">
+                        <img id="offerImage" src="" alt="Offer Image" class="fade-in-out">                  
                     </div>
                 </div>
             </div>
@@ -178,6 +182,7 @@
     </footer>
     
     <script>
+        
         function changeImage() { 
         }
         function openServiceModal(title, description, imageUrls, serviceName) {
@@ -260,6 +265,33 @@
                     clearSearchResults();
                 }
             });
+            let offerImages = [
+        'assets/Images/offer-slider3.jpg',
+        'assets/Images/offer-slider2.jpg',
+        'assets/Images/offer-slider.jpg',
+        'assets/Images/airbrush-makeup-weddingplz-feature.jpg',
+        // Add more images as needed
+    ];
+
+    let currentImageIndex = 0;
+    const offerImageElement = document.getElementById('offerImage'); // Change 'offerImage' to the actual ID of your image element
+
+    function changeOfferImage() {
+        offerImageElement.style.opacity = 0.1; // Set opacity to 0.2 for a quicker fade-out effect
+
+        setTimeout(() => {
+            offerImageElement.src = offerImages[currentImageIndex];
+            currentImageIndex = (currentImageIndex + 1) % offerImages.length;
+
+            offerImageElement.style.opacity = 1; // Set opacity to 0.8 for a quicker fade-in effect
+        }, 500); // Adjust the delay based on your transition duration
+    }
+
+    // Call the function initially
+    changeOfferImage();
+
+    // Set an interval to change the image every 5 seconds
+    setInterval(changeOfferImage, 7000);
     </script>
         <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
