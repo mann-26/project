@@ -2,7 +2,9 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
     display: flex;
+    
 }
+
 
 #sidebar {
     width: 250px;
@@ -195,4 +197,33 @@ h4{
 
 .add-service-button:hover {
     background-color: #353636; /* Button background color on hover */
+}
+
+
+/* Add this CSS to style the service image */
+.edit-service-entry img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border: 1px solid #ddd; /* Add a border for a neat look */
+    border-radius: 5px; /* Add a border-radius for rounded corners */
+}
+
+/* Add this CSS to style the file input */
+.edit-service-entry input[type="file"] {
+    margin-top: 10px;
+}
+
+.edit-services-section {
+    height: 700px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+/* Additional styling for scrollable content, if needed */
+.edit-service-entry {
+    margin-bottom: 10px; /* Add some spacing between service entries */
+}
+
+.add-service-button {
+    margin-top: 10px; /* Add spacing above the "Add New Service" button */
 }

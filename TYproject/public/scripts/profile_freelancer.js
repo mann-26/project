@@ -131,7 +131,6 @@ function addCustomService() {
         // Get values from the form
         var freelancerName = document.getElementById('freelancerName').value;
         var contact = document.getElementById('contact').value;
-        var ownerName = document.getElementById('ownerName').value;
         var openTime = document.getElementById('openTime').value;
         var closeTime = document.getElementById('closeTime').value;
         var areaName = document.getElementById('areaName').value;
@@ -186,7 +185,6 @@ function addCustomService() {
         var freelancerData = {
             freelancerName: freelancerName,
             contact: contact,
-            ownerName: ownerName,
             openTime: openTime,
             closeTime: closeTime,
             areaName: areaName,

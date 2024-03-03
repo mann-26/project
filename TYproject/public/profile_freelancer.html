@@ -4,137 +4,135 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>freelancer Profile</title>
+    <title>Salon Profile</title>
     <link rel="icon" type="image/png" href="assets/Images/tittle_logo.png">
     <meta name="author" content="Codeconvey" />
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-storage-compat.js"></script>
     <script src="/scripts/profile_freelancer.js"></script>
     <link rel="stylesheet" href="/assets/profile_freelancer.css">
+
 </head>
 <body>
-  <header id="mainHeader">
-    <div>
-        <img src="logo1.png" alt="Snaplooks Logo" class="logo">
-        <button onclick="redirectTofreelancerDashboard()">Go to Dashboard</button>
-    </div>
-  </header><br>
-  <div id="declineMessage"></div>
-  <div id="successMessage"></div>
-  <section>
-    <div class="rt-container">
-        <div class="col-rt-12">
-            <div class="Scriptcontent">
-                <div class="student-profile py-4">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent text-center">
-                                        <a href="javascript:void(0);" id="changePhotoBtn" onclick="uploadPhoto()">
-                                            <img class="profile_img" alt="freelancer dp" id="freelancerDpImage">
-                                        </a>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="mb-0"><strong class="pr-1">freelancer ID:</strong>--------</p>
-                                        <p class="mb-0"><strong class="pr-1">Email:</strong><span id="freelancerEmail">Not Available</span></p>
-                                    </div>
-                                </div>
+    <header id="mainHeader">
+        <div>
+            <img src="logo1.png" alt="Snaplooks Logo" class="logo">
+        </div>
+        <!-- <div>
+            <button onclick="redirectTofreelancerDashboard()">Go to Dashboard</button>
+        </div> -->
+    </header>
+    <br>
+    <div id="container">
+        <div id="leftContainer" onclick="uploadPhoto()">
+            <a href="javascript:void(0);" id="changePhotoBtn">
+                <img class="profile_img"  id="freelancerDpImage">
+            </a>
+        </div>
+        <!-- <div class="email">
+            <label for="email">Email:</label>
+            <span id="salonEmail">Not Available</span>
+        </div> -->
+        <div id="rightContainer">
+            <section id="salonInfo">
+                <div>
+                    <div>
+                        <h3 class="mb-0">Freelancer Information</h3><br>
+                    </div>
+                    <div>
+                        <form id="salonForm">
+                            <!-- <div>
+                                <label for="ownerName">Owner's Name:</label>
+                                <input type="text" class="form-control" id="ownerName" name="ownerName" autocomplete="off">
+                            </div> -->
+                            <div>
+                                <label for="salonName">freelancer Name:</label>
+                                <input type="text" class="form-control" id="freelancerName" name="freelancerName" autocomplete="off">
                             </div>
-                            <div class="col-lg-8">
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent border-0">
-                                        <h3 class="mb-0">freelancer Information</h3><br>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <form id="freelancerForm">
-                                            <div class="form-group">
-                                                <label for="ownerName">Owner's Name:</label>
-                                                <input type="text" class="form-control" id="ownerName" name="ownerName" autocomplete="off">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="freelancerName">freelancer Name:</label>
-                                                <input type="text" class="form-control" id="freelancerName" name="freelancerName" autocomplete="off">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="contact">Contact:</label>
-                                                <input type="text" class="form-control" id="contact" name="contact">
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div><br>
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent border-0">
-                                        <h3 class="mb-0">location</h3><br>
-                                        <label for="location">Your current location</label>
-                                        
-                                        <input type="text" id="areaName" name="areaName" readonly>
-                                        <!-- Add this div to hold the map -->
-                                        <div id="map" style="height: 300px;"></div><br>
-                                        <!-- Add a button to trigger location retrieval -->
-                                        <button type="button" onclick="getCurrentLocation()" class="btn btn-primary">Get Current Location</button>
-                                    </div>
-                                </div>
-                                <div style="height: 26px"></div>
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent border-0">
-                                        <h3 class="mb-0">Work information</h3><br>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <label for="openTime">Working Hours:</label><br>
-                                        <label for="closeTime">Open Time:</label>
-                                        <input type="time" id="openTime" name="openTime">
-                            
-                                        <label for="closeTime">Close Time:</label>
-                                        <input type="time" id="closeTime" name="closeTime">
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <label for="workingDays">Working Days:</label><br>
-                                        <input type="checkbox" id="monday" name="workingDays" value="Monday">
-                                        <label for="monday">Monday</label>
-                                        <input type="checkbox" id="tuesday" name="workingDays" value="Tuesday">
-                                        <label for="tuesday">Tuesday</label>
-                                        <input type="checkbox" id="wednesday" name="workingDays" value="Wednesday">
-                                        <label for="wednesday">Wednesday</label>
-                                        <input type="checkbox" id="thursday" name="workingDays" value="Thursday">
-                                        <label for="thursday">Thursday</label>
-                                        <input type="checkbox" id="friday" name="workingDays" value="Friday">
-                                        <label for="friday">Friday</label>
-                                        <input type="checkbox" id="saturday" name="workingDays" value="Saturday">
-                                        <label for="saturday">Saturday</label>
-                                        <input type="checkbox" id="sunday" name="workingDays" value="Sunday">
-                                        <label for="sunday">Sunday</label>
-                                    </div>
-                                </div> <br>
-                                <div style="height: 26px"></div>
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-transparent border-0">
-                                        <h3 class="mb-0">Add Services</h3><br>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <label for="customServices">Customized Services:</label>
-                                        <div id="customServicesContainer">
-                                            <!-- Custom services will be dynamically added here -->
-                                        </div>
-                                        <button type="button" onclick="addCustomService()" class="btn btn-primary mt-3">Add Custom Service</button>
-                                    </div>
+                            <div>
+                                <label for="contact">Contact:</label>
+                                <input type="text" class="form-control" id="contact" name="contact">
                             </div>
-                            <button type="button" onclick="savefreelancerToFirestore()" class="btn btn-primary mt-3">Save freelancer Data</button>
-                        </div>
-
+                        </form>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
+            <section id="location">
+                <div>
+                    <div>
+                        <h3 class="mb-0">Location</h3><br>
+                        <label for="location">Your current location</label>
+                        <input type="text" id="areaName" name="areaName" readonly>
+                        <div id="map" style="height: 300px;"></div><br>
+                        <button type="button" onclick="getCurrentLocation()">Get Current Location</button>
+                    </div>
+                </div>
+            </section>
+            <section id="workInfo">
+                <div>
+                    <div>
+                        <h3 class="mb-0">Work Information</h3><br>
+                    </div>
+                    <div>
+                        <form>
+                            <label for="openTime"><b>Working Hours:</b></label><br>
+                            <label for="closeTime">Open Time:</label>
+                            <input type="time" id="openTime" name="openTime">
+                            <label for="closeTime">Close Time:</label>
+                            <input type="time" id="closeTime" name="closeTime">
+                        </form>
+                    </div><br><br>
+                    <div>
+                        <label for="workingDays"><b>Working Days:</b></label><br>
+                        <input type="checkbox" id="monday" name="workingDays" value="Monday">
+                        <label for="monday">Monday</label>
+                    
+                        <input type="checkbox" id="tuesday" name="workingDays" value="Tuesday">
+                        <label for="tuesday">Tuesday</label>
+                    
+                        <input type="checkbox" id="wednesday" name="workingDays" value="Wednesday">
+                        <label for="wednesday">Wednesday</label>
+                    
+                        <input type="checkbox" id="thursday" name="workingDays" value="Thursday">
+                        <label for="thursday">Thursday</label>
+                    
+                        <input type="checkbox" id="friday" name="workingDays" value="Friday">
+                        <label for="friday">Friday</label>
+                    
+                        <input type="checkbox" id="saturday" name="workingDays" value="Saturday">
+                        <label for="saturday">Saturday</label>
+                    
+                        <input type="checkbox" id="sunday" name="workingDays" value="Sunday">
+                        <label for="sunday">Sunday</label>
+                    </div>
+                </div>
+            </section>
+            <section id="services">
+                <div>
+                    <h3 class="mb-0">Add Services</h3>
+                    <p>Provide details for the services your salon offers.</p>
+                </div>
+                <div>
+                    <label for="customServices"></label>
+                    <div id="customServicesContainer">
+                        <!-- Custom services will be dynamically added here -->
+                    </div>
+                    <button type="button" onclick="addCustomService()" class="btn btn-primary mt-3">Add Service</button>
+                    <button type="button" onclick="undoCustomService()" class="btn btn-secondary mt-3">Remove Service</button>
+                </div>
+            </section>
+            <button type="button" onclick="savefreelancerToFirestore()" class="Register-Salon">Register Freelancer</button>            
+            <section id="messages">
+                <div id="declineMessage"></div>
+                <div id="successMessage"></div>
+            </section>
+            
     </div>
-</section>
 </body>
 </html>

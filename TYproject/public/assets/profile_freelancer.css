@@ -1,48 +1,295 @@
-header {
-    background-color: #fff;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center; /* Center items vertically in the header */
-    justify-content: space-between; /* Distribute items horizontally with space between them */
-}
-    .logo {
-        max-width: 100px;
-    }
 body {
-    background-color: #f8f9fa;
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#mainHeader {
+    position: fixed; /* Fixed position to stay at the top */
+    top: 0; /* Position at the top of the page */
+    left: 0; /* Align to the left */
+    right: 0; /* Align to the right */
+    z-index: 100; /* Set a high z-index to ensure it appears above other elements */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    height: 50px;
+    border-bottom: 1px solid rgb(225, 220, 220);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .logo {
-    max-width: 100px;
+    height: 70px;
+    width: auto;
+    margin-right: 10px;
+    margin-top: 6px;
 }
-.container {
-    background-color: #ffffff;
-    margin-top: 20px;
-    border-radius: 8px;
+
+#mainHeader button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+#container {
+    display: flex;
+}
+
+#leftContainer {
+    width: 200px; /* Adjust the width as needed */
+    height: 200px; /* Adjust the height as needed */
     padding: 20px;
+    margin-left: 15%;
+    margin-top: 170px;
+    background-color: #f8f8f8;
+    box-shadow: 0 0 23px rgba(0, 0, 0, 0.2);
+    border-radius: 50%; /* Make it round */
+    overflow: hidden; /* Hide overflowing content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
-
-.card {
-background-color: #ffffff;
-
-border-radius: 10px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+#leftContainer:hover::before {
+    content: "Add a photo";
+    position: absolute;
+    left: 23.5%; /* Adjust as needed */
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: block;
 }
-.card-header h3 {
-color: rgb(0, 0, 0); /* Replace #your-desired-color with the color you want */
-font-size: xx-large;
+.email{
+    margin-top: 430px;
+    margin-left: -210px;
 }
-.card-header {
-background-color: #000000;
-color: #ffffff;
-border: none;
-border-radius: 10px 10px 0 0;
-}
-
-.card-body {
-padding: 20px;
-}
-.profile_img {
+#leftContainer img {
     width: 100%;
+    height: 100%;
     border-radius: 50%;
+    object-fit: cover;
+    
+}
+
+
+#rightContainer {
+    flex: 1;
+    padding: 20px;
+    margin-left: 10%;
+    margin-right: 130px;
+    margin-top: 40px;
+}
+
+#profile {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border: 1px solid #000000;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#profile img.profile_img {
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+#profile p {
+    margin-top: 10px;
+}
+h3{
+    font-size: x-large;
+    margin-top: -1px;
+}
+#salonInfo, #location, #workInfo, #services {
+    margin-top: 50px;
+}
+
+#salonInfo, #workInfo {
+    background-color: rgba(211, 211, 211, 0.096);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 42px;
+    padding: 30px;
+}
+
+#location, #services {
+    background-color: rgba(211, 211, 211, 0.096);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    padding: 30px;
+}
+
+#map {
+    width: 100%;
+    height: 300px;
+    border-radius: 20px;
+    z-index: 1;
+}
+
+.service-container {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Better styling for service container inputs, textarea, and select */
+.service-container input,
+.service-container textarea,
+.service-container select {
+    width: calc(100% - 20px); /* Adjusted width with padding */
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Add some hover effect for better user experience */
+.service-container input:hover,
+.service-container textarea:hover,
+.service-container select:hover {
+    border-color: black; /* Change color on hover */
+}
+
+/* Add focus styles */
+.service-container input:focus,
+.service-container textarea:focus,
+.service-container select:focus {
+    outline: none;
+    border-color: black; /* Change color on focus */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Add a subtle box shadow on focus */
+}
+
+
+.service-image {
+    margin-top: 10px;
+}
+
+#services button {
+    margin-top: 20px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 1px solid #333; /* Add border */
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Add transition */
+}
+
+#services button:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333; /* Change border color on hover */
+}
+
+#successMessage, #declineMessage {
+    color: #4CAF50;
+    margin-top: 20px;
+}
+form input,#areaName {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+/* Additional styles for checkboxes */
+form input[type="checkbox"] {
+    margin-top: 5px;
+}
+
+/* Styles for buttons */
+button {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 2px solid #fff; /* Add border */
+    padding: 10px 20px;
+    text-align: center;
+    border: 1px solid #333; /* Add border */
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Add transition */
+}
+
+button:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333; /* Change border color on hover */
+}
+
+
+/* Styles for success and decline messages */
+#successMessage, #declineMessage {
+    color: #4CAF50;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #e6ffe6; /* Light green background */
+}
+
+#declineMessage {
+    color: #ff3333;
+    background-color: #ffe6e6; /* Light red background */
+}
+/* Styles for checkboxes */
+form input[type="checkbox"] {
+    margin-top: 5px;
+    margin-right: 5px; /* Add margin between checkboxes */
+}
+
+/* Styles for time inputs */
+form input[type="time"] {
+    width: 80px; /* Adjust the width as needed */
+    padding: 8px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    font-size: 14px;
+}
+.Register-Salon{
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 2px solid #fff; /* Add border */
+    padding: 10px 60px;
+    text-align: center;
+    border: 1px solid #333; /* Add border */
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    margin: 20px auto;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Add transition */
+}
+.Register-Salon:hover{
+    background-color: #333;
+    color: #fff;
+    border-color: #333; /* Change border color on hover */
 }
