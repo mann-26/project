@@ -302,6 +302,7 @@ function approveSalon(salonId) {
 
                                 // Update the UI or fetch salon data again to reflect changes
                                 fetchSalonData();
+                                sendApprovalEmail('salon', salonId, 'approved');                            
                             })
                             .catch((error) => {
                                 console.error('Error removing salon:', error);
@@ -344,6 +345,7 @@ function declineSalon(salonId) {
 
                                 // Update the UI or fetch salon data again to reflect changes
                                 fetchSalonData();
+                                sendApprovalEmail('salon', salonId, 'declined');
                             })
                             .catch((error) => {
                                 console.error('Error removing salon:', error);
@@ -385,6 +387,7 @@ freelancerRef.get()
 
                         // Update the UI or fetch freelancer data again to reflect changes
                         fetchFreelancerData();
+                        sendApprovalEmail('freelancer', freelancerId, 'approved');
                     })
                     .catch((error) => {
                         console.error('Error removing freelancer:', error);
@@ -427,6 +430,7 @@ freelancerRef.get()
 
                         // Update the UI or fetch freelancer data again to reflect changes
                         fetchFreelancerData();
+                        sendApprovalEmail('freelancer', freelancerId, 'declined');
                     })
                     .catch((error) => {
                         console.error('Error removing freelancer:', error);
@@ -442,4 +446,47 @@ freelancerRef.get()
 .catch((error) => {
     console.error('Error getting freelancer document:', error);
 });
+}
+
+// Function to send approval or decline email
+function sendApprovalEmail(userType, userId, status) {
+    // Determine the collection based on userType
+    const userCollection = userType === 'salon' ? 'R_salons' : 'R_freelancers';
+
+    // Fetch user email from Firestore
+    db.collection(userCollection).doc(userId).get()
+        .then((doc) => {
+            if (doc.exists) {
+                const userEmail = doc.data().email;
+
+                // Send the approval or decline email
+                fetch('/send-approval-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userType: userType,
+                        userEmail: userEmail,
+                        status: status,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Approval/Decline Email sent successfully');
+                    } else {
+                        console.error('Failed to send Approval/Decline Email:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending Approval/Decline Email:', error);
+                });
+            } else {
+                console.log('User document not found in Firestore');
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching user document from Firestore:', error);
+        });
 }

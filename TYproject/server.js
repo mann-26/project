@@ -98,7 +98,7 @@ app.post('/send-review-link', (req, res) => {
     const websiteUrl = 'http://localhost:3000';  // Update the port if necessary
 
     // Your review form link
-    const reviewFormLink = `${websiteUrl}/YouBookings.html`;
+    const reviewFormLink = `${websiteUrl}/YourBookings.html`;
 
     // Create Nodemailer transporter
     const transporter = nodemailer.createTransport({
@@ -129,6 +129,44 @@ app.post('/send-review-link', (req, res) => {
     });
 });
 
+// Endpoint to handle salon/freelancer approval or decline
+app.post('/send-approval-email', (req, res) => {
+    const { userType, userEmail, status } = req.body;
+
+    // Define email subject and body based on approval status
+    const subject = status === 'approved' ? 'Application Approved' : 'Application Declined';
+    const text = status === 'approved'
+        ? 'Congratulations! Your application has been approved.'
+        : 'Unfortunately, your application has been declined.';
+
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'snaplooks204@gmail.com',
+            pass: 'olil bxpu dfhd hall',
+        },
+    });
+
+    // Email options
+    const mailOptions = {
+        from: 'snaplooks204@gmail.com',
+        to: userEmail,
+        subject: subject,
+        text: text,
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+            res.status(500).json({ success: false, message: 'Error sending email' });
+            return;
+        }
+        console.log('Email sent:', info.response);
+        res.json({ success: true, message: 'Email sent successfully' });
+    });
+});
 
 module.exports = app;
 

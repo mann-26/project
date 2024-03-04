@@ -198,7 +198,7 @@ var firebaseConfig = {
                     return;
                 }
         
-                if (!validateInputLength(salonName, 3, 10)) {
+                if (!validateInputLength(salonName, 3, 20)) {
                     alert("Salon name should be between 3 and 10 characters.");
                     return;
                 }
