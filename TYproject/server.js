@@ -56,6 +56,40 @@ app.post('/sendEmail', (req, res) => {
     });
 });
 
+
+app.post('/send-decline-notification', (req, res) => {
+    const { userEmail } = req.body;
+
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'snaplooks204@gmail.com',
+            pass: 'olil bxpu dfhd hall',
+        },
+    });
+
+    // Email options
+    const mailOptions = {
+        from: 'snaplooks204@gmail.com',
+        to: userEmail,
+        subject: 'Booking Request Declined',
+        text: 'Your booking request was declined',
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+            res.status(500).send('Error sending email');
+            return;
+        }
+        console.log('Email sent:', info.response);
+        res.send('Email sent successfully');
+    });
+});
+
+
 // New endpoint for sending review form link
 app.post('/send-review-link', (req, res) => {
     const { userEmail, userId } = req.body;

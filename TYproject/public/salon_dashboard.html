@@ -160,6 +160,10 @@
                 mainContent.style.marginLeft = '0'; // Adjust the margin to hide the sidebar
             }
         }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.dashboard').style.display = 'block';
+        });
      
         // Inside the EditServices() function
         function EditServices() {
@@ -193,15 +197,14 @@
                                 var serviceElement = document.createElement('div');
                                 serviceElement.className = 'edit-service-entry';
                                 serviceElement.innerHTML = `
+                                    <img src="${service.image}" alt="Service Image" class="service-image" />
                                     <input type="text" value="${service.name}" placeholder="Service Name" class="edit-service-input" data-service-index="${index}" data-field="name" />
                                     <input type="text" value="${service.description}" placeholder="Service Description" class="edit-service-input" data-service-index="${index}" data-field="description" />
-                                    <input type="text" value="${service.price}" placeholder="Service Price" class="edit-service-input" data-service-index="${index}" data-field="price" />
-                                    <input type="file" accept="image/*" onchange="handleImageChange('${service.id}')" />
-                                    <img src="${service.image}" alt="Service Image" />
+                                    <input type="text" value="${service.price}" placeholder="Service Price" class="edit-service-input" data-service-index="${index}" data-field="price" inputmode="numeric" pattern="[0-9]*" />
 
-
-                                    <button onclick="confirmUpdateService(${index})">Update</button>
-                                    <button onclick="confirmDeleteService(${index})">Delete</button>
+                                    <button class="update" onclick="confirmUpdateService(${index})">Update</button>
+                                    <button class="delete" onclick="confirmDeleteService(${index})">Delete</button>
+                                
                                 `;
                                 editServicesSection.appendChild(serviceElement);
                             });
@@ -223,12 +226,14 @@
                 // Add a form for adding a new service
                 var newServiceForm = document.createElement('div');
                 newServiceForm.innerHTML = `
-                <h3>Add New Service</h3>
+                <div id="newServiceContainer">
+                    <h3>Add New Service</h3>
                     <input type="text" id="newServiceName" placeholder="Service Name" />
                     <input type="text" id="newServiceDescription" placeholder="Service Description" />
                     <input type="text" id="newServicePrice" placeholder="Service Price" />
                     <input type="file" id="newServiceImageInput" accept="image/*" />
-    <button onclick="addNewService()">Add Service</button>
+                    <button onclick="addNewService()">Add Service</button>
+                    </div><br><br>
                 `;
                 editServicesSection.appendChild(newServiceForm);
         } else {

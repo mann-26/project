@@ -148,8 +148,12 @@ h4{
 .edit-services-section {
     display: none; /* Initially hide the section */
     position: fixed; /* Fixed position to center the section */
-    top: 50%;
+    margin-top: 25%;
+    margin-bottom: -20%;
+    margin-left: 5%;
     left: 55%;
+    width: 90%;
+    height: 40%;
     transform: translate(-50%, -50%); /* Center the section */
     padding: 20px;
     background-color: #ffffff;
@@ -157,14 +161,16 @@ h4{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .edit-service-entry {
-    margin-bottom: 20px;
+    margin-bottom: 90px;
 }
 
 .edit-service-input {
     width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 30px;
+    height: 50%;
+    margin-left: 40px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
     box-sizing: border-box;
     border: 1px solid #ced4da; /* Add a border when focused if desired */
     outline: none; /* Remove the outline */
@@ -172,7 +178,7 @@ h4{
 
 
 .update-button {
-    background-color: #28a745;
+    background-color: #000000;
     color: #fff;
     border: none;
     padding: 8px 12px;
@@ -202,11 +208,13 @@ h4{
 
 /* Add this CSS to style the service image */
 .edit-service-entry img {
-    max-width: 100%;
+    max-width: 20%;
     height: auto;
     margin-top: 10px;
+    margin-bottom: 30px;
+    margin-left: 30px;
     border: 1px solid #ddd; /* Add a border for a neat look */
-    border-radius: 5px; /* Add a border-radius for rounded corners */
+    border-radius: 50px; /* Add a border-radius for rounded corners */
 }
 
 /* Add this CSS to style the file input */
@@ -227,3 +235,86 @@ h4{
 .add-service-button {
     margin-top: 10px; /* Add spacing above the "Add New Service" button */
 }
+.edit-service-input {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 10%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .edit-service-input:focus {
+    border-color: #000000;
+    outline: none;
+  }
+  
+  /* Optional: Add a placeholder color */
+  .edit-service-input::placeholder {
+    color: #999;
+  }
+  
+  .update, .delete {
+    background-color: #000000;
+    color: white;
+    padding: 10px;
+    border: none;
+    margin-left: 50px;
+
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* Adjust as needed */
+  }
+  
+  .update:hover, .delete:hover {
+    background-color: #000000;
+  }
+  
+  .update:active, .delete:active {
+    background-color: #000000;
+  }
+  /* Container styles */
+#newServiceContainer {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  /* Heading styles */
+  #newServiceContainer h3 {
+    color: #333;
+  }
+  
+  /* Input styles */
+  #newServiceContainer input {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  /* File input styles */
+  #newServiceImageInput {
+    margin-top: 10px;
+  }
+  
+  /* Button styles */
+  #newServiceContainer button {
+    background-color: #000000;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #newServiceContainer button:hover {
+    background-color: #000000;
+  }
+  

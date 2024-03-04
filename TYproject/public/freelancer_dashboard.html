@@ -231,6 +231,10 @@
     });
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.dashboard').style.display = 'block';
+});
+
 function addNewService() {
     var newServiceName = document.getElementById('newServiceName').value;
     var newServiceDescription = document.getElementById('newServiceDescription').value;

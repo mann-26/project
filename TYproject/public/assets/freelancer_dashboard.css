@@ -146,8 +146,12 @@ h4{
 .edit-services-section {
     display: none; /* Initially hide the section */
     position: fixed; /* Fixed position to center the section */
-    top: 50%;
+    margin-top: 25%;
+    margin-bottom: -20%;
+    margin-left: 5%;
     left: 55%;
+    width: 90%;
+    height: 40%;
     transform: translate(-50%, -50%); /* Center the section */
     padding: 20px;
     background-color: #ffffff;
@@ -197,12 +201,6 @@ h4{
     background-color: #353636; /* Button background color on hover */
 }
 
-
-
-
-
-
-
 .edit-services-section {
     height: 700px; /* Set a fixed height */
     overflow-y: auto; /* Enable vertical scrolling if content overflows */
@@ -215,4 +213,32 @@ h4{
 
 .add-service-button {
     margin-top: 10px; /* Add spacing above the "Add New Service" button */
+}
+
+/* Styles for the input fields */
+#newServiceName,
+#newServiceDescription,
+#newServicePrice {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+/* Style for the file input (assuming newServiceImageInput is a file input) */
+#newServiceImageInput {
+    margin-bottom: 10px;
+}
+
+/* Optional: Style for the submit button or any other relevant elements */
+#submitServiceButton {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#submitServiceButton:hover {
+    background-color: #2980b9;
 }
