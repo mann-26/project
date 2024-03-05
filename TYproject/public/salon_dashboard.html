@@ -147,38 +147,43 @@
     });
 }
 
-        function Bookings() {
-            var mainContent = document.getElementById('mainContent');
-            var dashboard = document.querySelector('.dashboard');
+function Bookings() {
+    var mainContent = document.getElementById('mainContent');
+    var dashboard = document.querySelector('.dashboard');
 
-            // Toggle the visibility of the dashboard
-            if (dashboard.style.display === 'none' || dashboard.style.display === '') {
-                dashboard.style.display = 'block';
-                mainContent.style.marginLeft = '250px'; // Adjust the margin to show the sidebar
-            } else {
-                dashboard.style.display = 'none';
-                mainContent.style.marginLeft = '0'; // Adjust the margin to hide the sidebar
-            }
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.dashboard').style.display = 'block';
-        });
+    // Toggle the visibility of the dashboard
+    if (dashboard.style.display === 'none' || dashboard.style.display === '') {
+        dashboard.style.display = 'block';
+        mainContent.style.marginLeft = '250px'; // Adjust the margin to show the sidebar
+    } else {
+        dashboard.style.display = 'none';
+        mainContent.style.marginLeft = '0'; // Adjust the margin to hide the sidebar
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial state: dashboard is visible
+    document.querySelector('.dashboard').style.display = 'block';
+
+    // Toggle on click
+    document.querySelector('.booking-button').addEventListener('click', Bookings);
+});
+
      
         // Inside the EditServices() function
         function EditServices() {
-    var mainContent = document.getElementById('mainContent');
     var dashboard = document.querySelector('.dashboard');
     var editServicesSection = document.querySelector('.edit-services-section');
 
-    // Hide the main dashboard
-    dashboard.style.display = 'none';
+    // Check if the edit-services-section is currently visible
+    var isEditServicesVisible = editServicesSection.style.display !== 'none';
 
-    // Show the edit-services-section
-    editServicesSection.style.display = 'block';
+    // Toggle the visibility of the edit-services-section
+    editServicesSection.style.display = isEditServicesVisible ? 'none' : 'block';
 
-    // Clear existing content in edit-services-section
-    editServicesSection.innerHTML = '<h2>Edit Services</h2>';
+    if (!isEditServicesVisible) {
+        // Clear existing content in edit-services-section only when it's being shown
+        editServicesSection.innerHTML = '<h2>Edit Services</h2>';
 
     // Fetch existing services from Firebase Firestore
     firebase.auth().onAuthStateChanged(user => {
@@ -228,7 +233,7 @@
                 newServiceForm.innerHTML = `
                 <div id="newServiceContainer">
                     <h3>Add New Service</h3>
-                    <input type="text" id="newServiceName" placeholder="Service Name" />
+                    <input type="text" id="newServiceName" placeholder="Service Name" readonly />
                     <input type="text" id="newServiceDescription" placeholder="Service Description" />
                     <input type="text" id="newServicePrice" placeholder="Service Price" />
                     <input type="file" id="newServiceImageInput" accept="image/*" />
@@ -243,7 +248,7 @@
         }
     });
 }
-
+        }
 function addNewService() {
     var newServiceName = document.getElementById('newServiceName').value;
     var newServiceDescription = document.getElementById('newServiceDescription').value;
@@ -540,37 +545,65 @@ function displayApprovedBookings() {
 
         // Function to cancel a booking
         function cancelBooking(bookingId) {
-            // Get the reference to the booking document in "Approved_bookings" collection
-            var bookingRef = db.collection('Approved_bookings').doc(bookingId);
+    var bookingData; // Declare bookingData outside the promise scope
 
-            // Get the data of the booking to be moved
-            bookingRef.get()
-                .then(doc => {
-                    if (doc.exists) {
-                        var bookingData = doc.data();
+    // Get the reference to the booking document in "Approved_bookings" collection
+    var bookingRef = db.collection('Approved_bookings').doc(bookingId);
 
-                        // Add the booking data to "Declined_bookings" collection
-                        return db.collection('Declined_bookings').add(bookingData);
-                    } else {
-                        // Handle the case where the booking document does not exist
-                        console.error('Booking document does not exist.');
-                        showFeedbackMessage('Error canceling booking. Please try again.', 'danger');
-                    }
-                })
-                .then(() => {
-                    // After successfully adding to "Declined_bookings," delete from "Approved_bookings"
-                    return bookingRef.delete();
-                })
-                .then(() => {
-                    // Update the displayed bookings on the salon dashboard
-                    displayApprovedBookings();
-                    showFeedbackMessage('Booking canceled successfully!', 'success');
-                })
-                .catch(error => {
-                    console.error('Error canceling booking:', error);
-                    showFeedbackMessage('Error canceling booking. Please try again.', 'danger');
-                });
+    // Get the data of the booking to be moved
+    bookingRef.get()
+        .then(doc => {
+            if (doc.exists) {
+                bookingData = doc.data();
+
+                // Add the booking data to "Declined_bookings" collection
+                return db.collection('Declined_bookings').add(bookingData);
+            } else {
+                // Handle the case where the booking document does not exist
+                console.error('Booking document does not exist.');
+                showFeedbackMessage('Error canceling booking. Please try again.', 'danger');
+            }
+        })
+        .then(() => {
+            // After successfully adding to "Declined_bookings," delete from "Approved_bookings"
+            return bookingRef.delete();
+        })
+        .then(() => {
+            // Update the displayed bookings on the salon dashboard
+            displayApprovedBookings();
+            sendCencelEmail(bookingData.email);
+            showFeedbackMessage('Booking canceled successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('Error canceling booking:', error);
+            showFeedbackMessage('Error canceling booking. Please try again.', 'danger');
+        });
+}
+
+function sendCencelEmail(userEmail) {
+    fetch('/send-cancellation-email', { // Assuming you have a different endpoint for declined emails
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userEmail: userEmail,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.success) {
+            console.log('Decline email sent successfully!');
+        } else {
+            console.log('Failed to send decline email.');
         }
+    })
+    .catch(error => {
+        console.error('Error sending decline email:', error);
+    });
+}
+
 
 
         // Function to confirm before marking a booking as completed
@@ -635,9 +668,9 @@ function sendReviewLink(userEmail) {
         // Handle the response, you can display a message to the user
         console.log(data);
         if (data.success) {
-            alert('Review link sent successfully!');
+            console.log('Review link sent successfully!');
         } else {
-            alert('Failed to send review link.');
+            console.log('Failed to send review link.');
         }
     })
     .catch(error => {
@@ -731,7 +764,9 @@ function clearDeclinedBookings() {
         }
 
         // Function to approve a booking
-function approveBooking(bookingId) {
+        function approveBooking(bookingId) {
+    var bookingData; // Declare bookingData outside the promise scope
+
     // Get the reference to the booking document in "Salon_bookings" collection
     var bookingRef = db.collection('Salon_bookings').doc(bookingId);
 
@@ -739,8 +774,7 @@ function approveBooking(bookingId) {
     bookingRef.get()
         .then(doc => {
             if (doc.exists) {
-                var bookingData = doc.data();
-
+                bookingData = doc.data(); // Assign value to bookingData
                 // Add the booking data to "Approved_bookings" collection
                 return db.collection('Approved_bookings').add(bookingData);
             } else {
@@ -757,28 +791,50 @@ function approveBooking(bookingId) {
             // Update the displayed bookings on the salon dashboard
             displaySalonBookings();
             showFeedbackMessage('Booking approved successfully!', 'success');
+            sendApproveEmail(bookingData.email); // Now bookingData is accessible here
         })
         .catch(error => {
             console.error('Error approving booking:', error);
             showFeedbackMessage('Error approving booking. Please try again.', 'danger');
         });
 }
-
+function sendApproveEmail(userEmail) {
+    fetch('/send-booking-approved-email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userEmail: userEmail,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.success) {
+            console.log('Cancellation email sent successfully!');
+        } else {
+            console.log('Failed to send cancellation email.');
+        }
+    })
+    .catch(error => {
+        console.error('Error sending cancellation email:', error);
+    });
+}
 // Function to decline a booking
 function declineBooking(bookingId) {
-    // Get the reference to the booking document in "Salon_bookings" collection
+    var bookingData; // Declare bookingData outside the promise scope
+
     var bookingRef = db.collection('Salon_bookings').doc(bookingId);
 
-    // Get the data of the booking to be moved
     bookingRef.get()
         .then(doc => {
             if (doc.exists) {
-                var bookingData = doc.data();
+                bookingData = doc.data();
 
                 // Add the booking data to "Declined_bookings" collection
                 return db.collection('Declined_bookings').add(bookingData);
             } else {
-                // Handle the case where the booking document does not exist
                 console.error('Booking document does not exist.');
                 showFeedbackMessage('Error declining booking. Please try again.', 'danger');
             }
@@ -788,6 +844,9 @@ function declineBooking(bookingId) {
             return bookingRef.delete();
         })
         .then(() => {
+            // Send decline email
+            sendDeclineEmail(bookingData.email);
+
             // Update the displayed bookings on the salon dashboard
             displaySalonBookings();
             showFeedbackMessage('Booking declined successfully!', 'success');
@@ -797,6 +856,31 @@ function declineBooking(bookingId) {
             showFeedbackMessage('Error declining booking. Please try again.', 'danger');
         });
 }
+
+function sendDeclineEmail(userEmail) {
+    fetch('/send-booking-decline-email', { // Assuming you have a different endpoint for declined emails
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userEmail: userEmail,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.success) {
+            console.log('Decline email sent successfully!');
+        } else {
+            console.log('Failed to send decline email.');
+        }
+    })
+    .catch(error => {
+        console.error('Error sending decline email:', error);
+    });
+}
+
         function showFeedbackMessage(message, type) {
             var feedbackMessageContainer = document.getElementById('feedbackMessage');
             feedbackMessageContainer.innerHTML = `<div class="alert alert-${type}" role="alert">${message}</div>`;

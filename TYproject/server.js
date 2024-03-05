@@ -168,6 +168,103 @@ app.post('/send-approval-email', (req, res) => {
     });
 });
 
+
+app.post('/send-booking-approved-email', (req, res) => {
+    const { userEmail } = req.body;
+
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'snaplooks204@gmail.com',
+            pass: 'olil bxpu dfhd hall',
+        },
+    });
+
+    // Email options
+    const mailOptions = {
+        from: 'snaplooks204@gmail.com',
+        to: userEmail,
+        subject: 'Booking Approved',
+        text: 'Your booking is approved ',
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+            res.status(500).send('Error sending email');
+            return;
+        }
+        console.log('Email sent:', info.response);
+        res.send('Email sent successfully');
+    });
+});
+
+app.post('/send-booking-decline-email', (req, res) => {
+    const { userEmail } = req.body;
+
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'snaplooks204@gmail.com',
+            pass: 'olil bxpu dfhd hall',
+        },
+    });
+
+    // Email options
+    const mailOptions = {
+        from: 'snaplooks204@gmail.com',
+        to: userEmail,
+        subject: 'Booking Declined',
+        text: 'Your booking is declined ',
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+            res.status(500).send('Error sending email');
+            return;
+        }
+        console.log('Email sent:', info.response);
+        res.send('Email sent successfully');
+    });
+});
+
+app.post('/send-cancellation-email', (req, res) => {
+    const { userEmail } = req.body;
+
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'snaplooks204@gmail.com',
+            pass: 'olil bxpu dfhd hall',
+        },
+    });
+
+    // Email options
+    const mailOptions = {
+        from: 'snaplooks204@gmail.com',
+        to: userEmail,
+        subject: 'Booking Cancelled',
+        text: 'Your booking is Cancelled ',
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+            res.status(500).send('Error sending email');
+            return;
+        }
+        console.log('Email sent:', info.response);
+        res.send('Email sent successfully');
+    });
+});
+
 module.exports = app;
 
 app.listen(port, () => {

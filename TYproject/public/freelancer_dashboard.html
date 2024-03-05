@@ -143,31 +143,43 @@
         }
 
         function Bookings() {
-            var mainContent = document.getElementById('mainContent');
-            var dashboard = document.querySelector('.dashboard');
-
-            // Toggle the visibility of the dashboard
-            if (dashboard.style.display === 'none' || dashboard.style.display === '') {
-                dashboard.style.display = 'block';
-                mainContent.style.marginLeft = '250px'; // Adjust the margin to show the sidebar
-            } else {
-                dashboard.style.display = 'none';
-                mainContent.style.marginLeft = '0'; // Adjust the margin to hide the sidebar
-            }
-        }
-        function EditServices() {
     var mainContent = document.getElementById('mainContent');
+    var dashboard = document.querySelector('.dashboard');
+
+    // Toggle the visibility of the dashboard
+    if (dashboard.style.display === 'none' || dashboard.style.display === '') {
+        dashboard.style.display = 'block';
+        mainContent.style.marginLeft = '250px'; // Adjust the margin to show the sidebar
+    } else {
+        dashboard.style.display = 'none';
+        mainContent.style.marginLeft = '0'; // Adjust the margin to hide the sidebar
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial state: dashboard is visible
+    document.querySelector('.dashboard').style.display = 'block';
+
+    // Toggle on click
+    document.querySelector('.booking-button').addEventListener('click', Bookings);
+});
+        function EditServices() {
     var dashboard = document.querySelector('.dashboard');
     var editServicesSection = document.querySelector('.edit-services-section');
 
-    // Hide the main dashboard
-    dashboard.style.display = 'none';
+    // Check if the edit-services-section is currently visible
+    var isEditServicesVisible = editServicesSection.style.display !== 'none';
 
-    // Show the edit-services-section
-    editServicesSection.style.display = 'block';
+    // Toggle the visibility of the edit-services-section
+    editServicesSection.style.display = isEditServicesVisible ? 'none' : 'block';
 
-    // Clear existing content in edit-services-section
-    editServicesSection.innerHTML = '<h2>Edit Services</h2>';
+    if (!isEditServicesVisible) {
+        // Hide the main dashboard when showing the edit-services-section
+        dashboard.style.display = 'none';
+
+        // Clear existing content in edit-services-section only when it's being shown
+        editServicesSection.innerHTML = '<h2>Edit Services</h2>';
+
 
     // Fetch existing services from Firebase Firestore
     firebase.auth().onAuthStateChanged(user => {
@@ -229,11 +241,17 @@
             editServicesSection.innerHTML += '<p>User not authenticated. Please log in.</p>';
         }
     });
+} else {
+        // Show the main dashboard when hiding the edit-services-section
+        dashboard.style.display = 'block';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.dashboard').style.display = 'block';
 });
+
+
 
 function addNewService() {
     var newServiceName = document.getElementById('newServiceName').value;
@@ -489,7 +507,7 @@ function displayApprovedBookings() {
     approvedBookingsContainer.innerHTML = '';
 
     // Fetch approved bookings from the "Approved_bookings" collection
-    db.collection('Approved_bookings')
+    db.collection('Freelancer_Approved_bookings')
         .get()
         .then(querySnapshot => {
             if (!querySnapshot.empty) {
@@ -531,7 +549,7 @@ function confirmCancelBooking(bookingId) {
 // Function to cancel a booking
 function cancelBooking(bookingId) {
     // Get the reference to the booking document in "Approved_bookings" collection
-    var bookingRef = db.collection('Approved_bookings').doc(bookingId);
+    var bookingRef = db.collection('Freelancer_Approved_bookings').doc(bookingId);
 
     // Get the data of the booking to be moved
     bookingRef.get()
@@ -540,7 +558,7 @@ function cancelBooking(bookingId) {
                 var bookingData = doc.data();
 
                 // Add the booking data to "Declined_bookings" collection
-                return db.collection('Declined_bookings').add(bookingData);
+                return db.collection('Freelancer_Declined_bookings').add(bookingData);
             } else {
                 // Handle the case where the booking document does not exist
                 console.error('Booking document does not exist.');
@@ -572,7 +590,7 @@ function confirmCompleteBooking(bookingId) {
 // Function to mark a booking as completed
 function completeBooking(bookingId) {
     // Get the reference to the booking document in "Approved_bookings" collection
-    var bookingRef = db.collection('Approved_bookings').doc(bookingId);
+    var bookingRef = db.collection('Freelancer_Approved_bookings').doc(bookingId);
     var bookingData;  // Declare bookingData variable
 
     // Get the data of the booking to be moved
@@ -581,7 +599,7 @@ function completeBooking(bookingId) {
             if (doc.exists) {
                 bookingData = doc.data();  // Assign value to bookingData
                 // Add the booking data to "Booking_Completed" collection
-                return db.collection('Booking_Completed').add(bookingData);
+                return db.collection('Freelancer_Booking_Completed').add(bookingData);
             } else {
                 // Handle the case where the booking document does not exist
                 console.error('Booking document does not exist.');
@@ -623,9 +641,9 @@ function sendReviewLink(userEmail) {
         // Handle the response, you can display a message to the user
         console.log(data);
         if (data.success) {
-            alert('Review link sent successfully!');
+            console.log('Review link sent successfully!');
         } else {
-            alert('Failed to send the review link.');
+            console.log('Failed to send the review link.');
         }
     })
     .catch(error => {
@@ -645,7 +663,7 @@ function displayDeclinedBookings() {
     declinedBookingsContainer.innerHTML = '';
 
     // Fetch declined bookings from the "Declined_bookings" collection
-    db.collection('Declined_bookings')
+    db.collection('Freelancer_Declined_bookings')
         .get()
         .then(querySnapshot => {
             if (!querySnapshot.empty) {
@@ -682,12 +700,12 @@ function displayDeclinedBookings() {
 // Function to clear declined bookings
 function clearDeclinedBookings() {
     // Add logic to clear the declined bookings collection
-    db.collection('Declined_bookings')
+    db.collection('Freelancer_Declined_bookings')
         .get()
         .then(querySnapshot => {
             querySnapshot.forEach(doc => {
                 // Delete each document in the collection
-                db.collection('Declined_bookings').doc(doc.id).delete();
+                db.collection('Freelancer_Declined_bookings').doc(doc.id).delete();
             });
 
             // After clearing, refresh the displayed declined bookings
@@ -730,7 +748,7 @@ function confirmDeclineBooking(bookingId) {
                 var bookingData = doc.data();
 
                 // Add the booking data to "Approved_bookings" collection
-                return db.collection('Approved_bookings').add(bookingData);
+                return db.collection('Freelancer_Approved_bookings').add(bookingData);
             } else {
                 // Handle the case where the booking document does not exist
                 console.error('Booking document does not exist.');
@@ -764,7 +782,7 @@ function declineBooking(bookingId) {
                 var bookingData = doc.data();
 
                 // Add the booking data to "Declined_bookings" collection
-                return db.collection('Declined_bookings').add(bookingData);
+                return db.collection('Freelancer_Declined_bookings').add(bookingData);
             } else {
                 // Handle the case where the booking document does not exist
                 console.error('Booking document does not exist.');

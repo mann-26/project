@@ -344,6 +344,7 @@ var firebaseConfig = {
                     .then(function () {
                         // Index services by updating the "services" collection
                         updateServicesCollection(selectedServices, userID);
+                        displayBookingConfirmationMessage();
         
                         var successMessageContainer = document.getElementById('successMessage');
                         successMessageContainer.innerHTML = '<p>Your salon data has been successfully registered!</p>';
@@ -376,6 +377,16 @@ var firebaseConfig = {
                 // Add other salon-related fields if needed
             }, { merge: true }); // Use merge to update the document without overwriting existing data
         });
+    }
+    function displayBookingConfirmationMessage() {
+        // Replace this with your preferred way of displaying a popup message
+        var confirmationMessage = "Registration successful! You will receive an email shortly.";
+    
+        // Display confirmation message using the browser's built-in alert
+        alert(confirmationMessage);
+    
+        // Redirect to login.html after the user clicks "OK"
+        window.location.href = "login.html";
     }
     async function getBase64Image(img) {
         return new Promise(async function (resolve) {

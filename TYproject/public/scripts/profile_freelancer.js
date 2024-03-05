@@ -313,6 +313,7 @@ function addCustomService() {
             .then(function () {
                 // Index services by updating the "services" collection
                 updateServicesCollection(selectedServices, userID);
+                displayBookingConfirmationMessage();
                 
                 var successMessageContainer = document.getElementById('successMessage');
                 successMessageContainer.innerHTML = '<p>Your freelancer data has been successfully registered!</p>';
@@ -340,7 +341,16 @@ function updateServicesCollection(selectedServices, userID) {
         }, { merge: true }); // Use merge to update the document without overwriting existing data
     });
 }
+function displayBookingConfirmationMessage() {
+    // Replace this with your preferred way of displaying a popup message
+    var confirmationMessage = "Registration successful! You will receive an email shortly.";
 
+    // Display confirmation message using the browser's built-in alert
+    alert(confirmationMessage);
+
+    // Redirect to login.html after the user clicks "OK"
+    window.location.href = "login.html";
+}
 function validateInputLength(inputValue, minLength, maxLength) {
     const trimmedValue = inputValue.trim(); // Remove leading and trailing whitespaces
     return trimmedValue.length >= minLength && trimmedValue.length <= maxLength;
@@ -472,7 +482,7 @@ function fetchfreelancerDataForLoggedInUser(userId) {
                                 .then((freelancerDoc) => {
                                     if (freelancerDoc.exists) {
                                         // freelancer is neither approved nor declined but data is present in the freelancers collection
-                                        declineMessageContainer.innerHTML = '<p>Your freelancer is pending approval.</p>';
+                                        declineMessageContainer.innerHTML = '<p>Your application is pending approval.</p>';
                                         fetchfreelancerDataFromMainCollection(userId); // Fetch data from the main collection
                                     } else {
                                         // freelancer is neither approved nor declined and no data in the freelancers collection

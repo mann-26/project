@@ -191,6 +191,12 @@ function createProfile() {
             return; // Exit the function if validation fails
         }
 
+        const contactNumberRegex = /^\d{10}$/;
+        if (!contactNumberRegex.test(contactNumber)) {
+            displayErrorMessage(contactNumberInput, 'Please enter a valid 10-digit contact number.');
+            return; // Exit the function if validation fails
+        }
+        
         if (!address) {
             displayErrorMessage(addressInput, 'Please enter your address.');
             return; // Exit the function if validation fails
