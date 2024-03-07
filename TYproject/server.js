@@ -113,7 +113,7 @@ app.post('/send-review-link', (req, res) => {
     const mailOptions = {
         from: 'snaplooks204@gmail.com',
         to: userEmail,
-        subject: 'Complete Your Booking - Leave a Review',
+        subject: 'Leave a Review For Your Recent services',
         text: `Dear user,\n\nThank you for using snaplooks! Please take a moment to leave a review for your recent booking.\n\n${reviewFormLink}`,
     };
 

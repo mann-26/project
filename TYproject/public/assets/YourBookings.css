@@ -94,6 +94,7 @@ header select {
     animation: spin 1s linear infinite;
     margin: 20% auto;
     display: none; /* initially hidden */
+    z-index: 2;
 }
 
 @keyframes spin {
@@ -174,7 +175,9 @@ header select {
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 20%;
+    border-radius: 30px;
+    text-align: center;
 }
 
 .close {
@@ -213,4 +216,10 @@ a, .home-button{
 }
 a, .home-button:hover{
     text-decoration: none;
+}
+.checkmark {
+    color: #4CAF50; /* Green color for the checkmark */
+    font-size: 80px; /* Adjust the size as needed */
+    margin-bottom: 20px;
+    text-align: center;
 }

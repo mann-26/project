@@ -21,12 +21,16 @@
         }
 
         .salon-section, .freelancer-section {
-            width: 45%;
-            background-color: white;
+            width: 42%;
+            background-color: rgba(255, 255, 255, 0);
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 60px;
+            border-radius: 50px;
+            margin-top: 43px;
+        }
+        .freelancer-section{
+            width: 43%;
+            margin-right: -5px;
+            
         }
 
         h2 {
@@ -102,10 +106,12 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            margin-bottom: 10px;
             justify-content: center;
             margin-right: 30px;
             padding: 9px;
-            width: 80px;
+            width: 50px;
+            height: 40px;
         }
         #searchResultsContainer {
             position: absolute;
@@ -164,17 +170,10 @@
         color: red;
     }
     .salon-item:hover {
-        background-color: #f0f0f0b6; /* Change to the desired background color on hover */
+        background-color: #ffffff96; /* Change to the desired background color on hover */
         transition: background-color 0.3s; /* Add transition for smoother effect */
     }
-    .freelancer-section {
-        width: 45%;
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-top: 60px;
-    }
+    
 
     .freelancer-list {
         list-style: none;
@@ -190,7 +189,7 @@
         padding: 20px;
         border-radius: 20px;
         transition: background-color 0.3s;
-        height: 230px;
+        height: 220px;
     }
 
     .freelancer-info {
@@ -230,27 +229,26 @@
 
     /* Hover effect for freelancer items (similar to salons) */
     .freelancer-item:hover {
-        background-color: #f0f0f0b6;
+        background-color: #ffffff96;
         transition: background-color 0.3s;
     }
     #homeButton {
-        background-color: #000000;
-        color: #ffffff;
-        border: none;
-        border-radius: 30px;
+        background-color: white;
+        padding: 8px 20px;
+        margin-right: 50px;
+        margin-left: -900px;
+        border: 2px solid #333;
+        border-radius: 50px;
         cursor: pointer;
-        display: flex;
-        width: 70px;
-        justify-content: center;
-        align-items: center;
-        margin-right: 80px;
-        padding: 9px;
-        transition: background-color 0.3s; /* Add transition for smoother effect */
-        margin-right: 70px;
+        transition: background-color 0.3s, color 0.3s;
+        display: block; /* To center the span properly */
+        transition: background-color 0.3s ease, color 0.3s ease;
+        color: #333;
     }
 
     #homeButton:hover {
-        background-color: #3d3e3d; /* Change the background color on hover */
+        background-color: #333;
+        color: #fff; /* Change the background color on hover */
     }
 
 
@@ -260,12 +258,14 @@
             border: none;
             border-radius: 30px;
             cursor: pointer;
+            margin-bottom: -10px;
             /* display: flex; */
             /* align-items: center; */
             /* justify-content: center; */
             margin-right: 30px;
             padding: 9px;
-            width: 80px;
+            width: 50px;
+            height: 40px;
         }
 
         #freelancerSearchInput {
@@ -273,7 +273,8 @@
             border: 1px solid #ccc;
             border-radius: 30px;
             margin-right: 5px;
-            width: 200px;
+            width: 220px;
+            height: 25px;
             margin-bottom: 10px;
         }
     </style>

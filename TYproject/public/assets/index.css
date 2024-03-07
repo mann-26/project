@@ -6,7 +6,7 @@
 .banner{
     width: 100%;
     height: 100vh;
-    background-image: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)), url('https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/Pictures%2Fbenyamin-bohlouli-_C-S7LqxHPw-unsplash.jpg?alt=media&token=d5f3b7a3-96b2-4685-9f12-a3c69e6af9e9');
+    background-image: linear-gradient(rgba(0,0,0,0.60),rgba(0,0,0,0.60)), url('https://firebasestorage.googleapis.com/v0/b/snaplooks-bd932.appspot.com/o/Pictures%2Fbenyamin-bohlouli-_C-S7LqxHPw-unsplash.jpg?alt=media&token=d5f3b7a3-96b2-4685-9f12-a3c69e6af9e9');
     background-size: cover;
     background-position: center;
 }

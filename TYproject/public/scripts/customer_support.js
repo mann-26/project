@@ -15,11 +15,15 @@ var db = firebase.firestore();
 // Function to handle form submission
 function submitQuery(event) {
     event.preventDefault();
-
+  
+    // Show the loading spinner
+    var spinner = document.getElementById('loadingSpinner');
+    spinner.style.display = 'block';
+  
     var userName = document.getElementById('userName').value;
     var userEmail = document.getElementById('userEmail').value;
     var userQuery = document.getElementById('userQuery').value;
-
+  
     // Add the user query to the "user_queries" collection
     db.collection('user_queries').add({
         userName: userName,
@@ -29,11 +33,24 @@ function submitQuery(event) {
     })
     .then(function(docRef) {
         console.log('Query submitted with ID: ', docRef.id);
-        alert('Query submitted successfully!');
-        // You can reset the form or redirect the user to another page here
+        // Hide the loading spinner
+        spinner.style.display = 'none';
+        // Show the success pop-up or perform other actions
+        showPopup();
     })
     .catch(function(error) {
         console.error('Error submitting query: ', error);
+        // Hide the loading spinner
+        spinner.style.display = 'none';
         alert('Error submitting query. Please try again.');
     });
-}
+  }
+function showPopup() {
+    var popup = document.getElementById('successPopup');
+    popup.style.display = 'block';
+  }
+  
+  function closePopup() {
+    var popup = document.getElementById('successPopup');
+    popup.style.display = 'none';
+  }
