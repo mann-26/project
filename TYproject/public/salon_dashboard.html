@@ -117,13 +117,10 @@
                                 <div class="booking-entry">
                                     <p>Date: ${bookingData.appointmentDate}</p>
                                     <p>Time: ${bookingData.appointmentTime}</p>
-                                    <p>Salon ID: ${bookingData.salonId}</p>
-                                    
-                                    
                                     <p>Services: ${bookingData.selectedServices}</p>
                                     <p>Total Amount: ${bookingData.totalAmount}</p>
                                     <p>User Email: ${bookingData.email}</p>
-                                    <p>User ID: ${bookingData.userId}</p>
+                                    <p>User Name: ${bookingData.fullName}</p>
                                     <button onclick="confirmApproveBooking('${doc.id}')">Approve</button>
                                     <button onclick="confirmDeclineBooking('${doc.id}')">Decline</button>
                                 </div>
@@ -515,11 +512,10 @@ function displayApprovedBookings() {
                             <div class="booking-entry">
                                 <p>Date: ${approvedBookingData.appointmentDate}</p>
                                     <p>Time: ${approvedBookingData.appointmentTime}</p>
-                                    <p>Salon ID: ${approvedBookingData.salonId}</p
                                     <p>Services: ${approvedBookingData.selectedServices}</p>
                                     <p>Total Amount: ${approvedBookingData.totalAmount}</p>
                                     <p>User Email: ${approvedBookingData.email}</p>
-                                    <p>User ID: ${approvedBookingData.userId}</p>
+                                    <p>User Name: ${approvedBookingData.fullName}</p>
                                 <button onclick="confirmCancelBooking('${doc.id}')">Cancel Booking</button>
                                 <button onclick="confirmCompleteBooking('${doc.id}')">Booking Completed</button>
                             </div>
@@ -699,13 +695,11 @@ function displayDeclinedBookings() {
                         <div class="booking-entry">
                             <p>Date: ${declinedBookingData.appointmentDate}</p>
                             <p>Time: ${declinedBookingData.appointmentTime}</p>
-                            <p>Salon ID: ${declinedBookingData.salonId}</p>
                             <p>Salon Name: ${declinedBookingData.salonName}</p>
                             <p>Services: ${declinedBookingData.services ? declinedBookingData.services.map(service => service.service).join(', ') : 'N/A'}</p>
-
                             <p>Total Amount: ${declinedBookingData.totalAmount}</p>
                             <p>User Email: ${declinedBookingData.userEmail}</p>
-                            <p>User ID: ${declinedBookingData.userId}</p>
+                            <p>User Name: ${declinedBookingData.fullName}</p>
                         </div>
                     `;
                     declinedBookingsContainer.appendChild(document.createRange().createContextualFragment(declinedBookingHtml));

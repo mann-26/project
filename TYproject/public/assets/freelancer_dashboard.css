@@ -57,9 +57,13 @@ header{
 }
 
 .dashboard {
-    max-width: 100%;
+    width: 1170px; /* Fixed width */
+    height: 600px; /* Fixed height */
+    overflow: auto; /* Enable scrolling within the dashboard */
+    display: flex;
     margin: 20px auto;
-    margin-left: -70px;
+    margin-left: -200px;
+    margin-top: -5px;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 30px;
@@ -74,12 +78,20 @@ h2 {
 .collapsible-section {
     cursor: pointer;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 15px;
     margin-top: 10px;
     padding: 10px;
     background-color: #f8f9fa;
+    max-height: 100%; /* Adjust this value according to your needs */
+    overflow-y: auto; /* Enable vertical scrolling within the collapsible sections */
 }
 
+body.collapsible-open{
+    overflow: hidden;
+}
+.dashboard.collapsible-open {
+    overflow: auto;
+}
 .collapsible-content {
     display: none;
     padding: 10px;

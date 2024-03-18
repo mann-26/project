@@ -310,6 +310,9 @@ if (navigator.geolocation) {
 function openCustomerBookings() {
     window.location.href = 'YourBookings.html';
 }
+function openYourReviews() {
+    window.location.href = 'reviews.html';
+}
 // Function to handle location
 function handleLocation(pos) {
     position = pos.coords;
