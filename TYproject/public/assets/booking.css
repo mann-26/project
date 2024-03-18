@@ -49,6 +49,7 @@ header {
 
 .left-section {
     width: 700px; /* Adjust the padding as needed */
+    margin-top: 40px;
 }
 .left-section fieldset {
     border: 1px solid #ddd;
@@ -74,7 +75,7 @@ header {
 .right-section {
     max-width: 400px;
     padding: 30px 40px;
-    height: 55%;
+    height: 56%;
     background-color: #fff;
     border-radius: 30px;
     box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
@@ -158,4 +159,7 @@ form#bookingForm h1 {
     padding: 10px;
     border: 1px solid #ddd;
     box-sizing: border-box;
+}
+.salon-hours{
+    font-size: smaller;
 }

@@ -32,7 +32,8 @@
             <!-- Fieldset and legend for details -->
             <fieldset>
                 <legend>Details</legend>
-                <p><strong>Selected Services:</strong> <span id="selectedServices"></span></p>
+                <p><strong>Salon Name:</strong> <span id="salonName"></span></p>
+                <p><strong>Services:</strong> <span id="selectedServices"></span></p>
                 <p><strong>Total Amount:</strong> Rs <span id="totalAmount"></span></p>
                 <p><strong>Full Name:</strong> <span id="fullName"></span></p>
                 <p><strong>Email:</strong> <span id="email"></span></p>
@@ -45,7 +46,6 @@
         <!-- Booking form -->
         <form id="bookingForm">
             <h1>Book Your Appointment</h1>
-
             <div class="form-group">
                 <label for="appointmentDate">Select Date:</label>
                 <input type="date" id="appointmentDate" name="appointmentDate" required>
@@ -54,6 +54,7 @@
             <div class="form-group">
                 <label for="appointmentTime">Select Time:</label>
                 <input type="time" id="appointmentTime" name="appointmentTime" required>
+                <p class="salon-hours">Choose time between:<span id="salonHours"></span></p>
             </div>
             
             <button type="submit">Book Now</button>

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const auth = firebase.auth();
     const firestore = firebase.firestore();
 
-    // Check if a user is signed in
+   // Update the code inside the auth.onAuthStateChanged function
     auth.onAuthStateChanged(function (user) {
         if (user) {
             // User is signed in, fetch user details from Firestore using UID
@@ -40,11 +40,54 @@ document.addEventListener('DOMContentLoaded', function () {
             }).catch((error) => {
                 console.log('Error getting document:', error);
             });
+
+            // Fetch salon operating hours and display them
+            const salonId = urlParams.get('salonId');
+            const salonRef = firestore.collection('approved').doc(salonId);
+
+            salonRef.get().then((doc) => {
+                if (doc.exists) {
+                    const salonData = doc.data();
+                    const openTime24Hour = salonData.openTime;
+                    const closeTime24Hour = salonData.closeTime;
+                    const salonName = salonData.salonName;
+
+                    // Convert opening and closing times to AM/PM format
+                    const openTime12Hour = convertTo12HourFormat(openTime24Hour);
+                    const closeTime12Hour = convertTo12HourFormat(closeTime24Hour);
+
+                    // Display salon hours in AM/PM format
+                    document.getElementById('salonHours').innerText = `${openTime12Hour} - ${closeTime12Hour}`;
+                    document.getElementById('salonName').innerText = `${salonName}`;
+                } else {
+                    console.log('No such document!');
+                }
+            }).catch((error) => {
+                console.log('Error getting document:', error);
+            });
         } else {
             // No user is signed in, handle accordingly
             console.log('No user signed in');
         }
     });
+
+    // Function to convert 24-hour time to AM/PM format
+    function convertTo12HourFormat(time24Hour) {
+        const splitTime = time24Hour.split(':');
+        let hours = parseInt(splitTime[0]);
+        const minutes = splitTime[1];
+
+        // Determine AM/PM
+        const period = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12; // Handle midnight (00:00)
+
+        return `${hours}:${minutes} ${period}`;
+    }
+
+
 
     // Retrieve query parameters from the URL
     const urlParams = new URLSearchParams(window.location.search);

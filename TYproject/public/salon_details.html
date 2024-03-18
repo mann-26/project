@@ -25,7 +25,7 @@
         <div class="cart-container" id="cartContainer">
             <h2 class="cart-title">Service Selected</h2>
             <ul class="cart-items" id="cartItems"></ul><br>
-            <p id="totalPrice"><strong>Total Price:</strong> Rs0</p>
+            <p id="totalPrice"><strong>Total Price:</strong> Rs 0</p>
         </div>
         <div class="select-date-time-container">
             <button class="select-date-time-button" id="selectDateTimeButton">Select Date and Time</button>
@@ -133,7 +133,7 @@
 
 
         function updateTotalPrice() {
-            totalPriceDisplay.innerHTML = '<strong>Total Price:</strong> Rs' + totalPrice.toFixed(2);
+            totalPriceDisplay.innerHTML = '<strong>Total Price:</strong> Rs ' + totalPrice.toFixed(2);
         }
 
         function updateSelectDateTimeButton() {
@@ -180,7 +180,7 @@
             var serviceDescription = document.createElement('p');
             serviceDescription.textContent = service.description;
             var servicePrice = document.createElement('p');
-            servicePrice.textContent = 'Price: Rs' + service.price;
+            servicePrice.textContent = 'Price: Rs ' + service.price;
             serviceDetails.appendChild(serviceName);
             serviceDetails.appendChild(serviceDescription);
             serviceDetails.appendChild(servicePrice);
