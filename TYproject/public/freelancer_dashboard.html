@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Toggle on click
     document.querySelector('.booking-button').addEventListener('click', Bookings);
 });
-        function EditServices() {
+function EditServices() {
     var dashboard = document.querySelector('.dashboard');
     var editServicesSection = document.querySelector('.edit-services-section');
 
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dashboard.style.display = 'none';
 
         // Clear existing content in edit-services-section only when it's being shown
-        editServicesSection.innerHTML = '<h2>Edit Services</h2>';
+        editServicesSection.innerHTML = '<h2 class="edit-services-heading">Edit Services</h2>';
 
 
     // Fetch existing services from Firebase Firestore
@@ -198,47 +198,47 @@ document.addEventListener('DOMContentLoaded', function() {
                                 var serviceElement = document.createElement('div');
                                 serviceElement.className = 'edit-service-entry';
                                 serviceElement.innerHTML = `
+                                    <img src="${service.image}" alt="Service Image" class="service-image" />
                                     <input type="text" value="${service.name}" placeholder="Service Name" class="edit-service-input" data-service-index="${index}" data-field="name" />
                                     <input type="text" value="${service.description}" placeholder="Service Description" class="edit-service-input" data-service-index="${index}" data-field="description" />
                                     <input type="text" value="${service.price}" placeholder="Service Price" class="edit-service-input" data-service-index="${index}" data-field="price" />
-                                    <input type="file" accept="image/*" onchange="handleImageChange('${service.id}')" />
-                                    <img src="${service.image}" alt="Service Image" />
+                                    
 
-                                    <button onclick="confirmUpdateService(${index})">Update</button>
-                                    <button onclick="confirmDeleteService(${index})">Delete</button>
+                                    <button class="update-service-btn" onclick="confirmUpdateService(${index})">Update</button>
+                                    <button class="delete-service-btn" onclick="confirmDeleteService(${index})">Delete</button>
                                 `;
                                 editServicesSection.appendChild(serviceElement);
                             });
                         } else {
                             // Show a message when there are no services
-                            editServicesSection.innerHTML += '<p>No services available.</p>';
+                            editServicesSection.innerHTML += '<p class="no-services-msg">No services available.</p>';
                         }
                     } else {
                         // Handle the case where the freelancer document does not exist
                         console.error('Freelancer document does not exist.');
-                        editServicesSection.innerHTML += '<p>Error fetching freelancer data. Please try again.</p>';
+                        editServicesSection.innerHTML += '<p class="error-msg">Error fetching freelancer data. Please try again.</p>';
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching freelancer data:', error);
-                    editServicesSection.innerHTML += '<p>Error fetching freelancer data. Please try again.</p>';
+                    editServicesSection.innerHTML += '<p class="error-msg">Error fetching freelancer data. Please try again.</p>';
                 });
 
             // Add a form for adding a new service
             var newServiceForm = document.createElement('div');
             newServiceForm.innerHTML = `
-                <h3>Add New Service</h3>
-                <input type="text" id="newServiceName" placeholder="Service Name" />
-                <input type="text" id="newServiceDescription" placeholder="Service Description" />
-                <input type="text" id="newServicePrice" placeholder="Service Price" />
-                <input type="file" id="newServiceImageInput" accept="image/*" />
-                <button onclick="addNewService()">Add Service</button>
+                <h3 class="add-service-heading">Add New Service</h3>
+                <input type="text" id="newServiceName" placeholder="Service Name" class="new-service-input" />
+                <input type="text" id="newServiceDescription" placeholder="Service Description" class="new-service-input" />
+                <input type="text" id="newServicePrice" placeholder="Service Price" class="new-service-input" />
+                <input type="file" id="newServiceImageInput" accept="image/*" class="new-service-input" />
+                <button class="add-service-btn" onclick="addNewService()">Add Service</button>
             `;
             editServicesSection.appendChild(newServiceForm);
         } else {
             // Handle the case where the user is not authenticated.
             console.error('User not authenticated.');
-            editServicesSection.innerHTML += '<p>User not authenticated. Please log in.</p>';
+            editServicesSection.innerHTML += '<p class="error-msg">User not authenticated. Please log in.</p>';
         }
     });
 } else {
@@ -246,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dashboard.style.display = 'block';
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.dashboard').style.display = 'block';
